@@ -1,0 +1,5 @@
+source default.soar
+
+pushd ./default
+source simple.soar
+popd

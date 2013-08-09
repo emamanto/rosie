@@ -3,3 +3,22 @@ source default.soar
 pushd ./default
 source simple.soar
 popd
+
+pushd ./pointing
+source series-of-points.soar
+popd
+
+sp {propose*init-agent
+   (state <s> -^name
+   	      ^superstate nil)
+-->
+   (<s> ^operator <op> + >)
+   (<op> ^name init-agent)
+}
+
+sp {apply*init-agent
+   (state <s> ^operator.name init-agent)
+-->
+   (<s> ^topstate <s>
+        ^name pointer)
+}

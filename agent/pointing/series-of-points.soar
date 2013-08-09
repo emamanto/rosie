@@ -1,0 +1,6 @@
+sp {propose*series-of-points
+   (state <s> ^name pointer)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name series-of-points)
+}

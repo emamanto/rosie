@@ -1,0 +1,6 @@
+sp {propose*continuous-point
+   (state <s> ^name pointer)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name continuous-point)
+}

@@ -5,7 +5,7 @@ source simple.soar
 popd
 
 pushd ./pointing
-source do-point.soar
+source series-of-points.soar
 popd
 
 pushd ./topchef-soar
@@ -27,4 +27,31 @@ sp {apply*init-agent
 -->
    (<s> ^topstate <s>
         ^name pointer)
+}
+
+sp {initialize*point*list
+   (state <s> ^superstate nil)
+-->
+   (<s> ^point-list <list>)
+   (<list> ^begin <first>)
+   (<first> ^pose <p1>
+            ^next <second>)
+   (<second> ^pose <p2>
+             ^next <third>)
+   (<third> ^pose <p3>
+            ^next <fourth>)
+   (<fourth> ^pose <p4>
+             ^next nil)
+   (<p1> ^x 0.2
+         ^y 0.2
+         ^z 0)
+   (<p2> ^x -0.2
+         ^y -0.2
+         ^z 0)
+   (<p3> ^x -0.2
+         ^y 0.2
+         ^z 0)
+   (<p4> ^x 0.2
+         ^y -0.2
+         ^z 0)
 }

@@ -1,0 +1,11 @@
+sp {propose*do-point
+   (state <s> ^name pointer)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name do-point)
+   (<o> ^actions.point <point>)
+   (<point> ^pose <pose>)
+   (<pose> ^x 0.3
+           ^y 0.2
+           ^z 0)
+}

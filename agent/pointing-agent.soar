@@ -5,7 +5,13 @@ source simple.soar
 popd
 
 pushd ./pointing
-source series-of-points.soar
+source do-point.soar
+popd
+
+pushd ./topchef-soar
+pushd ./primitive-actions
+source apply-action.soar
+popd
 popd
 
 sp {propose*init-agent

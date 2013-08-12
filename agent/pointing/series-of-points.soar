@@ -24,9 +24,10 @@ sp {propose*do-current-point
    (state <s> ^name series-of-points
               ^current.pose <pos>
               ^io.output-link <out>)
-   -(<out> ^<command>.<com>.status complete)
+   -{(<out> ^<command> <com>)
+   	 (<com> ^status complete)}
 -->
-   (<s> ^operator <o> +)
+   (<s> ^operator <o> + <)
    (<o> ^name do-current-point
         ^actions.point <point>)
    (<point> ^pose <pos>)
@@ -40,7 +41,7 @@ sp {propose*update-current
    (<com> ^status complete)
    (<cur> ^next <> nil)
    -->
-   (<s> ^operator <o> + >)
+   (<s> ^operator <o> +)
    (<o> ^name update-current)
 }
 
@@ -54,4 +55,15 @@ sp {apply*update-current
    (<s> ^current <cur> -)
    (<out> ^<command> <com> -)
    (<s> ^current <next>)
+}
+
+sp {monitor*command*status
+  (state <s> ^name series-of-points 
+			 ^io.output-link <ol>)
+   (<ol> ^<command> <com>)
+   (<com> ^pose.x <x>
+          ^pose.y <y>)
+   (<com> ^status complete)
+-->
+   (write (crlf) <x> |, | <y> | was completed.|)   
 }

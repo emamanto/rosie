@@ -38,7 +38,9 @@ sp {propose*update-current
               ^current <cur>
               ^io.output-link <out>)
    (<out> ^<command> <com>)
-   (<com> ^status complete)
+   (<com> ^status complete
+   		  ^pose <pos>)	
+   (<cur> ^pose <pos>)
    (<cur> ^next <> nil)
    -->
    (<s> ^operator <o> +)
@@ -51,9 +53,12 @@ sp {apply*update-current
               ^io.output-link <out>)
    (<cur> ^next <next>)
    (<out> ^<command> <com>)
+   (<com> ^pose.x <x>
+          ^pose.y <y>)
 -->
    (<s> ^current <cur> -)
    (<out> ^<command> <com> -)
+   (write (crlf) |Taking away | <x> |, | <y>)
    (<s> ^current <next>)
 }
 

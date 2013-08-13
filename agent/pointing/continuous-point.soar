@@ -1,15 +1,18 @@
 # Creates the substate
 sp {propose*continuous-point
-   (state <s> ^name pointer)
+   (state <s> ^name pointer
+              ^io.input-link.objects.object <object>)
 -->
    (<s> ^operator <o> +)
-   (<o> ^name continuous-point)
+   (<o> ^name continuous-point
+        ^object <object>)
 }
 
+# When x, y of pose get updated, this re-fires
 sp {continuous-point*propose*point
    (state <s> ^name continuous-point
+              ^superstate.operator.object <obj>
               ^io.input-link <in>)
-   (<in> ^objects.object <obj>)
    (<obj> ^id <id>
           ^pose <pose>)
    (<pose> ^x <x>
@@ -22,102 +25,3 @@ sp {continuous-point*propose*point
    (<point> ^id <id>
             ^pose <pose>)
 }
-
-## Sub-operators... I doubt this is nice organization
-#sp {propose*new-object
-#   (state <s> ^name continuous-point
-#              ^io.input-link <in>)
-#   (<in> ^objects.object <obj>)
-#   (<obj> ^id <id>
-#          ^pose <pose>)
-#-->
-#   (<s> ^operator <o> + <)
-#   (<o> ^name new-object
-#        ^actions.point <point>
-#        ^object <obj>)
-#   (<point> ^id <id>
-#            ^pose <pose>)
-#}
-#
-#sp {apply*new-object*create*tracked-id
-#   (state <s> ^name continuous-point
-#              ^operator <o>)
-#   (<o> ^name new-object
-#        ^object.id <id>)
-#-->
-#   (<s> ^tracked-id <id>)
-#}
-#
-#
-#sp {apply*new-object*remove*tracked-id
-#   (state <s> ^name continuous-point
-#              ^operator <o>
-#              ^tracked-id <cur>)
-#   (<o> ^name new-object
-#        ^object.id { <id> <> <cur> })
-#-->
-#   (<s> ^tracked-id <cur> -)
-#}
-#
-#sp {apply*operator*create*last-pose
-#   (state <s> ^name continuous-point
-#              ^operator.object.pose <pose>)
-#-->
-#   (<s> ^last-pose <pose>)
-#}
-#
-#
-#sp {apply*new-object*remove*last-pose
-#   (state <s> ^name continuous-point
-#              ^last-pose <cur>
-#              ^operator.object.pose { <pose> <> <cur> })
-#-->
-#   (<s> ^last-pose <cur> -)
-#}
-#
-#sp {continuous-point*compute*diffs
-#   (state <s> ^name continuous-point
-#              ^tracked-id <track>
-#              ^last-pose <last>
-#              ^io.input-link <in>)
-#   (<in> ^objects.object <obj>)
-#   (<obj> ^id <track>
-#          ^pose <pose>)
-#   (<pose> ^x <x>
-#           ^y <y>)
-#   (<last> ^x <lastx>
-#           ^y <lasty>)
-#-->
-#   (<s> ^x-diff (- <x> <lastx>))
-#   (<s> ^y-diff (- <y> <lasty>)) 
-#}
-#
-#sp {continuous-point*elaborate*moved*x
-#   (state <s> ^name continous-point
-#              ^x-diff > 0.1)
-#-->
-#   (<s> ^obj-moved true)
-#}
-#
-#sp {continuous-point*elaborate*moved*y
-#   (state <s> ^name continous-point
-#              ^y-diff > 0.1)
-#-->
-#   (<s> ^obj-moved true)
-#}
-#
-#sp {propose*follow-object
-#   (state <s> ^name continuous-point
-#              ^tracked-id <track>
-#              ^obj-moved true
-#              ^io.input-link.objects.object <obj>)
-#   (<obj> ^id <track>
-#          ^pose <pose>)
-#-->
-#    (<s> ^operator <o> +)
-#    (<o> ^name follow-object
-#         ^actions.point <point>
-#         ^object <obj>)
-#   (<point> ^id <id>
-#            ^pose <pose>)  
-#}

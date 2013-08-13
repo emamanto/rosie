@@ -1,9 +1,9 @@
-# Creates the substate
+# Creates the substate; doesn't specify which object must be tracked...
 sp {propose*continuous-point
    (state <s> ^name pointer
               ^io.input-link.objects.object <object>)
 -->
-   (<s> ^operator <o> +)
+   (<s> ^operator <o> + =)
    (<o> ^name continuous-point
         ^object <object>)
 }
@@ -23,5 +23,5 @@ sp {continuous-point*propose*point
         ^actions.point <point>
         ^object <obj>)
    (<point> ^id <id>
-            ^pose <pose>)
+			^pose <pose>)
 }

@@ -15,4 +15,4 @@
 # directory
 
 java edu.umich.insoar.InSoar $* &
-java abolt.bolt.Bolt -w $ABOLT_HOME/config/bolt.world -c $ABOLT_HOME/config/bolt.config
+java abolt.bolt.Bolt -w $ABOLT_HOME/config/single.world -c $ABOLT_HOME/config/bolt.config

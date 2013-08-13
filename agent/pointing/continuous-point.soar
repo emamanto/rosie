@@ -9,10 +9,11 @@ sp {propose*continuous-point
 sp {continuous-point*propose*point
    (state <s> ^name continuous-point
               ^io.input-link <in>)
-   (<in> ^time.microseconds <t>)
    (<in> ^objects.object <obj>)
    (<obj> ^id <id>
           ^pose <pose>)
+   (<pose> ^x <x>
+           ^y <y>)
 -->
    (<s> ^operator <o> +)
    (<o> ^name point

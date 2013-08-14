@@ -13,6 +13,6 @@ sp {apply*operator*actions
 #   (<ol> ^<command> <com>)
 #   (<com> ^status complete)
 #-->
-#   (write (crlf) <com> | was completed.|)
+#   (write (crlf) | Removing a successful command.|)
 #   (<ol> ^<command> <com> -)
 #}

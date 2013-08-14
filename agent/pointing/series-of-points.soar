@@ -7,7 +7,7 @@ sp {propose*series-of-points
 
 sp {propose*begin-points
    (state <s> ^name series-of-points
-             -^current <any>)
+             -^topstate.current <any>)
 -->
    (<s> ^operator <o> +)
    (<o> ^name begin-points)
@@ -15,14 +15,15 @@ sp {propose*begin-points
 
 sp {apply*begin-points
    (state <s> ^operator.name begin-points
-              ^topstate.point-list.begin <first>)
+              ^topstate <ts>)
+   (<ts> ^point-list.begin <first>)
 -->
-   (<s> ^current <first>)
+   (<ts> ^current <first>)
 }
 
 sp {propose*do-current-point
    (state <s> ^name series-of-points
-              ^current.pose <pos>
+              ^topstate.current.pose <pos>
               ^io.output-link <out>)
    -{(<out> ^<command> <com>)
    	 (<com> ^status complete)}
@@ -35,7 +36,7 @@ sp {propose*do-current-point
 
 sp {propose*update-current
    (state <s> ^name series-of-points
-              ^current <cur>
+              ^topstate.current <cur>
               ^io.output-link <out>)
    (<out> ^<command> <com>)
    (<com> ^status complete
@@ -49,26 +50,25 @@ sp {propose*update-current
 
 sp {apply*update-current
    (state <s> ^operator.name update-current
-              ^current <cur>
+              ^topstate <ts>
               ^io.output-link <out>)
-   (<cur> ^next <next>)
    (<out> ^<command> <com>)
-   (<com> ^pose.x <x>
-          ^pose.y <y>)
+   (<ts> ^current <cur>)
+   (<cur> ^next <next>)
 -->
-   (<s> ^current <cur> -)
+   (<ts> ^current <cur> -)
+   (<ts> ^current <next>)
    (<out> ^<command> <com> -)
-   (write (crlf) |Taking away | <x> |, | <y>)
-   (<s> ^current <next>)
 }
 
-sp {monitor*command*status
-  (state <s> ^name series-of-points 
-			 ^io.output-link <ol>)
-   (<ol> ^<command> <com>)
-   (<com> ^pose.x <x>
-          ^pose.y <y>)
-   (<com> ^status complete)
+sp {monitor*finished-commands
+   (state <s> ^name series-of-points
+              ^io.output-link <out>)
+   (<out> ^<command> <com>)
+   (<com> ^status complete
+    	   ^pose <pos>)
+   (<pos> ^x <x>
+          ^y <y>)
 -->
-   (write (crlf) <x> |, | <y> | was completed.|)   
+   (write (crlf) <x> |, | <y> | finished.|)
 }

@@ -2,6 +2,8 @@
 sp {propose*continuous-point
    (state <s> ^name pointer
               ^io.input-link.objects.object <object>)
+   (<object> ^visual-prop <v>)
+   (<v> ^category color)
 -->
    (<s> ^operator <o> + =)
    (<o> ^name continuous-point

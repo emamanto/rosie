@@ -1,11 +1,12 @@
-sp {propose*series-of-points
-   (state <s> ^name pointer)
+sp {pointer*propose*series-of-points
+   (state <s> ^name pointer
+             -^done true)
 -->
    (<s> ^operator <o> +)
    (<o> ^name series-of-points)
 }
 
-sp {propose*begin-points
+sp {series-of-points*propose*begin-points
    (state <s> ^name series-of-points
              -^topstate.current <any>)
 -->
@@ -13,7 +14,7 @@ sp {propose*begin-points
    (<o> ^name begin-points)
 }
 
-sp {apply*begin-points
+sp {series-of-points*apply*begin-points
    (state <s> ^operator.name begin-points
               ^topstate <ts>)
    (<ts> ^point-list.begin <first>)
@@ -21,7 +22,7 @@ sp {apply*begin-points
    (<ts> ^current <first>)
 }
 
-sp {propose*do-current-point
+sp {series-of-points*propose*do-current-point
    (state <s> ^name series-of-points
               ^topstate.current.pose <pos>
               ^io.output-link <out>)
@@ -34,7 +35,7 @@ sp {propose*do-current-point
    (<point> ^pose <pos>)
 }
 
-sp {propose*update-current
+sp {series-of-points*propose*update-current
    (state <s> ^name series-of-points
               ^topstate.current <cur>
               ^io.output-link <out>)
@@ -43,12 +44,12 @@ sp {propose*update-current
    		  ^pose <pos>)	
    (<cur> ^pose <pos>)
    (<cur> ^next <> nil)
-   -->
+-->	
    (<s> ^operator <o> +)
    (<o> ^name update-current)
 }
 
-sp {apply*update-current
+sp {series-of-points*apply*update-current
    (state <s> ^operator.name update-current
               ^topstate <ts>
               ^io.output-link <out>)
@@ -61,14 +62,17 @@ sp {apply*update-current
    (<out> ^<command> <com> -)
 }
 
-sp {monitor*finished-commands
+sp {series-of-points*propose*end-points
    (state <s> ^name series-of-points
-              ^io.output-link <out>)
-   (<out> ^<command> <com>)
-   (<com> ^status complete
-    	   ^pose <pos>)
-   (<pos> ^x <x>
-          ^y <y>)
+              ^topstate.current.next nil)
 -->
-   (write (crlf) <x> |, | <y> | finished.|)
+   (<s> ^operator <o> +)
+   (<o> ^name end-points)
+}
+
+sp {series-of-points*apply*end-points
+   (state <s> ^operator.name end-points
+              ^superstate <ss>)
+-->
+   (<ss> ^done true)
 }

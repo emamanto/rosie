@@ -24,7 +24,7 @@ public class OutputLinkHandler implements OutputEventInterface, RunEventInterfac
     public OutputLinkHandler(SoarAgent soarAgent)
     {
         String[] outputHandlerStrings = { "message", "action", "pick-up", "push-segment", "pop-segment",
-                "put-down", "point", "send-message","remove-message","send-training-label", "set-state", 
+                "put-down", "point", "move", "send-message","remove-message","send-training-label", "set-state", 
                 "report-interaction", "home"};
 
         for (String outputHandlerString : outputHandlerStrings)
@@ -117,8 +117,12 @@ public class OutputLinkHandler implements OutputEventInterface, RunEventInterfac
 	            }
 	            else if(wme.GetAttribute().equals("report-interaction")){
 	            	processReportInteraction(id);
-	            } else if(wme.GetAttribute().equals("home")){
+	            } 
+	            else if(wme.GetAttribute().equals("home")){
 	            	processHomeCommand(id);
+	            }
+	            else if(wme.GetAttribute().equals("move")){
+	            	processMoveCommand(id);
 	            }
 	            InSoar.Singleton().getSoarAgent().commitChanges();
             } catch (IllegalStateException e){
@@ -355,6 +359,25 @@ public class OutputLinkHandler implements OutputEventInterface, RunEventInterfac
         id.CreateStringWME("status", "complete");
     }
     
+    private void processMoveCommand(Identifier id){
+    	Identifier poseId = WMUtil.getIdentifierOfAttribute(id, "pose",
+        		"Error (move): No ^pose identifier");
+        String x = WMUtil.getValueOfAttribute(poseId, "x",
+        		"Error (move): No ^pose.x identifier");
+        String y = WMUtil.getValueOfAttribute(poseId, "y",
+        		"Error (move): No ^pose.y identifier");
+        String z = WMUtil.getValueOfAttribute(poseId, "z",
+        		"Error (move): No ^pose.z identifier");
+        
+        robot_command_t command = new robot_command_t();
+        command.utime = TimeUtil.utime();
+        command.dest = new double[]{Double.parseDouble(x), Double.parseDouble(y), Double.parseDouble(z), 0, 0, 0};
+    	command.action = "MOVE";
+    	InSoar.broadcastRobotCommand(command);
+        
+        id.CreateStringWME("status", "complete");
+    }
+        
     private void processReportInteraction(Identifier id){
     	String type = WMUtil.getValueOfAttribute(id, "type");
     	String originator = WMUtil.getValueOfAttribute(id, "originator");

@@ -5,7 +5,7 @@ source simple.soar
 popd
 
 pushd ./pointing
-source do-move.soar
+source continuous-point.soar
 popd
 
 pushd ./topchef-soar

@@ -22,8 +22,11 @@ sp {continuous-point*propose*point
 -->
    (<s> ^operator <o> +)
    (<o> ^name point
-        ^actions.point <point>
+        ^actions.move <point>
         ^object <obj>)
    (<point> ^id <id>
-			^pose <pose>)
+	    ^pose <p>)
+   (<p> ^x <x>
+        ^y <y>
+        ^z 0.1)
 }

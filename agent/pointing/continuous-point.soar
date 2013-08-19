@@ -26,7 +26,10 @@ sp {continuous-point*propose*point
         ^object <obj>)
    (<point> ^id <id>
 	    ^pose <p>)
-   (<p> ^x <x>
-        ^y <y>
+   # This is a real hack... stops the arm from being directly above the object
+   # and blocking it from view.
+   (<p> ^x (- <x> 0.08)
+        ^y (- <y> 0.08)
         ^z 0.1)
+   (write (crlf) |Moving because obj is at | <x> |, | <y>)
 }

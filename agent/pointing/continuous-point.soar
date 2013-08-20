@@ -10,10 +10,17 @@ sp {propose*continuous-point
         ^object <object>)
 }
 
+sp {continuous-point*elaborate*tracked-object
+   (state <s> ^name continuous-point 
+	          ^superstate.operator.object <obj>)
+-->
+   (<s> ^tracked-object <obj>)
+}
+
 # When x, y of pose get updated, this re-fires
 sp {continuous-point*propose*point
    (state <s> ^name continuous-point
-              ^superstate.operator.object <obj>
+              ^tracked-object <obj>
               ^io.input-link <in>)
    (<obj> ^id <id>
           ^pose <pose>)
@@ -31,5 +38,41 @@ sp {continuous-point*propose*point
    (<p> ^x (- <x> 0.08)
         ^y (- <y> 0.08)
         ^z 0.1)
-   (write (crlf) |Moving because obj is at | <x> |, | <y>)
+}
+
+sp {continuous-point*apply*point*elaborate*last-location
+   (state <s> ^name continuous-point
+              ^operator.name point
+              ^superstate <ss>
+              ^tracked-object.pose <pose>)
+   (<pose> ^x <x>
+           ^y <y>)
+   -->
+   (<ss> ^last-location <last>)
+   (<last> ^x <x>
+           ^y <y>)
+}
+
+sp {continuous-point*apply*point*remove*last-location*x
+   (state <s> ^name continuous-point
+              ^operator.name point
+              ^superstate <ss>
+              ^tracked-object.pose <pose>)
+   (<pose> ^x <x>)
+   (<ss> ^last-location <last>)
+   (<last> ^x <> <x>)
+   -->
+   (<ss> ^last-location <last> -)
+}
+
+sp {continuous-point*apply*point*remove*last-location*y
+   (state <s> ^name continuous-point
+              ^operator.name point
+              ^superstate <ss>
+              ^tracked-object.pose <pose>)
+   (<pose> ^y <y>)
+   (<ss> ^last-location <last>)
+   (<last> ^y <> <y>)
+   -->
+   (<ss> ^last-location <last> -)
 }

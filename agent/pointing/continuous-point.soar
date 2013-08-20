@@ -21,7 +21,29 @@ sp {continuous-point*elaborate*tracked-object
 sp {continuous-point*propose*point
    (state <s> ^name continuous-point
               ^tracked-object <obj>
-              ^io.input-link <in>)
+              ^object-moved true)
+   (<obj> ^id <id>
+          ^pose <pose>)
+   (<pose> ^x <x>
+           ^y <y>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name point
+        ^actions.move <point>
+        ^object <obj>)
+   (<point> ^id <id>
+	    ^pose <p>)
+   # This is a real hack... stops the arm from being directly above the object
+   # and blocking it from view.
+   (<p> ^x (- <x> 0.08)
+        ^y (- <y> 0.08)
+        ^z 0.1)
+}
+
+sp {continuous-point*propose*starting-point
+   (state <s> ^name continuous-point
+              ^tracked-object <obj>
+              -^superstate.last-location)
    (<obj> ^id <id>
           ^pose <pose>)
    (<pose> ^x <x>
@@ -51,6 +73,7 @@ sp {continuous-point*apply*point*elaborate*last-location
    (<ss> ^last-location <last>)
    (<last> ^x <x>
            ^y <y>)
+   (write (crlf) |Adding last-location | <last>)
 }
 
 sp {continuous-point*apply*point*remove*last-location*x
@@ -63,6 +86,7 @@ sp {continuous-point*apply*point*remove*last-location*x
    (<last> ^x <> <x>)
    -->
    (<ss> ^last-location <last> -)
+   (write (crlf) |Removing last-location | <last>)
 }
 
 sp {continuous-point*apply*point*remove*last-location*y
@@ -75,4 +99,48 @@ sp {continuous-point*apply*point*remove*last-location*y
    (<last> ^y <> <y>)
    -->
    (<ss> ^last-location <last> -)
+   (write (crlf) |Removing last-location | <last>)
+}
+
+sp {continuous-point*elaborate*state*diffs
+     (state <s> ^name continuous-point
+                ^superstate <ss>
+                ^tracked-object.pose <pose>)
+     (<ss> ^last-location <last>)
+     (<last> ^x <last-x>
+             ^y <last-y>)
+     (<pose> ^x <curr-x>
+             ^y <curr-y>)
+-->
+   (<s> ^x-diff (- <last-x> <curr-x>)
+   	    ^y-diff (- <last-y> <curr-y>))
+   (write (crlf) |Computed new diffs|)
+}
+
+sp {continuous-point*elaborate*moved*x
+   (state <s> ^name continuous-point
+              ^x-diff > 0.05)
+-->
+   (<s> ^object-moved true)
+}
+
+sp {continuous-point*elaborate*moved*x*neg
+   (state <s> ^name continuous-point
+              ^x-diff < -0.05)
+-->
+   (<s> ^object-moved true)
+}
+
+sp {continuous-point*elaborate*moved*y
+   (state <s> ^name continuous-point
+              ^y-diff > 0.05)
+-->
+   (<s> ^object-moved true)
+}
+
+sp {continuous-point*elaborate*moved*y*neg
+   (state <s> ^name continuous-point
+              ^y-diff < -0.05)
+-->
+   (<s> ^object-moved true)
 }

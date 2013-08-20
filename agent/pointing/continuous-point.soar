@@ -10,6 +10,7 @@ sp {propose*continuous-point
         ^object <object>)
 }
 
+# Copy the tracked-object down for substate
 sp {continuous-point*elaborate*tracked-object
    (state <s> ^name continuous-point 
 	          ^superstate.operator.object <obj>)
@@ -17,29 +18,7 @@ sp {continuous-point*elaborate*tracked-object
    (<s> ^tracked-object <obj>)
 }
 
-# When x, y of pose get updated, this re-fires
-sp {continuous-point*propose*point
-   (state <s> ^name continuous-point
-              ^tracked-object <obj>
-              ^object-moved true)
-   (<obj> ^id <id>
-          ^pose <pose>)
-   (<pose> ^x <x>
-           ^y <y>)
--->
-   (<s> ^operator <o> +)
-   (<o> ^name point
-        ^actions.move <point>
-        ^object <obj>)
-   (<point> ^id <id>
-	    ^pose <p>)
-   # This is a real hack... stops the arm from being directly above the object
-   # and blocking it from view.
-   (<p> ^x (- <x> 0.08)
-        ^y (- <y> 0.08)
-        ^z 0.1)
-}
-
+# Do the first point; we have no last-location now
 sp {continuous-point*propose*starting-point
    (state <s> ^name continuous-point
               ^tracked-object <obj>
@@ -62,6 +41,32 @@ sp {continuous-point*propose*starting-point
         ^z 0.1)
 }
 
+# If the object moved, re-point
+sp {continuous-point*propose*point
+   (state <s> ^name continuous-point
+              ^tracked-object <obj>
+              ^object-moved true)
+   (<obj> ^id <id>
+          ^pose <pose>)
+   (<pose> ^x <x>
+           ^y <y>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name point
+        ^actions.move <point>
+        ^object <obj>)
+   (<point> ^id <id>
+	    ^pose <p>)
+   # This is a real hack... stops the arm from being directly above the object
+   # and blocking it from view.
+   (<p> ^x (- <x> 0.08)
+        ^y (- <y> 0.08)
+        ^z 0.1)
+}
+
+# Big question #1: If I store last-location on <s> instead of <ss>, the GDS flips
+# out and removes <s> entirely. WHY?
+# Store the last place the arm pointed to
 sp {continuous-point*apply*point*elaborate*last-location
    (state <s> ^name continuous-point
               ^operator.name point
@@ -73,9 +78,9 @@ sp {continuous-point*apply*point*elaborate*last-location
    (<ss> ^last-location <last>)
    (<last> ^x <x>
            ^y <y>)
-   (write (crlf) |Adding last-location | <last>)
 }
 
+# Delete the last-location if its x val is no longer correct
 sp {continuous-point*apply*point*remove*last-location*x
    (state <s> ^name continuous-point
               ^operator.name point
@@ -86,9 +91,9 @@ sp {continuous-point*apply*point*remove*last-location*x
    (<last> ^x <> <x>)
    -->
    (<ss> ^last-location <last> -)
-   (write (crlf) |Removing last-location | <last>)
 }
 
+# Delete the last-location if its y val is no longer correct
 sp {continuous-point*apply*point*remove*last-location*y
    (state <s> ^name continuous-point
               ^operator.name point
@@ -99,9 +104,14 @@ sp {continuous-point*apply*point*remove*last-location*y
    (<last> ^y <> <y>)
    -->
    (<ss> ^last-location <last> -)
-   (write (crlf) |Removing last-location | <last>)
 }
 
+# Big question #2: If I put x-diff and y-diff on <ss> instead
+# of <s>, they don't get removed when the supporting WMEs change.
+# I thought they were still supposed to have i-support, so WHY
+# do they only behave as expected when on <s>?
+# Compute how far the object has moved from where the arm is
+# currently pointing
 sp {continuous-point*elaborate*state*diffs
      (state <s> ^name continuous-point
                 ^superstate <ss>
@@ -114,9 +124,10 @@ sp {continuous-point*elaborate*state*diffs
 -->
    (<s> ^x-diff (- <last-x> <curr-x>)
    	    ^y-diff (- <last-y> <curr-y>))
-   (write (crlf) |Computed new diffs|)
 }
 
+# Note that the object moved if abs of x-diff or y-diff are above
+# threshold
 sp {continuous-point*elaborate*moved*x
    (state <s> ^name continuous-point
               ^x-diff > 0.05)

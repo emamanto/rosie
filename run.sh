@@ -14,5 +14,9 @@
 # all of the jars except lcm and sml can be rebuilt by running ant in their
 # directory
 
+cd ../abolt/java
+ant
+cd ../../insoar
+
 java edu.umich.insoar.InSoar $* &
 java abolt.bolt.Bolt -w $ABOLT_HOME/config/single.world -c $ABOLT_HOME/config/bolt.config

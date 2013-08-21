@@ -31,5 +31,4 @@ sp {continuous-point*propose*point
    (<p> ^x (- <x> 0.08)
         ^y (- <y> 0.08)
         ^z 0.1)
-   (write (crlf) |Moving because obj is at | <x> |, | <y>)
 }

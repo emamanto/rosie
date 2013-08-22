@@ -71,8 +71,7 @@ public class OutputLinkHandler implements OutputEventInterface, RunEventInterfac
                 return;
             }
     		Identifier id = wme.ConvertToIdentifier();
-            System.out.println(wme.GetAttribute());
-            
+            System.out.println("[OUT] Sent command : " + wme.GetAttribute());
 
             try{
 	            if (wme.GetAttribute().equals("set-state"))
@@ -374,7 +373,7 @@ public class OutputLinkHandler implements OutputEventInterface, RunEventInterfac
         command.dest = new double[]{Double.parseDouble(x), Double.parseDouble(y), Double.parseDouble(z), 0, 0, 0};
     	command.action = "MOVE";
     	InSoar.broadcastRobotCommand(command);
-        
+    	        
         id.CreateStringWME("status", "complete");
     }
         

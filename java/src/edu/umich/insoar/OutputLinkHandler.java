@@ -23,7 +23,7 @@ public class OutputLinkHandler implements OutputEventInterface, RunEventInterfac
 
     public OutputLinkHandler(SoarAgent soarAgent)
     {
-        String[] outputHandlerStrings = { "message", "action", "pick-up", "push-segment", "pop-segment",
+        String[] outputHandlerStrings = { "message", "action", "grasp", "push-segment", "pop-segment",
                 "put-down", "point", "move", "send-message","remove-message","send-training-label", "set-state", 
                 "report-interaction", "home"};
 
@@ -86,9 +86,9 @@ public class OutputLinkHandler implements OutputEventInterface, RunEventInterfac
 	            {
 	                processOutputLinkMessage(id);
 	            }
-	            else if (wme.GetAttribute().equals("pick-up"))
+	            else if (wme.GetAttribute().equals("grasp"))
 	            {
-	                processPickUpCommand(id);
+	                processGraspCommand(id);
 	            }
 	            else if (wme.GetAttribute().equals("put-down"))
 	            {
@@ -230,21 +230,22 @@ public class OutputLinkHandler implements OutputEventInterface, RunEventInterfac
     }
 
     /**
-     * Takes a pick-up command on the output link given as an identifier and
-     * uses it to update the internal robot_command_t command. Expects pick-up
+     * Takes a grasp command on the output link given as an identifier and
+     * uses it to update the internal robot_command_t command. Expects grasp
      * ^object-id [int]
+     * XXX Is this the way this should work?
      */
-    private void processPickUpCommand(Identifier pickUpId)
+    private void processGraspCommand(Identifier graspId)
     {
-        String objectIdStr = WMUtil.getValueOfAttribute(pickUpId,
-                "object-id", "pick-up does not have an ^object-id attribute");
+        String objectIdStr = WMUtil.getValueOfAttribute(graspId,
+                "object-id", "grasp does not have an ^object-id attribute");
         
         robot_command_t command = new robot_command_t();
         command.utime = TimeUtil.utime();
-        command.action = String.format("GRAB=%d", Integer.parseInt(objectIdStr));
+        command.action = String.format("GRASP=%d", Integer.parseInt(objectIdStr));
         command.dest = new double[6];
         InSoar.broadcastRobotCommand(command);
-        pickUpId.CreateStringWME("status", "complete");
+        graspId.CreateStringWME("status", "complete");
     }
 
     /**

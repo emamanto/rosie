@@ -1,0 +1,3 @@
+pushd point
+source propose-point.soar
+popd

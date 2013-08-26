@@ -133,7 +133,9 @@ popd
 #source svs_source.soar
 #popd
 
-
+pushd motions
+source motions_source.soar
+popd
 
 # Source child problem space "learning"
 pushd learning

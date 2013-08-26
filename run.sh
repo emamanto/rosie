@@ -14,4 +14,5 @@
 # all of the jars except lcm and sml can be rebuilt by running ant in their
 # directory
 
+java probcog.gui.PerceptionGUI -c $HOME/probcog/probcog2/config/probcog.config -w $HOME/probcog/probcog2/worlds/simple.world &
 java edu.umich.insoar.InSoar $* &

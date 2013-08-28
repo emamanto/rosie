@@ -129,7 +129,6 @@ public class MotorSystemConnector   implements OutputEventInterface, RunEventInt
             return;
         }
 		Identifier id = wme.ConvertToIdentifier();
-        System.out.println(wme.GetAttribute());
             
         try{
             if (wme.GetAttribute().equals("set-state")) {
@@ -160,13 +159,13 @@ public class MotorSystemConnector   implements OutputEventInterface, RunEventInt
     {
     	Identifier poseId = WMUtil.getIdentifierOfAttribute(
                 moveId, "pose",
-                "ERROR [MOVE]: No ^pose identifier");
+                "[OUTPUT] ERROR: Move command has no ^pose identifier");
         double x = Double.parseDouble(WMUtil.getValueOfAttribute(
-                poseId, "x", "ERROR [MOVE]: Pose has no ^x attribute"));
+                poseId, "x", "[OUTPUT] ERROR: Move pose has no ^x attribute"));
         double y = Double.parseDouble(WMUtil.getValueOfAttribute(
-        		poseId, "y", "ERROR [MOVE]: Pose has no ^y attribute"));
+        		poseId, "y", "[OUTPUT] ERROR: Move pose has no ^y attribute"));
         double z = Double.parseDouble(WMUtil.getValueOfAttribute(
-        		poseId, "z", "ERROR [MOVE]: Pose has no ^z attribute"));
+        		poseId, "z", "[OUTPUT] ERROR: Move pose has no ^z attribute"));
                                 
         robot_command_t command = new robot_command_t();
         command.utime = TimeUtil.utime();

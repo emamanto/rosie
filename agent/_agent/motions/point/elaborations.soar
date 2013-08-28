@@ -1,0 +1,8 @@
+sp {point*elaborate*state
+   (state <s> ^name point
+              ^superstate.operator <sop>)
+   (<sop> ^name point
+          ^pointed-object <obj>)
+-->
+   (<s> ^pointed-object <obj>)
+}

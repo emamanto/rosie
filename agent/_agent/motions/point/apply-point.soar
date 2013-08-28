@@ -1,0 +1,34 @@
+# find the projection where the hand should go
+
+# To point, we want to put the hand "above" an object
+# Find the "above" preposition in smem
+sp {point*propose*lookup-preposition*above
+   (state <s> ^name point
+              ^pointed-object
+             -^found-prep)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name lookup-preposition
+        ^type above)
+}
+
+# After we have found the above preposition from smem, project
+# it so that we get an xyz point to move the arm to
+sp {point*propose*find-projection
+   (state <s> ^name point
+              ^pointed-object <objb>
+              ^object {<obja> <> <objb>}
+              ^found-prep <prep>
+             -^projection-result)
+   (<obja> ^category block)
+   (<objb> ^category block)
+   (<prep> ^predicate <pred>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name find-projection
+        ^category svs
+        ^a <obja>
+        ^b <objb>
+        ^type <prep>
+        ^predicate <pred>)
+}

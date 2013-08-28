@@ -1,3 +1,5 @@
 pushd point
 source propose-point.soar
+source apply-point.soar
+source elaborations.soar
 popd

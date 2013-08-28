@@ -8,5 +8,5 @@ sp {topstate*propose*point
 -->
    (<s> ^operator <op> + <, =)
    (<op> ^name point
-         ^object <obj>)
+         ^pointed-object <obj>)
 }

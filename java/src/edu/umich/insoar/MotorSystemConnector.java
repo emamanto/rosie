@@ -54,7 +54,7 @@ public class MotorSystemConnector   implements OutputEventInterface, RunEventInt
         agent.getAgent().RegisterForRunEvent(smlRunEventId.smlEVENT_BEFORE_INPUT_PHASE, this, null);
         
         // Setup Output Link Events
-        String[] outputHandlerStrings = { "pick-up", "put-down", "point", "set-state", "home"};
+        String[] outputHandlerStrings = { "move", "grasp", "release", "set-state"};
         for (String outputHandlerString : outputHandlerStrings)
         {
         	agent.getAgent().AddOutputHandler(outputHandlerString, this, null);
@@ -135,66 +135,63 @@ public class MotorSystemConnector   implements OutputEventInterface, RunEventInt
             if (wme.GetAttribute().equals("set-state")) {
                 processSetCommand(id);
             } 
-            else if (wme.GetAttribute().equals("pick-up")) {
-                processPickUpCommand(id);
+            else if (wme.GetAttribute().equals("move")) {
+                processMoveCommand(id);
             } 
-            else if (wme.GetAttribute().equals("put-down")) {
-                processPutDownCommand(id);
+            else if (wme.GetAttribute().equals("grasp")) {
+                processGraspCommand(id);
             } 
-            else if (wme.GetAttribute().equals("point")) {
-                processPointCommand(id);
+            else if (wme.GetAttribute().equals("release")) {
+                processReleaseCommand(id);
             } 
-            else if(wme.GetAttribute().equals("home")){
-            	processHomeCommand(id);
-            }
             agent.commitChanges();
+            System.out.println("[ROSIE] Sent " + wme.GetAttribute() + " command.");
         } catch (IllegalStateException e){
         	System.out.println(e.getMessage());
         }
 	}
     
     /**
-     * Takes a pick-up command on the output link given as an identifier and
-     * uses it to update the internal robot_command_t command. Expects pick-up
-     * ^object-id [int]
+     * Takes a move command on the output link given as an identifier and
+     * uses it to update the internal robot_command_t command. Expects move
+     * ^pose <p> <p> ^x [float] ^y [float] ^z [float].
      */
-    private void processPickUpCommand(Identifier pickUpId)
+    private void processMoveCommand(Identifier moveId)
     {
-        String objectIdStr = WMUtil.getValueOfAttribute(pickUpId,
-                "object-id", "pick-up does not have an ^object-id attribute");
-        
+    	Identifier poseId = WMUtil.getIdentifierOfAttribute(
+                moveId, "pose",
+                "ERROR [MOVE]: No ^pose identifier");
+        double x = Double.parseDouble(WMUtil.getValueOfAttribute(
+                poseId, "x", "ERROR [MOVE]: Pose has no ^x attribute"));
+        double y = Double.parseDouble(WMUtil.getValueOfAttribute(
+        		poseId, "y", "ERROR [MOVE]: Pose has no ^y attribute"));
+        double z = Double.parseDouble(WMUtil.getValueOfAttribute(
+        		poseId, "z", "ERROR [MOVE]: Pose has no ^z attribute"));
+                                
         robot_command_t command = new robot_command_t();
         command.utime = TimeUtil.utime();
-        command.action = String.format("GRAB=%d", Integer.parseInt(objectIdStr));
-        command.dest = new double[6];
-    	lcm.publish("ROBOT_COMMAND", command);
-        pickUpId.CreateStringWME("status", "complete");
+        command.action = String.format("MOVE");
+        command.dest = new double[]{x, y, z, 0, 0, 0};
+        lcm.publish("ROBOT_COMMAND", command);
+        moveId.CreateStringWME("status", "complete");
     }
 
     /**
-     * Takes a put-down command on the output link given as an identifier and
-     * uses it to update the internal robot_command_t command Expects put-down
-     * ^location <loc> <loc> ^x [float] ^y [float] ^z [float]
+	 * XXX Implement grasp...
      */
-    private void processPutDownCommand(Identifier putDownId)
+    private void processGraspCommand(Identifier graspId)
     {
-        Identifier locationId = WMUtil.getIdentifierOfAttribute(
-                putDownId, "location",
-                "Error (put-down): No ^location identifier");
-        double x = Double.parseDouble(WMUtil.getValueOfAttribute(
-                locationId, "x", "Error (put-down): No ^location.x attribute"));
-        double y = Double.parseDouble(WMUtil.getValueOfAttribute(
-                locationId, "y", "Error (put-down): No ^location.y attribute"));
-        double z = Double.parseDouble(WMUtil.getValueOfAttribute(
-                locationId, "z", "Error (put-down): No ^location.z attribute"));
-        robot_command_t command = new robot_command_t();
-        command.utime = TimeUtil.utime();
-        command.action = "DROP";
-        command.dest = new double[]{x, y, z, 0, 0, 0};
-    	lcm.publish("ROBOT_COMMAND", command);
-        putDownId.CreateStringWME("status", "complete");
+        System.out.println("GRASP: not implemented yet");
     }
 
+    /**
+	 * XXX Implement release...
+     */
+    private void processReleaseCommand(Identifier releaseId)
+    {
+        System.out.println("RELEASE: not implemented yet");
+    }
+    
     /**
      * Takes a set-state command on the output link given as an identifier and
      * uses it to update the internal robot_command_t command
@@ -218,27 +215,6 @@ public class MotorSystemConnector   implements OutputEventInterface, RunEventInt
         id.CreateStringWME("status", "complete");
     }
 
-    private void processPointCommand(Identifier pointId)
-    {
-    	Integer id = Integer.parseInt(WMUtil.getValueOfAttribute(pointId, "id"));
-        
-        robot_command_t command = new robot_command_t();
-        command.utime = TimeUtil.utime();
-        command.dest = new double[]{0, 0, 0, 0, 0, 0};
-    	command.action = "POINT=" + id;
-    	lcm.publish("ROBOT_COMMAND", command);
-        pointId.CreateStringWME("status", "complete");
-    }
-    
-    private void processHomeCommand(Identifier id){
-    	robot_command_t command = new robot_command_t();
-        command.utime = TimeUtil.utime();
-        command.dest = new double[6];
-    	command.action = "HOME";
-    	lcm.publish("ROBOT_COMMAND", command);
-        id.CreateStringWME("status", "complete");
-    }
-    
     public JMenu createMenu(){
     	JMenu actionMenu = new JMenu("Action");
     	JButton armResetButton  = new JButton("Reset Arm");

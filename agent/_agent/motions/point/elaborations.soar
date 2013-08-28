@@ -4,5 +4,6 @@ sp {point*elaborate*state
    (<sop> ^name point
           ^pointed-object <obj>)
 -->
-   (<s> ^pointed-object <obj>)
+   (<s> ^pointed-object <obj>
+        ^problemspace motion)
 }

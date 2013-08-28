@@ -1,7 +1,9 @@
 sp {apply*operator*actions
-   (state <s> ^problemspace action
+   # TEMP
+   (state <s> ^problemspace << action motion >>
    	      ^operator <op>
    	      ^io.output-link <ol>
+          # I think this will have to go
    	      ^io.input-link.self.action wait)
    (<op> ^actions <act>)
    (<act> ^<command> <com>)

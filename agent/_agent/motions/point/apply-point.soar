@@ -1,5 +1,3 @@
-# find the projection where the hand should go
-
 # To point, we want to put the hand "above" an object
 # Find the "above" preposition in smem
 sp {point*propose*lookup-preposition*above
@@ -14,6 +12,8 @@ sp {point*propose*lookup-preposition*above
 
 # After we have found the above preposition from smem, project
 # it so that we get an xyz point to move the arm to
+# HACK for now: chooses a second object <obja> randomly from
+# the other blocks; this should really be the arm
 sp {point*propose*find-projection
    (state <s> ^name point
               ^pointed-object <objb>
@@ -31,4 +31,17 @@ sp {point*propose*find-projection
         ^b <objb>
         ^type <prep>
         ^predicate <pred>)
+}
+
+# Move the arm to where the projection tells us
+sp {point*propose*move-arm
+   (state <s> ^name point
+              ^projection-result <res>)
+   (<res> ^x <x> ^y <y> ^z <z>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name move-arm 
+	    ^actions.move <move>)
+   (<move> ^pose <pose>)
+   (<pose> ^x <x> ^y <y> ^z <z>)
 }

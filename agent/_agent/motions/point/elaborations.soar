@@ -3,7 +3,9 @@ sp {point*elaborate*state
               ^superstate.operator <sop>)
    (<sop> ^name point
           ^pointed-object <obj>)
+   (<obj> ^id <id>)
 -->
    (<s> ^pointed-object <obj>
+        ^attend-to-object <id>
         ^problemspace motion)
 }

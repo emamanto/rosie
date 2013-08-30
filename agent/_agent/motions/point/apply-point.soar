@@ -29,7 +29,7 @@ sp {point*propose*find-projection
         ^category svs
         ^a <obja>
         ^b <objb>
-        ^type <prep>
+        ^type above
         ^predicate <pred>)
 }
 

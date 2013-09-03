@@ -1,3 +1,6 @@
+# Copy down which object the agent is supposed to
+# be pointing at, set up attending to scene changes,
+# note that the arm should do an initial move
 sp {point*elaborate*state
    (state <s> ^name point
               ^superstate <ss>)
@@ -8,14 +11,16 @@ sp {point*elaborate*state
 -->
    (<s> ^pointed-object <obj>
         ^attend-to-all-scene-changes true
-        ^scene-changed true
+        ^should-move true
         ^problemspace motion)
    (<ss> ^attend-to-all-scene-changes true -)
 }
 
-sp {point*apply*attend-to-scene-change*record*scene-changed
+# If the agent attends to a scene change, an object has
+# moved so the arm should follow it.
+sp {point*apply*attend-to-scene-change*record*should-move
    (state <s> ^name point
               ^operator.name attend-to-scene-change)
 -->
-   (<s> ^scene-changed true)
+   (<s> ^should-move true)
 }

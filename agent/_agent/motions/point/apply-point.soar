@@ -32,10 +32,11 @@ sp {point*propose*find-projection
         ^predicate <pred>)
 }
 
-# Move the arm to where the projection tells us
+# Move the arm to where the projection tells us, if the
+# block's position has changed
 sp {point*propose*move-arm
    (state <s> ^name point
-              ^scene-changed true
+              ^should-move true
               ^projection-result <res>)
    (<res> ^x <x> ^y <y> ^z <z>)
 -->
@@ -46,6 +47,8 @@ sp {point*propose*move-arm
    (<pose> ^x <x> ^y <y> ^z <z>)
 }
 
+# If the arm has just been told to move, remove the projection-result
+#  used to do this move since it's now obsolete
 sp {point*apply*move-arm*remove*used*projection-result
    (state <s> ^name point
               ^operator <o>
@@ -58,10 +61,12 @@ sp {point*apply*move-arm*remove*used*projection-result
    (<s> ^projection-result <res> -)
 }
 
-sp {point*apply*move-arm*remove*scene-changed
+# If the arm has just been told to move, it shouldn't move
+# again unless the scene changes.
+sp {point*apply*move-arm*remove*should-move
    (state <s> ^name point
               ^operator.name move-arm
-              ^scene-changed true)
+              ^should-move true)
 -->
-   (<s> ^scene-changed true -)
+   (<s> ^should-move true -)
 }

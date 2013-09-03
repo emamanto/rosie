@@ -7,3 +7,4 @@ sbolt.properties
 java/.classpath
 java/.project
 *~
+*.log

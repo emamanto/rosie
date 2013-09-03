@@ -18,6 +18,8 @@ sp {point*elaborate*state
 
 # If the agent attends to a scene change, an object has
 # moved so the arm should follow it.
+# This is a hack; the arm will move whenever any object
+# moves, not just its target object. Fixme.
 sp {point*apply*attend-to-scene-change*record*should-move
    (state <s> ^name point
               ^operator.name attend-to-scene-change)

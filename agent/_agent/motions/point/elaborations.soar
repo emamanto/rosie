@@ -1,11 +1,21 @@
 sp {point*elaborate*state
    (state <s> ^name point
-              ^superstate.operator <sop>)
+              ^superstate <ss>)
+   (<ss> ^operator <sop>)
    (<sop> ^name point
           ^pointed-object <obj>)
    (<obj> ^id <id>)
 -->
    (<s> ^pointed-object <obj>
-        ^attend-to-object <id>
+        ^attend-to-all-scene-changes true
+        ^scene-changed true
         ^problemspace motion)
+   (<ss> ^attend-to-all-scene-changes true -)
+}
+
+sp {point*apply*attend-to-scene-change*record*scene-changed
+   (state <s> ^name point
+              ^operator.name attend-to-scene-change)
+-->
+   (<s> ^scene-changed true)
 }

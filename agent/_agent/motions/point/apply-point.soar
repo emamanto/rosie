@@ -29,13 +29,13 @@ sp {point*propose*find-projection
         ^category svs
         ^a <obja>
         ^b <objb>
-        ^type above
         ^predicate <pred>)
 }
 
 # Move the arm to where the projection tells us
 sp {point*propose*move-arm
    (state <s> ^name point
+              ^scene-changed true
               ^projection-result <res>)
    (<res> ^x <x> ^y <y> ^z <z>)
 -->
@@ -44,4 +44,24 @@ sp {point*propose*move-arm
 	    ^actions.move <move>)
    (<move> ^pose <pose>)
    (<pose> ^x <x> ^y <y> ^z <z>)
+}
+
+sp {point*apply*move-arm*remove*used*projection-result
+   (state <s> ^name point
+              ^operator <o>
+              ^projection-result <res>)
+   (<o> ^name move-arm
+        ^actions.move.pose <pos>)
+   (<pos> ^x <x> ^y <y> ^z <z>)
+   (<res> ^x <x> ^y <y> ^z <z>)
+-->
+   (<s> ^projection-result <res> -)
+}
+
+sp {point*apply*move-arm*remove*scene-changed
+   (state <s> ^name point
+              ^operator.name move-arm
+              ^scene-changed true)
+-->
+   (<s> ^scene-changed true -)
 }

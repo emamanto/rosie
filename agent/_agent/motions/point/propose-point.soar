@@ -4,7 +4,8 @@ sp {topstate*propose*point
    (state <s> ^name bolt-agent
               ^superstate nil
               ^object <obj>)
-   (<obj> ^category block)
+   (<obj> ^category block
+          ^id <id>)
 -->
    (<s> ^operator <op> + <, =)
    (<op> ^name point

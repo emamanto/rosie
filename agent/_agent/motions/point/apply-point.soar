@@ -5,7 +5,7 @@ sp {point*propose*lookup-preposition*above
               ^pointed-object
              -^found-prep)
 -->
-   (<s> ^operator <o> +)
+   (<s> ^operator <o> + =) # AM: Indifferent pref
    (<o> ^name lookup-preposition
         ^type above)
 }

@@ -26,18 +26,19 @@ public class Messages implements IInputLinkElement
     // Represents an invalid id, or that no message is on the input-link
     private final Integer INVALID_ID = -1;
     
+
     private BOLTDictionary dictionary;
 
     private int messageNumber;
 
     private Parser parser;
 
-    public Messages(){
+    public Messages(String dictionaryFile, String grammarFile){
         latestMessage = "";
         latestMessageId = INVALID_ID;   
         messageChanged = false;
-        dictionary = new BOLTDictionary("./java/src/edu/umich/insoar/language/dictionary.txt"); 
-        parser = new Parser(dictionary);
+        dictionary = new BOLTDictionary(dictionaryFile); 
+        parser = new Parser(dictionary, grammarFile);
     }
 
 
@@ -55,7 +56,7 @@ public class Messages implements IInputLinkElement
         messageId = parentIdentifier.CreateIdWME("message");
         messageNumber = latestMessageId;
         messageId.CreateIntWME("id", latestMessageId);
-        messageId.CreateStringWME("type", latestMessage);
+        //messageId.CreateStringWME("type", latestMessage);
         if(!parser.getSoarSpeak(latestMessage, messageId)){
         	messageId.DestroyWME();
         	messageId = null;

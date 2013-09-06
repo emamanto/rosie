@@ -9,20 +9,27 @@ sp {point*elaborate*state
           ^pointed-object <obj>)
    (<obj> ^id <id>)
 -->
+   (interrupt)
    (<s> ^pointed-object <obj>
         ^attend-to-all-scene-changes true
-        ^should-move true
         ^problemspace motion)
    (<ss> ^attend-to-all-scene-changes true -)
 }
 
-# If the agent attends to a scene change, an object has
-# moved so the arm should follow it.
-# This is a hack; the arm will move whenever any object
-# moves, not just its target object. Fixme.
-sp {point*apply*attend-to-scene-change*record*should-move
-   (state <s> ^name point
-              ^operator.name attend-to-scene-change)
--->
-   (<s> ^should-move true)
-}
+#sp {point*elaborate*projection-result*expire-time
+#   (state <s> ^name point
+#              ^io.input-link.time.seconds <time>
+#              ^operator.name find-projection
+#              ^projection-result <res>)
+#-->
+#   (<res> ^expire-time (+ <time> 3))
+#}
+#
+#sp {point*remove*expired*projection-result
+# 	(state <s> ^name point
+#               ^io.input-link.time.seconds <time>
+#               ^projection-result <res>)
+#    (<res> ^expire-time <= <time>)
+#-->
+#    (<s> ^projection-result <res> -)
+#}

@@ -17,7 +17,7 @@ sp {spatial-reasoning*elaborate*initialize*prep-list
 #         ^prep.name diagonal-with 
 #         ^prep.name near 
 #         ^prep2.name linear-with
-#         ^prep.name above 
+         ^prep.name above 
 #         ^prep.name next-to
          )
 }

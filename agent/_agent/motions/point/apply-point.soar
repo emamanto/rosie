@@ -14,59 +14,20 @@ sp {point*propose*lookup-preposition*above
 # it so that we get an xyz point to move the arm to
 # HACK for now: chooses a second object <obja> randomly from
 # the other blocks; this should really be the arm
-sp {point*propose*find-projection
-   (state <s> ^name point
-              ^pointed-object <objb>
-              ^object {<obja> <> <objb>}
-              ^found-prep <prep>
-             -^projection-result)
-   (<obja> ^category block)
-   (<objb> ^category block)
-   (<prep> ^predicate <pred>)
--->
-   (<s> ^operator <o> + =)
-   (<o> ^name find-projection
-        ^category svs
-        ^a <obja>
-        ^b <objb>
-        ^predicate <pred>)
-}
-
-# Move the arm to where the projection tells us, if the
-# block's position has changed
-sp {point*propose*move-arm
-   (state <s> ^name point
-              ^should-move true
-              ^projection-result <res>)
-   (<res> ^x <x> ^y <y> ^z <z>)
--->
-   (<s> ^operator <o> + =)
-   (<o> ^name move-arm 
-	    ^actions.move <move>)
-   (<move> ^pose <pose>)
-   (<pose> ^x <x> ^y <y> ^z <z>)
-}
-
-# If the arm has just been told to move, remove the projection-result
-#  used to do this move since it's now obsolete
-sp {point*apply*move-arm*remove*used*projection-result
-   (state <s> ^name point
-              ^operator <o>
-              ^projection-result <res>)
-   (<o> ^name move-arm
-        ^actions.move.pose <pos>)
-   (<pos> ^x <x> ^y <y> ^z <z>)
-   (<res> ^x <x> ^y <y> ^z <z>)
--->
-   (<s> ^projection-result <res> -)
-}
-
-# If the arm has just been told to move, it shouldn't move
-# again unless the scene changes.
-sp {point*apply*move-arm*remove*should-move
-   (state <s> ^name point
-              ^operator.name move-arm
-              ^should-move true)
--->
-   (<s> ^should-move true -)
-}
+#sp {point*propose*find-projection
+#   (state <s> ^name point
+#              ^pointed-object <objb>
+#              ^object {<obja> <> <objb>}
+#              ^found-prep <prep>
+#             -^projection-result)
+#   (<obja> ^category block)
+#   (<objb> ^category block)
+#   (<prep> ^predicate <pred>)
+#-->
+#   (<s> ^operator <o> + =)
+#   (<o> ^name find-projection
+#        ^category svs
+#        ^a <obja>
+#        ^b <objb>
+#        ^predicate <pred>)
+#}

@@ -14,20 +14,20 @@ sp {point*propose*lookup-preposition*above
 # it so that we get an xyz point to move the arm to
 # HACK for now: chooses a second object <obja> randomly from
 # the other blocks; this should really be the arm
-#sp {point*propose*find-projection
-#   (state <s> ^name point
-#              ^pointed-object <objb>
-#              ^object {<obja> <> <objb>}
-#              ^found-prep <prep>
-#             -^projection-result)
-#   (<obja> ^category block)
-#   (<objb> ^category block)
-#   (<prep> ^predicate <pred>)
-#-->
-#   (<s> ^operator <o> + =)
-#   (<o> ^name find-projection
-#        ^category svs
-#        ^a <obja>
-#        ^b <objb>
-#        ^predicate <pred>)
-#}
+sp {point*propose*find-projection
+   (state <s> ^name point
+              ^pointed-object <objb>
+              ^object {<obja> <> <objb>}
+              ^found-prep <prep>
+             -^projection-result)
+   (<obja> ^category block)
+   (<objb> ^category block)
+   (<prep> ^predicate <pred>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name find-projection
+        ^category svs
+        ^a <obja>
+        ^b <objb>
+        ^predicate <pred>)
+}

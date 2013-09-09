@@ -19,7 +19,8 @@ sp {point*propose*find-projection
               ^pointed-object <objb>
               ^object {<obja> <> <objb>}
               ^found-prep <prep>
-             -^projection-result)
+              ^topstate <ts>)
+   (<ts> -^projection-result)
    (<obja> ^category block)
    (<objb> ^category block)
    (<prep> ^predicate <pred>)
@@ -29,5 +30,43 @@ sp {point*propose*find-projection
         ^category svs
         ^a <obja>
         ^b <objb>
-        ^predicate <pred>)
+        ^predicate <pred>
+        ^expire-time 1)
+}
+
+sp {point*propose*remove-expired-projection
+   (state <s> ^name point
+              ^io.input-link.time.seconds <time>
+              ^topstate <ts>)
+   (<ts> ^projection-result <res>)
+   (<res> ^expire-time <= <time>)
+-->
+   (<s> ^operator <o> + >, =)
+   (<o> ^name remove-expired-projection)
+}
+
+sp {point*apply*remove-expired-projection
+   (state <s> ^name point
+              ^topstate <ts>
+              ^operator.name remove-expired-projection)
+   (<ts> ^projection-result <res>
+         ^svs.command <comm>)
+   (<res> ^x <x> ^y <y> ^z <z>)
+   (<comm> ^project <proj>)
+   (<proj> ^result <res2>)
+   (<res2> ^x <x> ^y <y> ^z <z>)
+-->
+   (<ts> ^projection-result <res> -)
+   (<comm> ^project <proj> -)   
+}
+
+sp {point*propose*move-arm
+   (state <s> ^name point
+              ^topstate.projection-result <res>)
+   (<res> ^x <x> ^y <y> ^z <z>)
+-->
+   (<s> ^operator <op> + <, =)
+   (<op> ^name move-arm 
+	     ^actions.move.pose <pose>)
+   (<pose> ^x <x> ^y <y> ^z <z>)
 }

@@ -9,50 +9,8 @@ sp {point*elaborate*state
           ^pointed-object <obj>)
    (<obj> ^id <id>)
 -->
-   (interrupt)
    (<s> ^pointed-object <obj>
         ^attend-to-all-scene-changes true
         ^problemspace motion)
    (<ss> ^attend-to-all-scene-changes true -)
-}
-
-sp {point*propose*record-expire-time
-   (state <s> ^name point
-              ^topstate <ts>
-              ^projection-result <res>)
-   (<ts> -^projection-expire-time)
--->
-   (<s> ^operator <op> +)
-   (<op> ^name record-expire-time)
-}
-
-sp {point*elaborate*projection-expire-time
-   (state <s> ^name point
-              ^operator.name record-expire-time
-              ^io.input-link.time.seconds <time>
-              ^topstate <ts>)
--->
-   (<ts> ^projection-expire-time (+ <time> 3))
-}
-
-sp {point*propose*remove-expired-projection-result
- 	(state <s> ^name point
-               ^io.input-link.time.seconds <time>
-               ^projection-result <res>
-               ^topstate <ts>)
-    (<ts> ^projection-expire-time <= <time>)
--->
-    (<s> ^operator <op> +)
-    (<op> ^name remove-expired-projection-result)
-}
-
-sp {point*apply*remove-expired-projection-result
-   (state <s> ^name point
-              ^operator.name remove-expired-projection-result
-              ^projection-result <res>
-              ^topstate <ts>)
-   (<ts> ^projection-expire-time <t>)
--->
-   (<ts> ^projection-expire-time <t> -)
-   (<s> ^projection-result <res> -)
 }

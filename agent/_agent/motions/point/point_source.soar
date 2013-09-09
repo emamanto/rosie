@@ -1,0 +1,4 @@
+source apply-point.soar
+source elaborations.soar
+# Remember to not do this when motions get used for real 
+source propose-point.soar

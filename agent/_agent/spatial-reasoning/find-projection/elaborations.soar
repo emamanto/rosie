@@ -53,6 +53,13 @@ sp {find-projection*elaborate*copy-down-attrs*optional*predicate
         ^predicate <pred>)
 }
 
+sp {find-projection*elaborate*copy-down-attrs*optional*expire-time
+   (state <s> ^name find-projection
+              ^superstate.operator.expire-time <time>)
+-->
+   (<s> ^expire-time <time>)
+}
+
 #sp {find-projection*elaborate*copy-down-attrs*optional*interaction
 #   (state <s> ^name find-projection
 #              ^superstate.operator.interaction <int>)

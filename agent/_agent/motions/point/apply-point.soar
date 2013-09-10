@@ -11,26 +11,27 @@ sp {point*propose*lookup-preposition*above
 }
 
 # After we have found the above preposition from smem, project
-# it so that we get an xyz point to move the arm to
-# HACK for now: chooses a second object <obja> randomly from
-# the other blocks; this should really be the arm
-sp {point*propose*find-projection
+# the "hand" part of the arm into the "above" position from the
+# chosen object to get an (x, y, z) point for a move command
+sp {point*propose*project-hand
    (state <s> ^name point
               ^pointed-object <obj>
               ^found-prep <prep>
               ^topstate <ts>)
    (<ts> -^projection-result)
    (<obj> ^category block)
-   #(<prep> ^predicate <pred>)
 -->
    (<s> ^operator <o> + =)
    (<o> ^name project-hand
-        #^category svs
         ^object <obj>
     	^preposition <prep>
+        # In seconds, how long the projection is expected to be accurate
         ^expire-time 1)
 }
 
+# Once a projection is past its expiration, get rid of it so the above
+# will re-match and a new projection will be found. Needs to be
+# accomplished with an operator for support issues.
 sp {point*propose*remove-expired-projection
    (state <s> ^name point
               ^io.input-link.time.seconds <time>
@@ -54,9 +55,12 @@ sp {point*apply*remove-expired-projection
    (<res2> ^x <x> ^y <y> ^z <z>)
 -->
    (<ts> ^projection-result <res> -)
+   # Also remove the svs command... maybe this should be a separate rule?
    (<comm> ^project <proj> -)   
 }
 
+# Once a valid projection-result exists, move the arm to where
+# it suggests.
 sp {point*propose*move-arm
    (state <s> ^name point
               ^topstate.projection-result <res>)

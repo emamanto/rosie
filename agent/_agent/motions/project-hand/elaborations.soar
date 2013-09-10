@@ -1,3 +1,5 @@
+# Copy down relevant info from the superstate so that
+# project-hand can use it.
 sp {project-hand*elaborate*copy-down-attrs
    (state <s> ^name project-hand
               ^topstate.svs <svs>

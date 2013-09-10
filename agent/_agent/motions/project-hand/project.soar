@@ -1,3 +1,6 @@
+# Below blatantly stolen from find-projection and adapted
+# to deal with the hand instead of blocks.
+
 # If there is no object with the requested id,  FAIL
 sp {project-hand*failure*object-exist
    (state <s> ^name project-hand

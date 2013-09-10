@@ -132,7 +132,6 @@ sp {find-projection*project*svs*complete-projection
               ^a <ida>
               ^b <idb>
               ^result <res>
-             -^expire-time
               ^superstate <ss>
               ^svs-link.spatial-scene <sp>
               ^svs-link.command <cmd>)
@@ -147,28 +146,4 @@ sp {find-projection*project*svs*complete-projection
 -->
    (<ss> ^projection-result <result>)
    (<result> ^x <x> ^y <y> ^z <z> ^a <ida> ^b <idb>)
-}
-
-sp {find-projection*project*svs*complete-projection*timed
-   (state <s> ^name find-projection
-              ^a <ida>
-              ^b <idb>
-              ^result <res>
-              ^expire-time <expire>
-              ^topstate <ts>
-              ^io.input-link.time.seconds <time>
-              ^svs-link.spatial-scene <sp>
-              ^svs-link.command <cmd>)
-   (<ts> -^projection-result)
-   (<cmd> ^project <P11>)
-   (<P11> ^a <N7> ^b <N8> ^result <r>)
-   (<r> ^x <x> ^y <y> ^z <z>)
-   (<sp> ^child <c1> ^child <c2>)
-   (<c1> ^id-int <ida> ^id <obja>)
-   (<c2> ^id-int <idb> ^id <objb>)
-   (<N7> ^type node ^name <obja>)
-   (<N8> ^type node ^name <objb>)
--->
-   (<ts> ^projection-result <result>)
-   (<result> ^x <x> ^y <y> ^z <z> ^a <ida> ^b <idb> ^expire-time (+ <time> <expire>))
 }

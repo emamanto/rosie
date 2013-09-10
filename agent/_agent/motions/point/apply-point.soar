@@ -26,7 +26,7 @@ sp {point*propose*project-hand
         ^object <obj>
     	^preposition <prep>
         # In us, how long the projection is expected to be accurate
-        ^expire-time 250)
+        ^expire-time 100000)
 }
 
 # Once a projection is past its expiration, get rid of it so the above

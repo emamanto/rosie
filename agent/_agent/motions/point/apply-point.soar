@@ -16,21 +16,18 @@ sp {point*propose*lookup-preposition*above
 # the other blocks; this should really be the arm
 sp {point*propose*find-projection
    (state <s> ^name point
-              ^pointed-object <objb>
-              ^object {<obja> <> <objb>}
+              ^pointed-object <obj>
               ^found-prep <prep>
               ^topstate <ts>)
    (<ts> -^projection-result)
-   (<obja> ^category block)
-   (<objb> ^category block)
-   (<prep> ^predicate <pred>)
+   (<obj> ^category block)
+   #(<prep> ^predicate <pred>)
 -->
    (<s> ^operator <o> + =)
-   (<o> ^name find-projection
-        ^category svs
-        ^a <obja>
-        ^b <objb>
-        ^predicate <pred>
+   (<o> ^name project-hand
+        #^category svs
+        ^object <obj>
+    	^preposition <prep>
         ^expire-time 1)
 }
 

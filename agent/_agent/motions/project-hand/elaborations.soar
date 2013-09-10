@@ -1,0 +1,13 @@
+sp {project-hand*elaborate*copy-down-attrs
+   (state <s> ^name project-hand
+              ^topstate.svs <svs>
+   			  ^superstate.operator.object.id <obj-id>
+              ^superstate.operator.preposition <prep>
+              ^superstate.operator.expire-time <time>)
+-->
+   (<s> ^object-id <obj-id>
+        ^preposition <prep>
+        ^expire-time <time>
+        ^svs-link <svs>
+        ^result <result>)
+}

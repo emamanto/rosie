@@ -1,0 +1,104 @@
+# If there is no object with the requested id,  FAIL
+sp {project-hand*failure*object-exist
+   (state <s> ^name project-hand
+              ^topstate <ts>
+              ^svs-link.spatial-scene <sp>
+              ^object-id <obj-id>
+              ^result <result>)
+   (<sp> -^child.id-int <obj-id>)
+-->
+   (<ts> ^projection-result <proj>)
+   (<proj> ^status failure
+           ^reason nonexistent-object)
+}
+
+sp {project-hand*create-projection
+   (state <s> ^name project-hand
+              ^object-id <obj-id>
+              ^result <res>
+              ^preposition <prep>
+              ^svs-link.command <cmd>
+              ^svs-link.spatial-scene <sp>)
+   (<prep> ^predicate <pred>)
+   (<pred> ^all-aligned <val>)
+   (<sp> ^child <obj-child> ^child <arm-child>)
+   (<obj-child> ^id-int <obj-id> ^id <object>)
+   (<arm-child> ^id arm
+                ^child <hand>)
+   (<hand> ^id seg5)
+-->
+   (<cmd> ^project <proj>)
+   (<proj> ^a <arg-a> ^b <arg-b> ^aligned <val>)
+   (<arg-b> ^type node ^name <object>)
+   (<arg-a> ^type node ^name seg5)
+}
+
+sp {project-hand*create-projection*add-axis
+   (state <s> ^name project-hand
+              ^object-id <obj-id>
+              ^result <res>
+              ^svs-link.command <cmd>
+              ^preposition <prep>
+              ^svs-link.spatial-scene <sp>)
+   (<prep> ^predicate <pred>)
+   (<pred> ^relation <r>)
+   (<r> ^avg <avg> ^axis <axis>)
+   (<sp> ^child <obj-child> ^child <arm-child>)
+   (<obj-child> ^id-int <obj-id> ^id <object>)
+   (<arm-child> ^id arm ^child <hand>)
+   (<hand> ^id seg5)
+   (<cmd> ^project <proj>)
+   (<proj> ^a <arg-a> ^b <arg-b>)
+   (<arg-b> ^type node ^name <object>)
+   (<arg-a> ^type node ^name seg5)
+-->
+   (<proj> ^rel <rel>)
+   (<rel> ^axis <axis> ^avg <avg>)
+}
+
+sp {project-hand*create-projection*add-primitives
+   (state <s> ^name project-hand
+              ^object-id <obj-id>
+              ^result <res>
+              ^svs-link.command <cmd>
+              ^preposition <prep>
+              ^svs-link.spatial-scene <sp>)
+   (<prep> ^predicate <pred>)
+   (<pred> ^relation <r>)
+   (<r> ^type <ptype> ^axis <axis>)
+   (<sp> ^child <obj-child> ^child <arm-child>)
+   (<obj-child> ^id-int <obj-id> ^id <object>)
+   (<arm-child> ^id arm ^child <hand>)
+   (<hand> ^id seg5)
+   (<cmd> ^project <proj>)
+   (<proj> ^a <arg-a> ^b <arg-b> ^rel <rel>)
+   (<rel> ^axis <axis>)
+   (<arg-b> ^type node ^name <object>)
+   (<arg-a> ^type node ^name seg5)
+-->
+   (<rel> ^type <ptype>)
+}
+
+sp {project-hand*complete-projection
+   (state <s> ^name project-hand
+              ^object-id <obj-id>
+              ^result <res>
+              ^expire-time <expire>
+              ^topstate <ts>
+              ^io.input-link.time.seconds <time>
+              ^svs-link.spatial-scene <sp>
+              ^svs-link.command <cmd>)
+   (<ts> -^projection-result)
+   (<cmd> ^project <proj>)
+   (<proj> ^a <arg-a> ^b <arg-b> ^result <r>)
+   (<r> ^x <x> ^y <y> ^z <z>)
+   (<sp> ^child <obj-child> ^child <arm-child>)
+   (<obj-child> ^id-int <obj-id> ^id <object>)
+   (<arm-child> ^id arm ^child <hand>)
+   (<hand> ^id seg5)
+   (<arg-b> ^type node ^name <object>)
+   (<arg-a> ^type node ^name seg5)
+-->
+   (<ts> ^projection-result <result>)
+   (<result> ^x <x> ^y <y> ^z <z> ^a <ida> ^b <idb> ^expire-time (+ <time> <expire>))
+}

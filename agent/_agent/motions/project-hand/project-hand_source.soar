@@ -1,0 +1,7 @@
+
+
+# Souce file "elaborations.soar"
+source elaborations.soar
+
+# Souce file "project.soar"
+source project.soar

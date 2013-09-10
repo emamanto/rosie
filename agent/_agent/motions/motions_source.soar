@@ -1,3 +1,7 @@
 pushd point
 source point_source.soar
 popd
+
+pushd project-hand
+source project-hand_source.soar
+popd

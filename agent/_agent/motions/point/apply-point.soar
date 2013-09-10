@@ -25,8 +25,8 @@ sp {point*propose*project-hand
    (<o> ^name project-hand
         ^object <obj>
     	^preposition <prep>
-        # In seconds, how long the projection is expected to be accurate
-        ^expire-time 1)
+        # In us, how long the projection is expected to be accurate
+        ^expire-time 250)
 }
 
 # Once a projection is past its expiration, get rid of it so the above
@@ -34,7 +34,7 @@ sp {point*propose*project-hand
 # accomplished with an operator for support issues.
 sp {point*propose*remove-expired-projection
    (state <s> ^name point
-              ^io.input-link.time.seconds <time>
+              ^io.input-link.time.microseconds <time>
               ^topstate <ts>)
    (<ts> ^projection-result <res>)
    (<res> ^expire-time <= <time>)

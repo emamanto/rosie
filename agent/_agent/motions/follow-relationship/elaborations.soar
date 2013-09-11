@@ -1,0 +1,18 @@
+# Copy down which object the agent is supposed to
+# be following, what relationship the arm should have
+# to that object, set up attending to scene changes
+sp {follow-relationship*elaborate*state
+   (state <s> ^name follow-relationship
+              ^superstate <ss>)
+   (<ss> ^operator <sop>)
+   (<sop> ^name follow-relationship
+          ^preposition <name>
+          ^reference-object <obj>)
+   (<obj> ^id <id>)
+-->
+   (<s> ^reference-object <obj>
+        ^preposition <name>
+        ^attend-to-all-scene-changes true
+        ^problemspace motion)
+   (<ss> ^attend-to-all-scene-changes true -)
+}

@@ -1,73 +1,9 @@
-# To point, we want to put the hand "above" an object
-# Find the "above" preposition in smem
-sp {point*propose*lookup-preposition*above
+sp {point*propose*follow-relationship*above
    (state <s> ^name point
-              ^pointed-object
-             -^found-prep)
+              ^pointed-object <obj>)
 -->
-   (<s> ^operator <o> + =) # AM: Indifferent pref
-   (<o> ^name lookup-preposition
-        ^type above)
-}
-
-# After we have found the above preposition from smem, project
-# the "hand" part of the arm into the "above" position from the
-# chosen object to get an (x, y, z) point for a move command
-sp {point*propose*project-hand
-   (state <s> ^name point
-              ^pointed-object <obj>
-              ^found-prep <prep>
-              ^topstate <ts>)
-   (<ts> -^projection-result)
-   (<obj> ^category block)
--->
-   (<s> ^operator <o> + =)
-   (<o> ^name project-hand
-        ^object <obj>
-    	^preposition <prep>
-        # In us, how long the projection is expected to be accurate
-        ^expire-time 100000)
-}
-
-# Once a projection is past its expiration, get rid of it so the above
-# will re-match and a new projection will be found. Needs to be
-# accomplished with an operator for support issues.
-sp {point*propose*remove-expired-projection
-   (state <s> ^name point
-              ^io.input-link.time.microseconds <time>
-              ^topstate <ts>)
-   (<ts> ^projection-result <res>)
-   (<res> ^expire-time <= <time>)
--->
-   (<s> ^operator <o> + >, =)
-   (<o> ^name remove-expired-projection)
-}
-
-sp {point*apply*remove-expired-projection
-   (state <s> ^name point
-              ^topstate <ts>
-              ^operator.name remove-expired-projection)
-   (<ts> ^projection-result <res>
-         ^svs.command <comm>)
-   (<res> ^x <x> ^y <y> ^z <z>)
-   (<comm> ^project <proj>)
-   (<proj> ^result <res2>)
-   (<res2> ^x <x> ^y <y> ^z <z>)
--->
-   (<ts> ^projection-result <res> -)
-   # Also remove the svs command... maybe this should be a separate rule?
-   (<comm> ^project <proj> -)   
-}
-
-# Once a valid projection-result exists, move the arm to where
-# it suggests.
-sp {point*propose*move-arm
-   (state <s> ^name point
-              ^topstate.projection-result <res>)
-   (<res> ^x <x> ^y <y> ^z <z>)
--->
-   (<s> ^operator <op> + <, =)
-   (<op> ^name move-arm 
-	     ^actions.move.pose <pose>)
-   (<pose> ^x <x> ^y <y> ^z <z>)
+   (<s> ^operator <o> +)
+   (<o> ^name follow-relationship
+        ^reference-object <obj>
+        ^preposition above)
 }

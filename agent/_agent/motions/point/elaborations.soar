@@ -1,6 +1,3 @@
-# Copy down which object the agent is supposed to
-# be pointing at, set up attending to scene changes,
-# note that the arm should do an initial move
 sp {point*elaborate*state
    (state <s> ^name point
               ^superstate <ss>)

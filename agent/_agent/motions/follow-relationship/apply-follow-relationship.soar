@@ -1,0 +1,75 @@
+# To follow-relationship, we want to put the hand <some prep>
+# relative to an object and keep it there even if the object moves
+# Find the desired preposition in smem
+sp {follow-relationship*propose*lookup-preposition
+   (state <s> ^name follow-relationship
+              ^reference-object
+              ^preposition <name>
+             -^found-prep)
+-->
+   (<s> ^operator <o> + =) # AM: Indifferent pref
+   (<o> ^name lookup-preposition
+        ^type <name>)
+}
+
+# After we have found the above preposition from smem, project
+# the "hand" part of the arm into the relative position from the
+# chosen object to get an (x, y, z) for a move command
+sp {follow-relationship*propose*project-hand
+   (state <s> ^name follow-relationship
+              ^reference-object <obj>
+              ^found-prep <prep>
+              ^topstate <ts>)
+   (<ts> -^projection-result)
+   (<obj> ^category block)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name project-hand
+        ^object <obj>
+    	^preposition <prep>
+        # In us, how long the projection is expected to be accurate
+        ^expire-time 100000)
+}
+
+# Once a projection is past its expiration, get rid of it so the above
+# will re-match and a new projection will be found. Needs to be
+# accomplished with an operator for support issues.
+sp {follow-relationship*propose*remove-expired-projection
+   (state <s> ^name follow-relationship
+              ^io.input-link.time.microseconds <time>
+              ^topstate <ts>)
+   (<ts> ^projection-result <res>)
+   (<res> ^expire-time <= <time>)
+-->
+   (<s> ^operator <o> + >, =)
+   (<o> ^name remove-expired-projection)
+}
+
+sp {follow-relationship*apply*remove-expired-projection
+   (state <s> ^name follow-relationship
+              ^topstate <ts>
+              ^operator.name remove-expired-projection)
+   (<ts> ^projection-result <res>
+         ^svs.command <comm>)
+   (<res> ^x <x> ^y <y> ^z <z>)
+   (<comm> ^project <proj>)
+   (<proj> ^result <res2>)
+   (<res2> ^x <x> ^y <y> ^z <z>)
+-->
+   (<ts> ^projection-result <res> -)
+   # Also remove the svs command... maybe this should be a separate rule?
+   (<comm> ^project <proj> -)   
+}
+
+# Once a valid projection-result exists, move the arm to where
+# it suggests.
+sp {follow-relationship*propose*move-arm
+   (state <s> ^name follow-relationship
+              ^topstate.projection-result <res>)
+   (<res> ^x <x> ^y <y> ^z <z>)
+-->
+   (<s> ^operator <op> + <, =)
+   (<op> ^name move-arm 
+	     ^actions.move.pose <pose>)
+   (<pose> ^x <x> ^y <y> ^z <z>)
+}

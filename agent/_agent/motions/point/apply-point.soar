@@ -1,3 +1,5 @@
+# Pointing is simple: put the hand "above" an object
+# and follow it around if the object moves
 sp {point*propose*follow-relationship*above
    (state <s> ^name point
               ^pointed-object <obj>)

@@ -1,3 +1,6 @@
+# Copy down which object is supposed to be pointed
+# at and set up attending to scene changes at the
+# right level.
 sp {point*elaborate*state
    (state <s> ^name point
               ^superstate <ss>)

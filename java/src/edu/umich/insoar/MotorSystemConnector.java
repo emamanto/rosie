@@ -208,9 +208,7 @@ public class MotorSystemConnector   implements OutputEventInterface, RunEventInt
     @Override
     public synchronized void outputEventHandler(Object data, String agentName,
             String attributeName, WMElement wme) {
-    	// Lizzie: Make sure what you did here doesn't cause horrible bugs for anyone
-    	// else!
-		if (!wme.IsJustAdded())
+		if (!(wme.IsJustAdded() && wme.IsIdentifier()))
         {
             return;
         }
@@ -255,22 +253,26 @@ public class MotorSystemConnector   implements OutputEventInterface, RunEventInt
                                 
         robot_command_t command = new robot_command_t();
         command.utime = TimeUtil.utime();
-        command.action = String.format("MOVE");
+        command.action = "MOVE";
         command.dest = new double[]{x, y, z, 0, 0, 0};
         lcm.publish("ROBOT_COMMAND", command);
         moveId.CreateStringWME("status", "complete");
     }
 
     /**
-	 * XXX Implement grasp...
+	 * Takes a grasp command on the output link given as an identifier and
+	 * uses it to update the internal robot_command_t command. Expects
+	 * grasp ^object-id [int].
      */
     private void processGraspCommand(Identifier graspId)
     {
-    	robot_command_t command = new robot_command_t();
+    	String objId = WMUtil.getValueOfAttribute(graspId, "object-id",
+                "[OUTPUT] ERROR: Grasp command has no ^object-id attribute");
+                                
+        robot_command_t command = new robot_command_t();
         command.utime = TimeUtil.utime();
-        command.action = String.format("GRASP");
+        command.action = String.format("GRASP=%s", objId);
         lcm.publish("ROBOT_COMMAND", command);
-        
         graspId.CreateStringWME("status", "complete");
     }
 

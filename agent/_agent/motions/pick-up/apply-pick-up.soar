@@ -1,10 +1,24 @@
-sp {pick-up*propose*follow-relationship*on
+#sp {pick-up*propose*follow-relationship*on
+#   (state <s> ^name pick-up
+#              ^pick-up-object <obj>)
+#-->
+#   (<s> ^operator <o> +)
+#   (<o> ^name follow-relationship
+#        ^reference-object <obj>
+#        # Okay, getting the hand into pick-up position may be interesting
+#        ^preposition below)
+#}
+
+#woo testing the grasp move
+sp {pick-up*propose*grasp
    (state <s> ^name pick-up
-              ^pick-up-object <obj>)
+              ^pick-up-object.id <obj>)
 -->
    (<s> ^operator <o> +)
-   (<o> ^name follow-relationship
-        ^reference-object <obj>
-        # Okay, getting the hand into pick-up position may be interesting
-        ^preposition below)
+   (<o> ^name grasp
+        ^actions <a>)
+   # Pass in the id so that the arm has some idea of which object
+   # it's trying to get its hand around?
+   (<a> ^grasp <grasp>)
+   (<grasp> ^object-id <obj>)
 }

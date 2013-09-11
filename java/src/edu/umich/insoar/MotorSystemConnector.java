@@ -208,7 +208,9 @@ public class MotorSystemConnector   implements OutputEventInterface, RunEventInt
     @Override
     public synchronized void outputEventHandler(Object data, String agentName,
             String attributeName, WMElement wme) {
-		if (!(wme.IsJustAdded() && wme.IsIdentifier()))
+    	// Lizzie: Make sure what you did here doesn't cause horrible bugs for anyone
+    	// else!
+		if (!wme.IsJustAdded())
         {
             return;
         }
@@ -264,7 +266,12 @@ public class MotorSystemConnector   implements OutputEventInterface, RunEventInt
      */
     private void processGraspCommand(Identifier graspId)
     {
-        System.out.println("GRASP: not implemented yet");
+    	robot_command_t command = new robot_command_t();
+        command.utime = TimeUtil.utime();
+        command.action = String.format("GRASP");
+        lcm.publish("ROBOT_COMMAND", command);
+        
+        graspId.CreateStringWME("status", "complete");
     }
 
     /**

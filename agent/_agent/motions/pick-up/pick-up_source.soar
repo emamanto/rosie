@@ -1,0 +1,3 @@
+source apply-pick-up.soar
+source elaborations.soar
+source propose-pick-up.soar

@@ -1,0 +1,10 @@
+sp {pick-up*propose*follow-relationship*on
+   (state <s> ^name pick-up
+              ^pick-up-object <obj>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name follow-relationship
+        ^reference-object <obj>
+        # Okay, getting the hand into pick-up position may be interesting
+        ^preposition below)
+}

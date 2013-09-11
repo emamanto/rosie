@@ -9,3 +9,7 @@ popd
 pushd follow-relationship
 source follow-relationship_source.soar
 popd
+
+pushd pick-up
+source pick-up_source.soar
+popd

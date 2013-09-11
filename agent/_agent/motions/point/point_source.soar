@@ -11,4 +11,4 @@
 
 source apply-point.soar
 source elaborations.soar
-source propose-point.soar
+#source propose-point.soar

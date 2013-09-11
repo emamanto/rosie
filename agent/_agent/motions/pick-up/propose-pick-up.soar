@@ -1,0 +1,13 @@
+# For now, basically if the agent isn't doing anything else,
+# pick a block-type object and pick it up!
+sp {topstate*propose*pick-up
+   (state <s> ^name bolt-agent
+              ^superstate nil
+              ^object <obj>)
+   (<obj> ^category block
+          ^id <id>)
+-->
+   (<s> ^operator <op> + <, =)
+   (<op> ^name pick-up
+         ^pick-up-object <obj>)
+}

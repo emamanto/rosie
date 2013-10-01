@@ -9,3 +9,5 @@ popd
 pushd follow-relationship
 source follow-relationship_source.soar
 popd
+
+source preferences.soar

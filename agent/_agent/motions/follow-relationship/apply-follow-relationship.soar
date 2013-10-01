@@ -26,39 +26,7 @@ sp {follow-relationship*propose*project-hand
    (<s> ^operator <o> + =)
    (<o> ^name project-hand
         ^object <obj>
-    	^preposition <prep>
-        # In us, how long the projection is expected to be accurate
-        ^expire-time 100000)
-}
-
-# Once a projection is past its expiration, get rid of it so the above
-# will re-match and a new projection will be found. Needs to be
-# accomplished with an operator for support issues.
-sp {follow-relationship*propose*remove-expired-projection
-   (state <s> ^name follow-relationship
-              ^io.input-link.time.microseconds <time>
-              ^topstate <ts>)
-   (<ts> ^projection-result <res>)
-   (<res> ^expire-time <= <time>)
--->
-   (<s> ^operator <o> + >, =)
-   (<o> ^name remove-expired-projection)
-}
-
-sp {follow-relationship*apply*remove-expired-projection
-   (state <s> ^name follow-relationship
-              ^topstate <ts>
-              ^operator.name remove-expired-projection)
-   (<ts> ^projection-result <res>
-         ^svs.command <comm>)
-   (<res> ^x <x> ^y <y> ^z <z>)
-   (<comm> ^project <proj>)
-   (<proj> ^result <res2>)
-   (<res2> ^x <x> ^y <y> ^z <z>)
--->
-   (<ts> ^projection-result <res> -)
-   # Also remove the svs command... maybe this should be a separate rule?
-   (<comm> ^project <proj> -)   
+    	^preposition <prep>)
 }
 
 # Once a valid projection-result exists, move the arm to where
@@ -66,7 +34,7 @@ sp {follow-relationship*apply*remove-expired-projection
 sp {follow-relationship*propose*move-arm
    (state <s> ^name follow-relationship
               ^topstate.projection-result <res>)
-   (<res> ^x <x> ^y <y> ^z <z>)
+   (<res> ^x <x> ^y <y> ^z <z>)	
 -->
    (<s> ^operator <op> + <, =)
    (<op> ^name move-arm 

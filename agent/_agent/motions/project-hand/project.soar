@@ -86,9 +86,7 @@ sp {project-hand*complete-projection
    (state <s> ^name project-hand
               ^object-id <obj-id>
               ^result <res>
-              ^expire-time <expire>
               ^topstate <ts>
-              ^io.input-link.time.microseconds <time>
               ^svs-link.spatial-scene <sp>
               ^svs-link.command <cmd>)
    (<ts> -^projection-result)
@@ -102,6 +100,6 @@ sp {project-hand*complete-projection
    (<arg-b> ^type node ^name <object>)
    (<arg-a> ^type node ^name seg5)
 -->
-   (<ts> ^projection-result <result>)
-   (<result> ^x <x> ^y <y> ^z <z> ^a <ida> ^b <idb> ^expire-time (+ <time> <expire>))
+   (<ts> ^projection-result <r>)
 }
+

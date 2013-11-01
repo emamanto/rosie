@@ -13,5 +13,4 @@ sp {point*elaborate*state
         ^attend-to-all-scene-changes true
         ^problemspace motion)
    (<ss> ^attend-to-all-scene-changes true -)
-   (interrupt)
 }

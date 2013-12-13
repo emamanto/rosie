@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
@@ -58,8 +59,9 @@ public class PerceptionConnector implements OutputEventInterface, RunEventInterf
         	soarAgent.getAgent().AddOutputHandler(outputHandlerString, this, null);
         }
         
-        soarAgent.getAgent().RegisterForRunEvent(
-                smlRunEventId.smlEVENT_AFTER_OUTPUT_PHASE, this, null);
+       	soarAgent.getAgent().RegisterForRunEvent(
+               smlRunEventId.smlEVENT_BEFORE_INPUT_PHASE, this, null);
+        
         
         newLabels = new ArrayList<training_label_t>();
         
@@ -75,9 +77,21 @@ public class PerceptionConnector implements OutputEventInterface, RunEventInterf
      * with perceptual information (time, pointed obj) as well as
      * Send training labels to perception
      *************************************************/
+    long time = 0;
+
     public void runEventHandler(int eventID, Object data, Agent agent, int phase)
     {
-    	
+    	smlRunEventId runEventId = smlRunEventId.swigToEnum(eventID);
+    	if(runEventId == smlRunEventId.smlEVENT_BEFORE_INPUT_PHASE){
+    		time = TimeUtil.utime();
+    		updateInputLink(agent);
+    		if(InSoar.DEBUG_TRACE){
+    			System.out.println(String.format("%-20s : %d", "PERCEPTION CONNECTOR", (TimeUtil.utime() - time)/1000));
+    		}
+    	}
+    }
+    
+    public void updateInputLink(Agent agent){
     	Identifier inputLinkId = agent.GetInputLink();
     	// Update time information on the input link
     	if(timeId == null){
@@ -165,11 +179,11 @@ public class PerceptionConnector implements OutputEventInterface, RunEventInterf
     	String type = WMUtil.getValueOfAttribute(rootId, "type", "Error: No ^type attribute");
     	if(type.equals("delete")){
     		String deleteId = WMUtil.getValueOfAttribute(rootId, "id", "Error (delete): No ^id attribute");
-    		world.removeObject(Integer.parseInt(deleteId));
+    		//world.removeObject(Integer.parseInt(deleteId));
     	} else if(type.equals("merge")){
     		String originalId = WMUtil.getValueOfAttribute(rootId, "original-id", "Error (merge): No ^original-id");
     		String copyId = WMUtil.getValueOfAttribute(rootId, "copy-id", "Error (merge): No ^copy-id");
-    		world.mergeObject(Integer.parseInt(originalId), Integer.parseInt(copyId));
+    		//world.mergeObject(Integer.parseInt(originalId), Integer.parseInt(copyId));
     	} else if(type.equals("move")){
     		String moveId = WMUtil.getValueOfAttribute(rootId, "id", "Error (move): No ^id attribute");
     		Identifier posId = WMUtil.getIdentifierOfAttribute(rootId, "pos", "Error (moidfy-scene.move): No pos");
@@ -179,7 +193,22 @@ public class PerceptionConnector implements OutputEventInterface, RunEventInterf
 	        		posId, "y", "Error (modify-scene.move): No ^y attribute"));
 	        double z = Double.parseDouble(WMUtil.getValueOfAttribute(
 	        		posId, "z", "Error (modify-scene.move): No ^z attribute"));
-	        world.moveObject(Integer.parseInt(moveId), x, y, z);
+	        //world.moveObject(Integer.parseInt(moveId), x, y, z);
+    	} else if(type.equals("confirm")){
+    		String objId = WMUtil.getValueOfAttribute(rootId, "id", "Error (confirm): No ^id attribute");
+    		//world.confirmObject(Integer.parseInt(objId));
+    	} else if(type.equals("link")){
+    		Set<String> sourceIds = WMUtil.getAllValuesOfAttribute(rootId, "source-id");
+    		if(sourceIds.size() == 0){
+    			rootId.CreateStringWME("status", "error");
+    			System.err.println("Error (link): No ^source-id attribute");
+    		}
+    		String destId = WMUtil.getValueOfAttribute(rootId, "dest-id", "Error (link): No ^dest-id attribute");
+    		if(destId.contains("bel-")){
+    			destId = destId.substring(4);
+    		}
+    		world.linkObjects(sourceIds, destId);
+    		
     	} else {
     		rootId.CreateStringWME("status", "error");
     		return;
@@ -196,12 +225,15 @@ public class PerceptionConnector implements OutputEventInterface, RunEventInterf
     	if(channel.equals("OBSERVATIONS")){
             observations_t obs = null;
             try {
+            	long time = 0;
+            	if(InSoar.DEBUG_TRACE){
+            		time = TimeUtil.utime();
+            	}
                 obs = new observations_t(ins);
                 pointedId = obs.click_id;
                 //if(armStatus.equals("wait")){
                     world.newObservation(obs);
                 //}
-                world.sendObservation();
             }
             catch (IOException e){
                 e.printStackTrace();
@@ -222,15 +254,38 @@ public class PerceptionConnector implements OutputEventInterface, RunEventInterf
     	JMenuItem clearDataButton = new JMenuItem("Clear Classifier Data");
         clearDataButton.addActionListener(new ActionListener(){
         	public void actionPerformed(ActionEvent e){
-        		robot_command_t cmd = new robot_command_t();
+        		perception_command_t cmd = new perception_command_t();
         		cmd.utime = TimeUtil.utime();
-        		cmd.dest = new double[6];
-        		cmd.updateDest = false;
-        		cmd.action = "CLEAR";
-                LCM.getSingleton().publish("ROBOT_COMMAND", cmd);
+        		cmd.command = "CLEAR_CLASSIFIERS";
+                LCM.getSingleton().publish("PERCEPTION_COMMAND", cmd);
         	}
         });
+        
         perceptionMenu.add(clearDataButton);  
+        
+        JMenuItem loadDataButton = new JMenuItem("Load Classifier Data");
+        loadDataButton.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent e){
+        		perception_command_t cmd = new perception_command_t();
+        		cmd.utime = TimeUtil.utime();
+        		cmd.command = "LOAD_CLASSIFIERS";
+                LCM.getSingleton().publish("PERCEPTION_COMMAND", cmd);
+        	}
+        });
+        
+        perceptionMenu.add(loadDataButton);
+        
+        JMenuItem saveDataButton = new JMenuItem("Save Classifier Data");
+        saveDataButton.addActionListener(new ActionListener(){
+        	public void actionPerformed(ActionEvent e){
+        		perception_command_t cmd = new perception_command_t();
+        		cmd.utime = TimeUtil.utime();
+        		cmd.command = "SAVE_CLASSIFIERS";
+                LCM.getSingleton().publish("PERCEPTION_COMMAND", cmd);
+        	}
+        });
+        
+        perceptionMenu.add(saveDataButton);
         
         return perceptionMenu;
     }

@@ -7,6 +7,8 @@ import sml.Identifier;
 import sml.WMElement;
 import sml.smlRunEventId;
 
+import april.util.TimeUtil;
+
 import com.soartech.bolt.BOLTLGSupport;
 import com.soartech.bolt.testing.ActionType;
 
@@ -40,7 +42,7 @@ public class LanguageConnector implements OutputEventInterface, RunEventInterfac
         }
         
         soarAgent.getAgent().RegisterForRunEvent(
-                smlRunEventId.smlEVENT_AFTER_OUTPUT_PHASE, this, null);
+                smlRunEventId.smlEVENT_BEFORE_INPUT_PHASE, this, null);
     }
     
     public void clear(){
@@ -74,6 +76,11 @@ public class LanguageConnector implements OutputEventInterface, RunEventInterfac
     
     public void runEventHandler(int eventID, Object data, Agent agent, int phase)
     {
+    	long time = 0;
+    	if(InSoar.DEBUG_TRACE){
+    		time = TimeUtil.utime();
+    	}
+    	
     	Identifier outputLink = agent.GetOutputLink();
     	if(outputLink != null){
         	WMElement waitingWME = outputLink.FindByAttribute("waiting", 0);
@@ -82,6 +89,10 @@ public class LanguageConnector implements OutputEventInterface, RunEventInterfac
     	Identifier inputLink = agent.GetInputLink();
     	if(inputLink != null){
     		messages.updateInputLink(inputLink);
+    	}
+    	
+    	if(InSoar.DEBUG_TRACE){
+			System.out.println(String.format("%-20s : %d", "LANGUAGE CONNECTOR", (TimeUtil.utime() - time)/1000));
     	}
     }
 
@@ -247,8 +258,11 @@ public class LanguageConnector implements OutputEventInterface, RunEventInterfac
     		message = "I see multiple examples of '" + objStr + "' and I need clarification";
     	} else if(type.equals("teaching-request")){
     		Identifier obj = WMUtil.getIdentifierOfAttribute(context, "object");
-    		String objStr = LingObject.createFromSoarSpeak(obj, "outgoing-desc").toString();
-    		message = "Please give me teaching examples of '" + objStr + "' and tell me 'finished' when you are done.";
+    		if (obj != null)
+    		{	
+    			String objStr = LingObject.createFromSoarSpeak(obj, "outgoing-desc").toString();
+    			message = "Please give me teaching examples of '" + objStr + "' and tell me 'finished' when you are done.";
+    		}
     	} else if(type.equals("get-goal")){
     		String verb = WMUtil.getValueOfAttribute(context, "verb");
     		message = "Please tell me what the goal of '" + verb + "'is.";
@@ -261,15 +275,16 @@ public class LanguageConnector implements OutputEventInterface, RunEventInterfac
     }
     
     private void processReportIndexing(Identifier id){
-    	String type = WMUtil.getValueOfAttribute(id, "type");
-    	System.out.println("INDEXTYPE " + type);
-    	if(type.equals("new")){
-    		totalIndexes++;
-    	} else if(type.equals("failure")){
-    		indexFailures++;
-    	} else if(type.equals("report")){
-        	ChatFrame.Singleton().addMessage("Indexing Success: (" + (totalIndexes-indexFailures) + "/" + totalIndexes + ")");
-    	}
+    	// AM: Enable this code to report the number of successful indexes
+//    	String type = WMUtil.getValueOfAttribute(id, "type");
+//    	//System.out.println("INDEXTYPE " + type);
+//    	if(type.equals("new")){
+//    		totalIndexes++;
+//    	} else if(type.equals("failure")){
+//    		indexFailures++;
+//    	} else if(type.equals("report")){
+//        	ChatFrame.Singleton().addMessage("Indexing Success: (" + (totalIndexes-indexFailures) + "/" + totalIndexes + ")");
+//    	}
     	
         id.CreateStringWME("status", "complete");
     }

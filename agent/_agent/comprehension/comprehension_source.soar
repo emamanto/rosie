@@ -7,8 +7,8 @@ popd
 
 source elaborations.soar
 
-# Souce file "propose*index-parameter.soar"
-source propose*index-parameter.soar
+# Souce file "propose-index-parameter.soar"
+source propose-index-parameter.soar
 
 
 # Source child problem space "comprehend-action-command"
@@ -22,5 +22,7 @@ popd
 pushd comprehend-goal-description
 source comprehend-goal-description_source.soar
 popd
+
+
 
 

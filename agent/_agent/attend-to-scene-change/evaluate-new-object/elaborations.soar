@@ -1,0 +1,13 @@
+sp {evaluate-new-object*elaborate*monitor-object
+   (state <s> ^name evaluate-new-object
+              ^superstate.operator.object <mon-obj>)
+-->
+   (<s> ^monitor-object <mon-obj>)
+}
+
+sp {evaluate-new-object*elaborate*perception-obj
+   (state <s> ^name evaluate-new-object
+              ^monitor-object.perception-obj <perc-obj>)
+-->
+   (<s> ^perception-obj <perc-obj>)
+}

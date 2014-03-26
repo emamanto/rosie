@@ -167,6 +167,49 @@ sp {parameter-condition-message-relation*propose*learn-condition*3arg
 #	    ^parameter <type>)
 #}
 
+sp {check-name-message*propose*learn-action
+   (state <s> ^name dialog-event
+              ^topstate.current-game.learning <l>
+              ^purpose <p>)
+   (<l> ^check-name <action-name> ^check-type action)
+   (<p> ^type check-name-message
+        ^parameters <param>)
+   (<param> ^checked <rsp>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name learn-action
+        ^action-name <action-name>
+        ^checked <rsp>)
+}
+sp {check-name-message*propose*learn-goal
+   (state <s> ^name dialog-event
+              ^topstate.current-game.learning <l>
+              ^purpose <p>)
+   (<l> ^check-name <goal-name> ^check-type goal)
+   (<p> ^type check-name-message
+        ^parameters <param>)
+   (<param> ^checked <rsp>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name learn-goal
+        ^goal-name <goal-name>
+        ^checked <rsp>)
+}
+sp {check-name-message*propose*learn-failure
+   (state <s> ^name dialog-event
+              ^topstate.current-game.learning <l>
+              ^purpose <p>)
+   (<l> ^check-name <failure-name> ^check-type failure)
+   (<p> ^type check-name-message
+        ^parameters <param>)
+   (<param> ^checked <rsp>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name learn-failure
+        ^failure-name <failure-name>
+        ^checked <rsp>)
+}
+
 sp {action-name-message*propose*learn-action
    (state <s> ^name dialog-event
               ^purpose <p>)
@@ -176,8 +219,7 @@ sp {action-name-message*propose*learn-action
 -->
    (<s> ^operator <o> +)
    (<o> ^name learn-action
-        ^action-name <name>
-        ^category svs)
+        ^action-name <name>)
 }
 sp {action-name-message*propose*learn-action*multiplayer
    (state <s> ^name dialog-event
@@ -277,6 +319,38 @@ sp {conditions-finished-message*propose*finish-conditionsDEPRICATED
    (<o> ^name finish-conditions
         ^parameter <type>
         ^category svs)
+}
+
+sp {parameters-forget-message*propose*forget-parameters
+   (state <s> ^name dialog-event
+              ^purpose <p>)
+   (<p> ^type parameters-forget-message)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name forget-parameters
+        ^category svs)
+}
+sp {parameters-forget-message*apply*forget-parameters
+   (state <s> ^name dialog-event
+              ^operator <o>
+              ^topstate.interaction.status <status>
+              ^topstate.io.output-link <out>
+              ^topstate.current-game.game.<< actions goals failures >> <learning>
+              ^topstate.current-game.learning <l>)
+   (<o> ^name forget-parameters)
+   (<l> ^type <cond> ^arg <arg> ^learn-link <link> ^param-list <pl> ^param-list-num <pnum>)
+   (<learning> ^<num> <link>)
+-->
+   (<l> ^type <cond> -)
+   (<learning> ^<num> <link> -)
+   (<l> ^arg <arg> -)
+   (<l> ^param-list <pl> -)
+   (<l> ^param-list-num <pnum> -)
+   (<l> ^type game-params)
+   (<out> ^send-message <msg>)
+   (<msg> ^type game-new-params
+          ^fields <f>)
+   (<status> ^performed.dialog-event.type game)
 }
 
 sp {parameters-finished-message*propose*finish-parameters

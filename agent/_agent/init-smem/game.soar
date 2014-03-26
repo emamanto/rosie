@@ -74,7 +74,7 @@ smem --add {
 # (<pcondhh> ^name center)
  
  (<A> ^1 <ac1> ^2 <ac2>)
- (<ac1> ^name advance ^action-name advance ^conditions <c> ^parameters <p> ^verbs <verbs> ^cond-args 3)
+ (<ac1> ^name advance-block ^action-name advance-block ^conditions <c> ^parameters <p> ^verbs <verbs> ^cond-args 3 ^game hexa-pawn)
  (<p> ^1 <parama> ^2 <paramb> ^3 <paramc>)
  (<parama> ^type block)
  (<paramb> ^type location)
@@ -127,7 +127,7 @@ smem --add {
  (<fail> ^1 <fail1>)
  (<go> ^1 <go1>)  
  
-    (<go1> ^name end-row ^parameters <pa> ^conditions <co> ^cond-args 2)
+    (<go1> ^goal-name end-row ^name end-row ^parameters <pa> ^conditions <co> ^cond-args 2 ^game hexa-pawn)
 (<pa> ^1 <param1> ^2 <param2>)
 (<param1> ^type block)
 (<param2> ^type location)
@@ -693,7 +693,7 @@ smem --add {
 
  (<go> ^1 <go1>)  
 
- (<fail1> ^failure-name fox-goose ^parameters <paf> ^conditions <cof> ^cond-args 3)
+ (<fail1> ^failure-name fox-goose ^name fox-goose ^parameters <paf> ^conditions <cof> ^cond-args 3 ^game river-crossing)
  (<paf> ^1 <fparam1> ^2 <fparam2> ^3 <fparam3>)
  (<fparam1> ^type block)
  (<fparam2> ^type block)

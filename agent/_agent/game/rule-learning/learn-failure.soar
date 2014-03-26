@@ -26,10 +26,41 @@ sp {learn-failure*query*failure
 -->
    (<s> ^found false)
 }
+sp {learn-failure*propose*check-failure
+   (state <s> ^name learn-failure
+              ^failure-name <name>
+              ^found true
+             -^checked
+              ^found-failure.game <game-name>
+              ^topstate.current-game.learning <l>)
+   (<l> ^failure-number <num>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name check-failure
+        ^category svs)
+}
+
+sp {learn-failure*apply*check-failure
+   (state <s> ^name learn-failure
+              ^failure-name <failure-name>
+              ^topstate.interaction.status <status>
+              ^operator.name check-failure
+              ^found-failure.game <game-name>
+              ^topstate.current-game.learning <l>
+              ^topstate.io.output-link <out>)
+-->
+   (<l> ^check-name <goal-name> ^check-type failure)
+   (<out> ^send-message <msg>)
+   (<msg> ^type check-name
+          ^fields <f>)
+   (<f> ^name <failure-name> ^game <game-name>)
+   (<status> ^performed.dialog-event.type game)
+}
 sp {learn-failure*propose*copy-failure
    (state <s> ^name learn-failure
               ^failure-name <gname>
               ^found true
+              ^checked yes
               ^topstate.current-game.learning <l>)
    (<l> ^type game-params)
 -->
@@ -67,15 +98,10 @@ sp {learn-failure*apply*copy-failure*send-message
               ^topstate.current-game.game.failures.<num>
               ^topstate.interaction.status <status>
               ^topstate.current-game.learning <l>)
-   (<l> ^type <t> ^failure-number <num>)
+   (<l> ^type <t> ^failure-number <num> ^check-name <aname> ^check-type <ctype>)
 -->
-   #new game params
-#   (<l> ^type <t> -)
-#   (<l> ^type failure)
-#   (<out> ^send-message <msg>)
-#   (<msg> ^type game-new-failure
-#          ^fields <f>)
-#   (<status> ^performed.dialog-event.type game)
+   (<l> ^check-name <aname> -)
+   (<l> ^check-type <ctype> -)
    (<l> ^failure-number <num> -)
    (<l> ^type <t> -)
    (<l> ^failure-number (+ <num> 1)
@@ -90,6 +116,18 @@ sp {learn-failure*propose*store-failure
    (state <s> ^name learn-failure
               ^failure-name <gname>
               ^found false
+             -^topstate.current-game.game.failures.<num>
+              ^topstate.current-game.learning <l>)
+   (<l> ^type game-params ^failure-number <num>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name store-failure
+        ^category svs) # for now determine better or new category)
+}
+sp {learn-failure*propose*store-failure*ignore-found
+   (state <s> ^name learn-failure
+              ^failure-name <gname>
+              ^checked no
              -^topstate.current-game.game.failures.<num>
               ^topstate.current-game.learning <l>)
    (<l> ^type game-params ^failure-number <num>)
@@ -124,6 +162,19 @@ sp {learn-failure*propose*find-parameter
    (<o> ^name find-parameter
         ^category svs) # for now determine better or new category)
 }
+
+sp {learn-failure*apply*find-parameter*remove-checks
+   (state <s> ^name learn-failure
+              ^topstate.current-game.game
+              ^operator.name find-parameter
+              ^topstate.io.output-link <out>
+              ^topstate.interaction.status <status>
+              ^topstate.current-game.learning <l>)
+   (<l> ^check-type <t> ^check-name <n>)
+-->
+   (<l> ^check-name <n> -)
+   (<l> ^check-type <t> -)
+} 
 
 sp {learn-failure*apply*find-parameter
    (state <s> ^name learn-failure

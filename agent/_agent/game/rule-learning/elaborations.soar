@@ -7,6 +7,28 @@ sp {learn-action*elaborate*copy-down-attrs
    (<s> ^action-name <name>)
 }
 
+sp {learn-action*elaborate*copy-down-attrs*checked
+   (state <s> ^name learn-action
+              ^superstate.operator <o>)
+   (<o> ^checked <name>)
+-->
+   (<s> ^checked <name>)
+}
+sp {learn-goal*elaborate*copy-down-attrs*checked
+   (state <s> ^name learn-goal
+              ^superstate.operator <o>)
+   (<o> ^checked <name>)
+-->
+   (<s> ^checked <name>)
+}
+sp {learn-failure*elaborate*copy-down-attrs*checked
+   (state <s> ^name learn-failure
+              ^superstate.operator <o>)
+   (<o> ^checked <name>)
+-->
+   (<s> ^checked <name>)
+}
+
 sp {learn-action*elaborate*copy-down-attrs*multiplayer*true
    (state <s> ^name learn-action
               ^superstate.operator <o>)

@@ -1,3 +1,82 @@
+sp {chunk-1*d1677*opnochange*1
+:chunk
+   (state <s> ^game-name tic-tac-toe 
+              ^name find-parameters)
+-->
+   (<pie> ^1 <pie1> ^2 <pie2>)
+ (<pie1> ^name my-piece ^concept <pcond1>)
+ (<pie2> ^name my-piece ^concept <pcond2>)
+ (<pcond1> ^attribute <patr1>)
+ (<pcond2> ^attribute <patr2>)
+ (<patr1> ^attr blue)
+ (<patr2> ^attr red)
+ 
+ (<A> ^1 <ac1> ^type action)
+ 
+ (<ac1> ^action-name place ^name place ^conditions <c> ^parameters <p> ^verbs <verbs> ^cond-args 2)
+ (<p> ^1 <parama> ^2 <paramb>)
+ (<parama> ^type block)
+ (<paramb> ^type location)
+ (<c> ^1 <conda> ^2 <condb> ^cond <newconds1>)
+ (<newconds1> ^prep <prep3> ^prep <prep4> ^prep <prep5>)
+ (<conda> ^concept <atr3>) #^prep <prep3> ^prep <prep4> 
+# (<condb> ^prep <prep5>)
+ (<atr3> ^name my-piece)
+ #(<atr3> ^attr blue)
+ (<prep3> ^name on ^a 1 ^b INDEF ^negative true ^btype location)
+ (<prep4> ^name below ^a 1 ^b INDEF ^negative true ^btype block)
+ (<prep5> ^name below ^a 2 ^b INDEF ^negative true ^btype block)
+ 
+ (<verbs> ^1 <va>)
+ (<va> ^verb-name move ^verb-prep on ^1 1 ^2 2)
+ 
+ (<fail> ^1 <fail1> ^type failure)
+ (<go> ^1 <go1> ^type goal)   
+   
+ (<fail1> ^name none ^parameters <paf> ^conditions <cof> ^cond-args 0)
+ (<go1> ^goal-name three-in-arow ^name three-in-arow ^parameters <pa> ^conditions <co> ^cond-args 6)
+
+ (<pa> ^1 <param1> ^2 <param2> ^3 <param3> ^4 <param4> ^5 <param5> ^6 <param6>)
+ (<param1> ^type block)
+ (<param2> ^type block)
+ (<param3> ^type block)
+ (<param4> ^type location)
+ (<param5> ^type location)
+ (<param6> ^type location)
+ (<co> ^1 <cond1> ^2 <cond2> ^3 <cond3> ^4 <cond4> ^5 <cond5> ^6 <cond6> ^cond <newconds2>)
+ (<newconds2> ^prep <prepa1> ^prep <prepb1> ^prep <prepc1> ^prep <prepa2>)
+ (<cond1> ^concept <atra>) # ^prep <prepa1> 
+ (<cond2> ^concept <atrb>) # ^prep <prepb1> 
+ (<cond3> ^concept <atrc>) # ^prep <prepc1> 
+# (<cond4> ^prep <prepa2>)
+# (<atra> ^attr blue)
+# (<atrb> ^attr blue)
+# (<atrc> ^attr blue)
+ (<atra> ^name my-piece)
+ (<atrb> ^name my-piece)
+ (<atrc> ^name my-piece)
+ (<prepa1> ^name on ^a 1 ^b 4 ^negative false ^btype location)
+ (<prepb1> ^name on ^a 2 ^b 5 ^negative false ^btype location)
+ (<prepc1> ^name on ^a 3 ^b 6 ^negative false ^btype location)
+ (<prepa2> ^name linear-with ^a 4 ^b 5 ^c 6 ^negative false ^btype location)
+    
+    (<s> ^actions <A> ^failures <fail> ^goals <go> ^player-args <pp1>
+           ^player-pieces <pie>
+           ^current-player 1
+            ^multiplayer true
+           ^heuristics <h777>)
+    (<pp1> ^1 <aa1> ^2 <aa2> ^current 1)
+    (<aa1> ^action-args <a1> ^failure-args <f1> ^goal-args <g1> ^num 1)
+    (<aa2> ^action-args <a2> ^failure-args <f2> ^goal-args <g2> ^num 2)
+    (<a1> ^type action ^num 1)
+    (<f1> ^type failure ^num 1)
+    (<g1> ^type goal ^num 1)
+    (<a2> ^type action ^num 2)
+    (<f2> ^type failure ^num 2)
+    (<g2> ^type goal ^num 2)
+}
+
+
 sp {learn-parameter*propose*store-parameter
    (state <s> ^name learn-parameter
               ^parameter <p>

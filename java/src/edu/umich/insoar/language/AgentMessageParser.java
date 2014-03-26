@@ -103,6 +103,10 @@ public class AgentMessageParser
         } else if(type.equals("game-new-parameter")){
         	String stateType = WMUtil.getValueOfAttribute(fieldsId, "state-type");
             message = "Ok describe an object for this " + stateType + " state.";
+        } else if(type.equals("check-name")){
+        	String paramName = WMUtil.getValueOfAttribute(fieldsId, "name");
+        	String game = WMUtil.getValueOfAttribute(fieldsId, "game");
+            message = "Is this the same as " + paramName + " from " + game+ "?";
         } else if(type.equals("game-new-condition")){
         	String obj = WMUtil.getValueOfAttribute(fieldsId, "type");
             message = "Ok list a condition for the " + obj + ", another object, or finished.";
@@ -230,7 +234,7 @@ public class AgentMessageParser
         while(it.hasNext())
         {
             String sent = it.next().toString();
-            message += sent + "\n";
+            message += sent + ".\n";
         }
         return message;
     }

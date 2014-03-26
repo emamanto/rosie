@@ -134,7 +134,6 @@ sp {learn-action*propose*index-parameter-list*a
         ^category svs)
 }
 sp {learn-action*propose*index-parameter-list*b
-   :interrupt
    (state <s> ^name learn-action
               ^verb-name <name>
               ^obj.{<obj> << b >>} <objd>
@@ -191,7 +190,7 @@ sp {learn-action*propose*store-action*verb
 sp {learn-action*propose*store-action
    (state <s> ^name learn-action
               ^action-name <name>
-#              ^found true #hobo
+              ^found false
              -^topstate.current-game.game.actions.<num>
               ^topstate.current-game.learning <l>)
    (<l> ^type game-params ^action-number <num>)
@@ -200,15 +199,25 @@ sp {learn-action*propose*store-action
    (<o> ^name store-action
         ^category svs) # for now determine better or new category)
 }
-#TODO multiverbs
+sp {learn-action*propose*store-action*checked
+   (state <s> ^name learn-action
+              ^action-name <name>
+              ^found true
+              ^checked
+ #             ^checked yes
+             -^topstate.current-game.game.actions.<num>
+              ^topstate.current-game.learning <l>)
+   (<l> ^type game-params ^action-number <num>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name store-action
+        ^category svs) # for now determine better or new category)
+}
+
 sp {learn-action*apply*store-action*noverb
    (state <s> ^name learn-action 
               ^action-name  <aname>
-              ^found false  #hobo        
-#              ^verb-name <vname> #hobo
-#              ^verb-prep <prep>
-#              ^a <p1>
-#              ^b <p2>
+              ^found false          
               ^topstate <ts>
               ^operator.name store-action)
    (<ts> ^current-game <cg>)
@@ -219,33 +228,11 @@ sp {learn-action*apply*store-action*noverb
    (<a> ^<num> <act>)
    (<act> ^action-name <aname> ^name <aname> ^conditions <c> ^parameters <p> ^verbs <verbs>)
    (<c> ^cond <newcond>)
-#   (<verbs> ^1 <va>) #hobo
-#   (<va> ^verb-name <vname> ^verb-prep <prep> ^1 <p1> ^2 <p2>)	
 }
-
-sp {learn-action*apply*store-action*verb
-   (state <s> ^name learn-action        
-              ^verb-name <vname> #hobo
-              ^verb-prep <prep>
-              ^a <p1>
-              ^b <p2>
-              ^topstate <ts>
-              ^operator.name store-action)
-   (<ts> ^current-game <cg>)
-   (<cg> ^learning <l> ^name <gname> ^game <g>)
-   (<l> ^action-number <num> ^verb-num <vnum>)# ^action-name <aname>)
-   (<g> ^actions <a>)
-   (<a> ^<num> <act>)
-   (<act> ^conditions <c> ^parameters <p> ^verbs <verbs>)
--->
-   (<verbs> ^<vnum> <va>) #hobo
-   (<va> ^verb-name <vname> ^verb-prep <prep> ^1 <p1> ^2 <p2>)	
-}
-
-sp {learn-action*apply*store-action
-   (state <s> ^name learn-action             
-              ^action-name <vname>
-              ^found-action <act>
+sp {learn-action*apply*store-action*noverb*ignorefound
+   (state <s> ^name learn-action 
+              ^action-name <aname>
+              ^checked no      
               ^topstate <ts>
               ^operator.name store-action)
    (<ts> ^current-game <cg>)
@@ -254,13 +241,49 @@ sp {learn-action*apply*store-action
    (<g> ^actions <a>)
 -->
    (<a> ^<num> <act>)
-#   (<act> ^action-name <aname> ^conditions <c> ^parameters <p> ^verb <vname> ^verb-prep in) #HACK TODO verb-prep
+   (<act> ^action-name <aname> ^name <aname> ^conditions <c> ^parameters <p> ^verbs <verbs>)
+   (<c> ^cond <newcond>)
+}
+
+sp {learn-action*apply*store-action*verb
+   (state <s> ^name learn-action        
+              ^verb-name <vname>
+              ^verb-prep <prep>
+              ^a <p1>
+              ^b <p2>
+              ^topstate <ts>
+              ^operator.name store-action)
+   (<ts> ^current-game <cg>)
+   (<cg> ^learning <l> ^name <gname> ^game <g>)
+   (<l> ^action-number <num> ^verb-num <vnum>)
+   (<g> ^actions <a>)
+   (<a> ^<num> <act>)
+   (<act> ^conditions <c> ^parameters <p> ^verbs <verbs>)
+-->
+   (<verbs> ^<vnum> <va>)
+   (<va> ^verb-name <vname> ^verb-prep <prep> ^1 <p1> ^2 <p2>)	
+}
+
+sp {learn-action*apply*store-action
+   (state <s> ^name learn-action             
+              ^action-name <vname>
+              ^found-action <act>
+              ^checked yes
+              ^topstate <ts>
+              ^operator.name store-action)
+   (<ts> ^current-game <cg>)
+   (<cg> ^learning <l> ^name <gname> ^game <g>)
+   (<l> ^action-number <num>)
+   (<g> ^actions <a>)
+-->
+   (<a> ^<num> <act>)
 }
 
 sp {learn-action*propose*find-next-action
    (state <s> ^name learn-action
               ^action-name <name>
               ^found true
+              ^checked yes
               ^topstate.current-game.game.actions.<num>
               ^topstate.current-game.learning <l>)
    (<l> ^action-number <num>)
@@ -269,7 +292,50 @@ sp {learn-action*propose*find-next-action
    (<o> ^name find-next-action
         ^category svs)
 }
+sp {learn-action*propose*check-action
+   (state <s> ^name learn-action
+              ^action-name <name>
+              ^found true
+             -^checked
+              ^found-action.game <game-name>
+              ^topstate.current-game.learning <l>)
+   (<l> ^action-number <num>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name check-action
+        ^category svs)
+}
 
+sp {learn-action*apply*check-action
+   (state <s> ^name learn-action
+              ^action-name <action-name>
+              ^topstate.interaction.status <status>
+              ^operator.name check-action
+              ^found-action.game <game-name>
+              ^topstate.current-game.learning <l>
+              ^topstate.io.output-link <out>)
+-->
+   (<l> ^check-name <action-name> ^check-type action)
+   (<out> ^send-message <msg>)
+   (<msg> ^type check-name
+          ^fields <f>)
+   (<f> ^name <action-name> ^game <game-name>)
+   (<status> ^performed.dialog-event.type game)
+}
+
+
+sp {learn-action*apply*find-next-action*remove-check
+   (state <s> ^name learn-action
+              ^topstate.interaction.status <status>
+              ^topstate.current-game <cg>
+              ^operator.name find-next-action
+              ^topstate.io.output-link <out>
+              ^topstate.current-game.learning <l>)
+   (<l> ^action-number <num> ^type <type> ^check-name <aname> ^check-type <ctype>)
+-->
+   (<l> ^check-name <aname> -)
+   (<l> ^check-type <ctype> -)
+}
 sp {learn-action*apply*find-next-action
    (state <s> ^name learn-action
               ^topstate.interaction.status <status>
@@ -288,37 +354,10 @@ sp {learn-action*apply*find-next-action
           ^fields <f>)
    (<status> ^performed.dialog-event.type game)
 }
-#sp {learn-action*apply*find-next-action
-#   (state <s> ^name learn-action
-#              ^topstate.interaction.status <status>
-#              ^topstate.current-game <cg>
-#              ^operator.name find-next-action
-#              ^topstate.io.output-link <out>
-#              ^topstate.current-game.learning <l>)
-#   (<l> ^action-number <num>)
-#-->
-#   (<l> ^action-number <num> -)
-#   (<l> ^action-number (+ <num> 1))
-#   (<out> ^send-message <msg>)
-#   (<msg> ^type game-new-action2
-#          ^fields <f>)
-#   (<status> ^performed.dialog-event.type game)
-#}
-#new hobo ver
-#sp {learn-action*propose*find-new-action#getnewver
-#   (state <s> ^name learn-action
-#              ^action-name <name>
-#              ^found false
-#              ^topstate.current-game.learning <l>)
-#-->
-#   (<s> ^operator <o> + =)
-#   (<o> ^name find-new-action
-#        ^category svs)
-#}
 
 sp {learn-action*propose*find-new-action*verb
    (state <s> ^name learn-action
-              ^verb-name <name> #hobo
+              ^verb-name <name> 
               ^topstate.current-game.game.actions.<num>.verbs.<num2>
               ^topstate.current-game.learning <l>)
    (<l> ^action-number <num> ^verb-num <num2>)
@@ -327,12 +366,7 @@ sp {learn-action*propose*find-new-action*verb
    (<o> ^name find-new-action
         ^category svs)
 }
-
-#              ^verb-name <vname> #hobo
-#              ^verb-prep <prep>
-#              ^a <p1>
-#              ^b <p2>
-
+#
 sp {learn-action*propose*find-parameter*verb
    (state <s> ^name learn-action
              -^found-action
@@ -345,7 +379,20 @@ sp {learn-action*propose*find-parameter*verb
    (<o> ^name find-parameter
         ^category svs)
 }
-#todo hobo finished distinguisher
+sp {learn-action*propose*find-parameter*ignore-found
+   (state <s> ^name learn-action
+              ^found-action
+              ^checked no
+              -^verb-name <name> 
+              ^topstate.current-game.game.actions.<num>
+              ^topstate.current-game.learning <l>)
+   (<l> ^action-number <num>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name find-parameter
+        ^category svs)
+}
+
 sp {learn-action*apply*find-new-action*next-verb
    (state <s> ^name learn-action
               ^topstate.current-game.game
@@ -363,31 +410,6 @@ sp {learn-action*apply*find-new-action*next-verb
    (<status> ^performed.dialog-event.type game)
 }
 
-#sp {learn-action*apply*find-new-action
-#   (state <s> ^name learn-action
-#              ^topstate.current-game.game
-#              ^operator.name find-new-action
-#              ^topstate.io.output-link <out>
-#              ^topstate.interaction.status <status>
-#              ^topstate.current-game.learning <l>)
-#   (<l> ^type <t> ^arg <arg> ^action-number <num> ^learn-link <link>)
-#-->
-##   (<l> ^action-name <name>)
-##   (<out> ^send-message <msg>)
-##   (<msg> ^type game-new-verb
-##          ^fields <f>)
-##   (<status> ^performed.dialog-event.type game)
-#   (<l> ^type <t> -)
-#   (<l> ^arg <arg> -)
-#   (<l> ^action-number <num> -)
-#   (<link> ^cond-args (- <arg> 1))
-#   (<l> ^type action ^action-number (+ <num> 1))
-#   (<out> ^send-message <msg>)
-#   (<msg> ^type game-new-action2
-#          ^fields <f>)
-#   (<status> ^performed.dialog-event.type game)
-#}
-
 sp {learn-action*apply*find-parameter*remove-interaction
    (state <s> ^name learn-action
               ^verb-name <name>
@@ -399,6 +421,18 @@ sp {learn-action*apply*find-parameter*remove-interaction
    (<l> ^interaction <t>)
 -->
    (<l> ^interaction <t> -)
+}
+sp {learn-action*apply*find-parameter*remove-checks
+   (state <s> ^name learn-action
+              ^topstate.current-game.game
+              ^operator.name find-parameter
+              ^topstate.io.output-link <out>
+              ^topstate.interaction.status <status>
+              ^topstate.current-game.learning <l>)
+   (<l> ^check-type <t> ^check-name <n>)
+-->
+   (<l> ^check-name <n> -)
+   (<l> ^check-type <t> -)
 } 
 
 

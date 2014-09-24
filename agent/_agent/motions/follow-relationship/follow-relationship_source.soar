@@ -1,0 +1,20 @@
+# Follow-relationship means that you provide a preposition
+# and an objection, and the arm positions itself <preposition>
+# relative to <object> and follows the object around if it
+# moves, trying to keep the same relationship to the object.
+#
+# It can be called as follows:
+# sp {propose*follow-relationship
+#   (state <s> .... )
+#-->
+#   (<s> ^operator <o> +)
+#   (<o> ^name follow-relationship
+#        ^reference-object <some-obj>
+#        ^preposition |preposition name|)
+#}
+#
+# It will look up the preposition by name from smem, project it,
+# and move the hand to the projection.
+
+source apply-follow-relationship.soar
+source elaborations.soar

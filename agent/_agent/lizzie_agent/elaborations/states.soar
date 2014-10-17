@@ -1,0 +1,9 @@
+##
+# State things
+##
+
+sp {all*elaborate*name
+   (state <s> ^superstate.operator.name <name>)
+-->
+   (<s> ^name <name>)
+}

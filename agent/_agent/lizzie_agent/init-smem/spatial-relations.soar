@@ -1,0 +1,33 @@
+##
+# Prepositions
+##
+
+sp {spatial-reasoning*elaborate*initialize*prep-list
+   (state <s> ^superstate nil)
+-->
+   (<s> ^prepositions <fp>)
+   (<fp>
+     ^prep.name on
+     ^prep.name above
+     ^prep.name below)
+   }
+
+smem --add {
+# on
+(<P1> ^all-aligned false ^name on ^relation <R11> <R12> <R13>)
+   (<R11> ^avg 0     ^axis 0 ^top 100  ^type x-aligned )
+   (<R12> ^avg 0     ^axis 1 ^top 100  ^type y-aligned )
+   (<R13> ^avg 0.005 ^axis 2 ^top 0.03 ^type z-greater-than )
+
+# above
+(<P2> ^all-aligned false ^name above ^prep-name above ^relation <R21> <R22> <R23>)
+  (<R21> ^avg 0     ^axis 0 ^top 100.0 ^type x-aligned)
+  (<R22> ^avg 0     ^axis 1 ^top 100.0 ^type y-aligned)
+  (<R23> ^avg 0.005 ^axis 2 ^top 1.0   ^type z-greater-than)
+  
+# below
+(<P3> ^all-aligned false ^prep-name below ^name below ^relation <R31> <R32> <R33>)
+  (<R31> ^avg 0    ^axis 0 ^top 100 ^type x-aligned )
+  (<R32> ^avg 0    ^axis 1 ^top 100 ^type y-aligned )
+  (<R33> ^avg 0.02 ^axis 2 ^top .03 ^type z-less-than )
+}

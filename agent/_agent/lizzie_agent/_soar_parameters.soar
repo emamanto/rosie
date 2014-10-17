@@ -1,0 +1,7 @@
+##
+# Tell soar things
+##
+
+watch 1
+svs --enable
+learn --only

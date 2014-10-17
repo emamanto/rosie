@@ -1,0 +1,17 @@
+##
+#
+##
+
+sp {topstate*elaborate*objects
+   (state <s> ^name motions-agent
+              ^superstate nil
+              ^svs.spatial-scene <svs>)
+   (<svs> ^child <percept> )
+   (<percept> ^id <id>
+              ^color <c>)
+-->
+    (<s> ^object <obj>)
+    (<obj> ^category block
+           ^perception-obj <percept>
+           ^id (int <id>))
+}

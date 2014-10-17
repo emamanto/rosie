@@ -1,0 +1,7 @@
+##
+# Main file to load...
+##
+
+pushd lizzie_agent
+source agent_source.soar
+popd

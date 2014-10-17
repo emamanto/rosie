@@ -1,0 +1,16 @@
+# Copy down which object is supposed to be pointed
+# at and set up attending to scene changes at the
+# right level.
+sp {point*elaborate*state
+   (state <s> ^name point
+              ^superstate <ss>)
+   (<ss> ^operator <sop>)
+   (<sop> ^name point
+          ^pointed-object <obj>)
+   (<obj> ^id <id>)
+-->
+   (<s> ^pointed-object <obj>
+        ^attend-to-all-scene-changes true
+        ^problemspace motion)
+   (<ss> ^attend-to-all-scene-changes true -)
+}

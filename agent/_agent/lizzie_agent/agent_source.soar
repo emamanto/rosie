@@ -1,0 +1,18 @@
+##
+# Special motions agent source file
+##
+
+source _soar_parameters.soar
+source init-agent.soar
+
+pushd elaborations
+source elaborations_source.soar
+popd
+
+pushd init-smem
+source init-smem_source.soar
+popd
+
+pushd motions
+source motions_source.soar
+popd

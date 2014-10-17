@@ -1,0 +1,13 @@
+# For now, basically if the agent isn't doing anything else,
+# pick a block-type object and point at it.
+sp {topstate*propose*point
+   (state <s> ^name motions-agent
+              ^superstate nil
+              ^object <obj>)
+   (<obj> ^category block
+          ^id <id>)
+-->
+   (<s> ^operator <op> + <, =)
+   (<op> ^name point
+         ^pointed-object <obj>)
+}

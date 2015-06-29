@@ -1,1 +1,6 @@
 source init-agent.soar
+source elaborations.soar
+
+pushd interpret-motion-request
+source interpret-motion-request_source.soar
+popd

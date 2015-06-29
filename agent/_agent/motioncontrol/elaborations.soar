@@ -1,0 +1,6 @@
+# Name a state using the selected superstate operator's name
+sp {all*elaborate*name
+   (state <s> ^superstate.operator.name <name>)
+-->
+   (<s> ^name <name>)
+}

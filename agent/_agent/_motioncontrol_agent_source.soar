@@ -1,0 +1,3 @@
+pushd motioncontrol
+source motioncontrol_source.soar
+popd

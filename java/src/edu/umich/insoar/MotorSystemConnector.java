@@ -83,7 +83,9 @@ public class MotorSystemConnector implements OutputEventInterface,
 	 agent.getAgent().RegisterForRunEvent(smlRunEventId.smlEVENT_BEFORE_INPUT_PHASE, this, null);
 
 	 // Setup Output Link Events
-	 String[] outputHandlerStrings = { "search", "stop", "execute"};
+	 String[] outputHandlerStrings = { "search",
+					   "stop",
+					   "execute"};
 	 for (String outputHandlerString : outputHandlerStrings)
 	 {
 		 agent.getAgent().AddOutputHandler(outputHandlerString, this, null);

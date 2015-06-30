@@ -19,7 +19,8 @@ sp {apply*interpret-motion-request*apply-create-target
          ^y <yval>
          ^z <zval>)
 -->
-	(<ol> ^target <targ>)
+	(<ol> ^search <search>)
+ 	(<search> ^target <targ>)
  	(<targ> ^x <xval>
          	^y <yval>
          	^z <zval>)

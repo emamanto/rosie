@@ -1,0 +1,26 @@
+sp {apply*interpret-motion-request*propose-create-target
+	(state <s> ^name interpret-motion-request
+               ^topstate <t>)
+ 	(<t> ^io.output-link <ol>)
+    (<ol> -^ target)
+  	(<t> ^request)
+-->
+	(<s> ^operator <op> + =)
+ 	(<op> ^name create-target)
+}
+
+sp {apply*interpret-motion-request*apply-create-target
+	(state <s> ^name interpret-motion-request
+               ^operator.name create-target
+               ^topstate <t>)
+ 	(<t> ^io.output-link <ol>
+         ^request.target <r>)
+  	(<r> ^x <xval>
+         ^y <yval>
+         ^z <zval>)
+-->
+	(<ol> ^target <targ>)
+ 	(<targ> ^x <xval>
+         	^y <yval>
+         	^z <zval>)
+}

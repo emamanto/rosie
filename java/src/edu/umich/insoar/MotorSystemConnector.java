@@ -13,6 +13,7 @@ import lcm.lcm.LCMDataInputStream;
 import lcm.lcm.LCMSubscriber;
 import probcog.arm.ArmStatus;
 import probcog.lcmtypes.planner_command_t;
+import probcog.lcmtypes.planner_response_t;
 import sml.Agent;
 import sml.Agent.OutputEventInterface;
 import sml.Agent.RunEventInterface;
@@ -37,6 +38,7 @@ public class MotorSystemConnector implements OutputEventInterface,
     private SoarAgent agent;
     private Identifier inputLinkId;
     private Identifier selfId;
+    private Identifier plannerId;
 
     private Pose pose;
 
@@ -44,6 +46,9 @@ public class MotorSystemConnector implements OutputEventInterface,
 
     private boolean gotUpdate = false;
     private boolean gotArmUpdate = false;
+
+    private boolean searchSuccess = false;
+    private int planSize = 0;
 
     private LCM lcm;
 
@@ -77,6 +82,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 	 // Setup LCM events
 	 lcm = LCM.getSingleton();
 	 lcm.subscribe("ARM_STATUS", this);
+	 lcm.subscribe("PLANNER_RESPONSES", this);
 
 	 // Setup Input Link Events
 	 inputLinkId = agent.getAgent().GetInputLink();
@@ -98,6 +104,19 @@ public class MotorSystemConnector implements OutputEventInterface,
 					      LCMDataInputStream ins){
 	 if(channel.equals("ARM_STATUS")){
 	     gotArmUpdate = true;
+	 }
+	 if(channel.equals("PLANNER_RESPONSES")){
+	     gotUpdate = true;
+            try {
+                planner_response_t r = new planner_response_t(ins);
+		searchSuccess = r.plan_found;
+		planSize = r.plan_size;
+		gotUpdate = true;
+            }
+            catch (IOException e){
+                e.printStackTrace();
+                return;
+            }
 	 }
      }
 
@@ -132,6 +151,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 
     private void initIL(){
     	selfId = inputLinkId.CreateIdWME("self");
+	plannerId = inputLinkId.CreateIdWME("planner");
     	// selfId.CreateStringWME("action", "wait");
     	// selfId.CreateStringWME("prev-action", "wait");
     	// selfId.CreateStringWME("holding-obj", "false");
@@ -162,17 +182,13 @@ public class MotorSystemConnector implements OutputEventInterface,
     }
 
     private void updateIL(){
-    	// WMUtil.updateStringWME(selfId, "action", curStatus.action.toLowerCase());
-    	// if(prevStatus == null){
-        // 	WMUtil.updateStringWME(selfId, "prev-action", "wait");
-    	// } else {
-        // 	WMUtil.updateStringWME(selfId, "prev-action", prevStatus.action.toLowerCase());
-    	// }
-    	// WMUtil.updateStringWME(selfId, "holding-obj", (curStatus.obj_id != -1 ? "true" : "false"));
-    	// WMUtil.updateIntWME(selfId, "grabbed-object", perception.world.getSoarId(curStatus.obj_id));
-    	// pose.updateWithArray(curStatus.xyz);
-    	// pose.updateInputLink(selfId);
-    	//prevStatus = curStatus;
+    	Identifier srchId = plannerId.CreateIdWME("search");
+	if(searchSuccess) {
+	    srchId.CreateStringWME("found", "true");
+	} else {
+	    srchId.CreateStringWME("found", "false");
+	}
+	srchId.CreateIntWME("steps", planSize);
     }
 
     private void updateArmInfo(){

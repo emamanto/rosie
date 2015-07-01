@@ -271,11 +271,16 @@ public class MotorSystemConnector implements OutputEventInterface,
                 searchId, "z",
 		"Error: No target z attribute"));
 
+        double ss = Double.parseDouble(WMUtil.getValueOfAttribute(
+                id, "step-size",
+		"Error: No step-size attribute"));
+
         planner_command_t command = new planner_command_t();
         command.utime = TimeUtil.utime();
         command.command_type = "SEARCH";
 	double[] t = {x, y, z};
         command.target = t;
+	command.primitive_size = ss;
     	lcm.publish("PLANNER_COMMANDS", command);
         id.CreateStringWME("status", "searching");
         sentCommand = command;

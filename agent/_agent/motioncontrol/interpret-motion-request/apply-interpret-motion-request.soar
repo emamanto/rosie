@@ -1,8 +1,7 @@
 sp {apply*interpret-motion-request*propose-create-target
 	(state <s> ^name interpret-motion-request
-               ^topstate <t>)
- 	(<t> ^io.output-link <ol>)
-    (<ol> -^ target)
+               ^topstate <t>
+              -^search)
   	(<t> ^request)
 -->
 	(<s> ^operator <op> + =)
@@ -13,15 +12,53 @@ sp {apply*interpret-motion-request*apply-create-target
 	(state <s> ^name interpret-motion-request
                ^operator.name create-target
                ^topstate <t>)
- 	(<t> ^io.output-link <ol>
-         ^request.target <r>)
+ 	(<t> ^request.target <r>)
   	(<r> ^x <xval>
          ^y <yval>
          ^z <zval>)
 -->
-	(<ol> ^search <search>)
- 	(<search> ^target <targ>)
+	(<s> ^search <sr>)
+ 	(<sr> ^target <targ>)
  	(<targ> ^x <xval>
-         	^y <yval>
+ 		    ^y <yval>
          	^z <zval>)
+}
+
+sp {apply*interpret-motion-request*elaborate-target-step-size
+	(state <s> ^name interpret-motion-request
+               ^topstate <t>)
+ 	(<t> ^request <r>)
+  	(<s> ^search <search>)
+  	(<r> ^step-size <ss>)
+-->
+ 	(<search> ^step-size <ss>)
+}
+
+sp {apply*interpret-motion-request*elaborate-target-step-size*default
+	(state <s> ^name interpret-motion-request
+               ^topstate <t>)
+ 	(<t> ^request <r>)
+  	(<s> ^search <search>)
+  	(<r> -^step-size)
+-->
+ 	(<search> ^step-size 0.5)
+}
+
+sp {apply*interpret-motion-request*propose-put-output-link
+	(state <s> ^name interpret-motion-request
+               ^search <search>)
+ 	(<search> ^target
+          	  ^step-size)
+-->
+	(<s> ^operator <op> + =)
+ 	(<op> ^name put-output-link)
+}
+
+sp {apply*interpret-motion-request*apply-put-output-link
+	(state <s> ^name interpret-motion-request
+               ^operator.name put-output-link
+               ^topstate.io.output-link <ol>
+               ^search <search>)
+-->
+	(<ol> ^search <search>)
 }

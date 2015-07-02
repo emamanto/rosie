@@ -4,3 +4,7 @@ source elaborations.soar
 pushd interpret-motion-request
 source interpret-motion-request_source.soar
 popd
+
+pushd accept-motion-plan
+source accept-motion-plan_source.soar
+popd

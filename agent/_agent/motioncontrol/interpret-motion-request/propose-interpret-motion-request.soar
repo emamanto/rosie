@@ -1,7 +1,8 @@
 sp {propose*interpret-motion-request
 	(state <s> ^superstate nil
                ^name motion-control
-               ^request)
+               ^request
+              -^plan-requested true)
 -->
 	(<s> ^operator <op> + =)
  	(<op> ^name interpret-motion-request)

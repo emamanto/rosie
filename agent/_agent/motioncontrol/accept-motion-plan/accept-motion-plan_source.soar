@@ -1,2 +1,2 @@
-source propose-accept-motion-plan.soar
 source apply-accept-motion-plan.soar
+source propose-accept-motion-plan.soar

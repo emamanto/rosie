@@ -19,8 +19,8 @@ sp {topstate*start*demo
 	(state <s> ^name motion-control)
 -->
 	(<s> ^request <r>)
-	(<r> ^target <t>)
-         #^step-size 0.1)
+	(<r> ^target <t>
+         ^step-size 0.6)
  	(<t> ^x 0.2
          ^y 0.0
          ^z 0.2)

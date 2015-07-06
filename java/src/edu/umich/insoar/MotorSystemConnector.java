@@ -106,12 +106,17 @@ public class MotorSystemConnector implements OutputEventInterface,
 	     gotArmUpdate = true;
 	 }
 	 if(channel.equals("PLANNER_RESPONSES")){
-	     gotUpdate = true;
+	     System.out.println("Got a planner response.");
             try {
                 planner_response_t r = new planner_response_t(ins);
-		searchSuccess = r.plan_found;
-		planSize = r.plan_size;
-		gotUpdate = true;
+		if (r.response_type.equals("SEARCH") && r.finished) {
+		    searchSuccess = r.success;
+		    planSize = r.plan_size;
+		    gotUpdate = true;
+		}
+		if (r.response_type.equals("EXECUTE") && r.finished) {
+		    System.out.println("Done executing!");
+		}
             }
             catch (IOException e){
                 e.printStackTrace();

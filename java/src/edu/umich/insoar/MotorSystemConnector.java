@@ -93,7 +93,8 @@ public class MotorSystemConnector implements OutputEventInterface,
 	 // Setup Output Link Events
 	 String[] outputHandlerStrings = { "search",
 					   "stop",
-					   "execute"};
+					   "execute",
+					   "reset"};
 	 for (String outputHandlerString : outputHandlerStrings)
 	 {
 		 agent.getAgent().AddOutputHandler(outputHandlerString, this, null);
@@ -267,6 +268,9 @@ public class MotorSystemConnector implements OutputEventInterface,
             else if (wme.GetAttribute().equals("execute")) {
                 processExecuteCommand(id);
             }
+	    else if (wme.GetAttribute().equals("reset")) {
+		processResetCommand(id);
+	    }
             agent.commitChanges();
         } catch (IllegalStateException e){
         	System.out.println(e.getMessage());
@@ -330,6 +334,19 @@ public class MotorSystemConnector implements OutputEventInterface,
         id.CreateStringWME("status", "executing");
 
 	lastRequest = "EXECUTE";
+	requestFinished = false;
+	requestSuccess = false;
+    }
+
+    private void processResetCommand(Identifier id)
+    {
+        planner_command_t command = new planner_command_t();
+        command.utime = TimeUtil.utime();
+        command.command_type = "RESET";
+    	lcm.publish("PLANNER_COMMANDS", command);
+        id.CreateStringWME("status", "resetting");
+
+	lastRequest = "RESET";
 	requestFinished = false;
 	requestSuccess = false;
     }

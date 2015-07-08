@@ -16,12 +16,15 @@ sp {topstate*apply*init-agent
 
 ### Just for demoing
 sp {topstate*start*demo
-	(state <s> ^name motion-control)
+	(state <s> ^name motion-control
+           	   ^io.output-link <ol>)
 -->
-	(<s> ^request <r>)
-	(<r> ^target <t>
-         ^step-size 0.6)
- 	(<t> ^x 0.2
-         ^y 0.0
-         ^z 0.2)
+	(<ol> ^reset <r>)
+ 	(<r> ^something here)
+	#(<s> ^request <r>)
+	#(<r> ^target <t>
+    #    ^step-size 0.6)
+ 	#(<t> ^x 0.2
+    #     ^y 0.0
+    #     ^z 0.2)
 }

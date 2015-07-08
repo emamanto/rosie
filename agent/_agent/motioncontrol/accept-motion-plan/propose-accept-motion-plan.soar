@@ -3,8 +3,9 @@ sp {propose*accept-motion-plan
                ^name motion-control
                ^plan-requested true
                ^io.input-link <il>)
- 	(<il> ^planner.search <search>)
-  	(<search> ^found true)
+ 	(<il> ^planner <pl>)
+  	(<pl> ^last-completed search
+          ^success true)
 -->
 	(<s> ^operator <op> + =)
  	(<op> ^name accept-motion-plan)

@@ -47,7 +47,9 @@ public class MotorSystemConnector implements OutputEventInterface,
     private boolean gotUpdate = false;
     private boolean gotArmUpdate = false;
 
-    private boolean searchSuccess = false;
+    private String lastRequest = "NONE";
+    private boolean requestFinished = false;
+    private boolean requestSuccess = false;
     private int planSize = 0;
 
     private LCM lcm;
@@ -110,12 +112,15 @@ public class MotorSystemConnector implements OutputEventInterface,
             try {
                 planner_response_t r = new planner_response_t(ins);
 		if (r.response_type.equals("SEARCH") && r.finished) {
-		    searchSuccess = r.success;
+		    requestSuccess = r.success;
+		    requestFinished = true;
 		    planSize = r.plan_size;
 		    gotUpdate = true;
 		}
 		if (r.response_type.equals("EXECUTE") && r.finished) {
-		    System.out.println("Done executing!");
+		    requestSuccess = r.success;
+		    requestFinished = true;
+		    gotUpdate = true;
 		}
             }
             catch (IOException e){
@@ -157,6 +162,10 @@ public class MotorSystemConnector implements OutputEventInterface,
     private void initIL(){
     	selfId = inputLinkId.CreateIdWME("self");
 	plannerId = inputLinkId.CreateIdWME("planner");
+	plannerId.CreateStringWME("last-completed", "none");
+	plannerId.CreateStringWME("success", "false");
+	plannerId.CreateIntWME("plan-size", 0);
+
     	// selfId.CreateStringWME("action", "wait");
     	// selfId.CreateStringWME("prev-action", "wait");
     	// selfId.CreateStringWME("holding-obj", "false");
@@ -187,13 +196,16 @@ public class MotorSystemConnector implements OutputEventInterface,
     }
 
     private void updateIL(){
-    	Identifier srchId = plannerId.CreateIdWME("search");
-	if(searchSuccess) {
-	    srchId.CreateStringWME("found", "true");
+	WMUtil.updateStringWME(plannerId, "last-completed",
+			       lastRequest.toLowerCase());
+	if(requestSuccess) {
+	    WMUtil.updateStringWME(plannerId, "success", "true");
 	} else {
-	    srchId.CreateStringWME("found", "false");
+	    WMUtil.updateStringWME(plannerId, "success", "false");
 	}
-	srchId.CreateIntWME("steps", planSize);
+	if (lastRequest.equals("SEARCH")) {
+	    WMUtil.updateIntWME(plannerId, "plan-size", planSize);
+	}
     }
 
     private void updateArmInfo(){
@@ -290,6 +302,10 @@ public class MotorSystemConnector implements OutputEventInterface,
         id.CreateStringWME("status", "searching");
         sentCommand = command;
         sentTime = TimeUtil.utime();
+
+	lastRequest = "SEARCH";
+	requestFinished = false;
+	requestSuccess = false;
     }
 
     private void processStopCommand(Identifier stopId)
@@ -301,6 +317,8 @@ public class MotorSystemConnector implements OutputEventInterface,
         stopId.CreateStringWME("status", "killed");
         sentCommand = command;
         sentTime = TimeUtil.utime();
+
+	lastRequest = "STOP";
     }
 
     private void processExecuteCommand(Identifier id)
@@ -310,6 +328,10 @@ public class MotorSystemConnector implements OutputEventInterface,
         command.command_type = "EXECUTE";
     	lcm.publish("PLANNER_COMMANDS", command);
         id.CreateStringWME("status", "executing");
+
+	lastRequest = "EXECUTE";
+	requestFinished = false;
+	requestSuccess = false;
     }
 
     public JMenu createMenu(){

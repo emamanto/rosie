@@ -2,11 +2,14 @@ sp {apply*accept-motion-plan
 	(state <s> ^superstate nil 
 			   ^name motion-control
                ^operator.name accept-motion-plan
+               ^plan-requested true
                ^io <io>)
   	(<io> ^output-link <ol>)
-    (<ol> ^search <search>)
+    (<ol> ^search <cmd>)
 -->
-	(<ol> ^search <search> - 
+	(<s> ^plan-requested true -
+      	 ^execution-started true)
+	(<ol> ^search <cmd> - 
 		  ^execute <ex>)
  	(<ex> ^speed 0.5)
 }

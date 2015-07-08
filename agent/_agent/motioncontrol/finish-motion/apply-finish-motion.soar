@@ -1,0 +1,14 @@
+sp {apply*finish-motion
+	(state <s> ^superstate nil 
+			   ^name motion-control
+               ^operator.name finish-motion
+               ^request <r>
+               ^execution-started true
+               ^io <io>)
+  	(<io> ^output-link <ol>)
+    (<ol> ^execute <cmd>)
+-->
+	(<s> ^request <r> -
+      	 ^execution-started true -)
+	(<ol> ^execute <cmd> -)
+}

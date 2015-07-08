@@ -8,3 +8,7 @@ popd
 pushd accept-motion-plan
 source accept-motion-plan_source.soar
 popd
+
+pushd finish-motion
+source finish-motion_source.soar
+popd

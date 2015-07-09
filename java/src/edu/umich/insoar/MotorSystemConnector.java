@@ -46,6 +46,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 
     private boolean gotUpdate = false;
     private boolean gotArmUpdate = false;
+    private boolean spam = false;
 
     private String lastRequest = "NONE";
     private boolean requestFinished = false;
@@ -107,21 +108,30 @@ public class MotorSystemConnector implements OutputEventInterface,
 					      LCMDataInputStream ins){
 	 if(channel.equals("ARM_STATUS")){
 	     gotArmUpdate = true;
+	     if (spam) {
+		 lcm.publish("PLANNER_COMMANDS", sentCommand);
+	     }
 	 }
 	 if(channel.equals("PLANNER_RESPONSES")){
 	     System.out.println("Got a planner response.");
             try {
                 planner_response_t r = new planner_response_t(ins);
-		if (r.response_type.equals("SEARCH") && r.finished) {
+		if (r.response_type.equals("SEARCH") &&
+		    lastRequest.equals("SEARCH") &&
+		    r.finished) {
 		    requestSuccess = r.success;
 		    requestFinished = true;
 		    planSize = r.plan_size;
 		    gotUpdate = true;
+		    spam = false;
 		}
-		if (r.response_type.equals("EXECUTE") && r.finished) {
+		if (r.response_type.equals("EXECUTE") &&
+		    lastRequest.equals("EXECUTE") &&
+		    r.finished) {
 		    requestSuccess = r.success;
 		    requestFinished = true;
 		    gotUpdate = true;
+		    spam = false;
 		}
             }
             catch (IOException e){
@@ -310,6 +320,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 	lastRequest = "SEARCH";
 	requestFinished = false;
 	requestSuccess = false;
+	spam = true;
     }
 
     private void processStopCommand(Identifier stopId)
@@ -323,6 +334,7 @@ public class MotorSystemConnector implements OutputEventInterface,
         sentTime = TimeUtil.utime();
 
 	lastRequest = "STOP";
+	spam = true;
     }
 
     private void processExecuteCommand(Identifier id)
@@ -332,10 +344,13 @@ public class MotorSystemConnector implements OutputEventInterface,
         command.command_type = "EXECUTE";
     	lcm.publish("PLANNER_COMMANDS", command);
         id.CreateStringWME("status", "executing");
+        sentCommand = command;
+        sentTime = TimeUtil.utime();
 
 	lastRequest = "EXECUTE";
 	requestFinished = false;
 	requestSuccess = false;
+	spam = true;
     }
 
     private void processResetCommand(Identifier id)
@@ -345,10 +360,13 @@ public class MotorSystemConnector implements OutputEventInterface,
         command.command_type = "RESET";
     	lcm.publish("PLANNER_COMMANDS", command);
         id.CreateStringWME("status", "resetting");
+        sentCommand = command;
+        sentTime = TimeUtil.utime();
 
 	lastRequest = "RESET";
 	requestFinished = false;
 	requestSuccess = false;
+	spam = true;
     }
 
     public JMenu createMenu(){

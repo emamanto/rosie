@@ -339,9 +339,15 @@ public class MotorSystemConnector implements OutputEventInterface,
 
     private void processExecuteCommand(Identifier id)
     {
+        double speed =
+	    Double.parseDouble(WMUtil.getValueOfAttribute(id,
+							  "speed",
+							  "Error: No speed value"));
+
         planner_command_t command = new planner_command_t();
         command.utime = TimeUtil.utime();
         command.command_type = "EXECUTE";
+	command.speed = speed;
     	lcm.publish("PLANNER_COMMANDS", command);
         id.CreateStringWME("status", "executing");
         sentCommand = command;

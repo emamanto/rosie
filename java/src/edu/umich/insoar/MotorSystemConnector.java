@@ -94,6 +94,8 @@ public class MotorSystemConnector implements OutputEventInterface,
 	 // Setup Output Link Events
 	 String[] outputHandlerStrings = { "search",
 					   "stop",
+					   "pause",
+					   "continue",
 					   "execute",
 					   "reset"};
 	 for (String outputHandlerString : outputHandlerStrings)
@@ -275,6 +277,12 @@ public class MotorSystemConnector implements OutputEventInterface,
             else if (wme.GetAttribute().equals("stop")) {
                 processStopCommand(id);
             }
+            else if (wme.GetAttribute().equals("pause")) {
+                processPauseCommand(id);
+            }
+            else if (wme.GetAttribute().equals("continue")) {
+                processContinueCommand(id);
+            }
             else if (wme.GetAttribute().equals("execute")) {
                 processExecuteCommand(id);
             }
@@ -334,6 +342,34 @@ public class MotorSystemConnector implements OutputEventInterface,
         sentTime = TimeUtil.utime();
 
 	lastRequest = "STOP";
+	spam = true;
+    }
+
+    private void processPauseCommand(Identifier pauseId)
+    {
+        planner_command_t command = new planner_command_t();
+        command.utime = TimeUtil.utime();
+        command.command_type = "PAUSE";
+    	lcm.publish("PLANNER_COMMANDS", command);
+        pauseId.CreateStringWME("status", "paused");
+        sentCommand = command;
+        sentTime = TimeUtil.utime();
+
+	lastRequest = "PAUSE";
+	spam = true;
+    }
+
+    private void processContinueCommand(Identifier contId)
+    {
+        planner_command_t command = new planner_command_t();
+        command.utime = TimeUtil.utime();
+        command.command_type = "CONTINUE";
+    	lcm.publish("PLANNER_COMMANDS", command);
+        contId.CreateStringWME("status", "continued");
+        sentCommand = command;
+        sentTime = TimeUtil.utime();
+
+	lastRequest = "CONTINUE";
 	spam = true;
     }
 

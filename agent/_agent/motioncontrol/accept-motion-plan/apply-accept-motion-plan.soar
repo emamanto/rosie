@@ -11,5 +11,5 @@ sp {apply*accept-motion-plan
       	 ^execution-started true)
 	(<ol> ^search <cmd> - 
 		  ^execute <ex>)
- 	(<ex> ^speed 0.5)
+ 	(<ex> ^speed 0.9)
 }

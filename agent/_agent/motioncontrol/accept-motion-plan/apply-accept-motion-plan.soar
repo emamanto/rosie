@@ -2,14 +2,14 @@ sp {apply*accept-motion-plan
 	(state <s> ^superstate nil 
 			   ^name motion-control
                ^operator.name accept-motion-plan
-               ^plan-requested true
+               ^postprocessing-requested true
                ^io <io>)
   	(<io> ^output-link <ol>)
-    (<ol> ^search <cmd>)
+    (<ol> ^postprocess <cmd>)
 -->
-	(<s> ^plan-requested true -
+	(<s> ^postprocessing-requested true -
       	 ^execution-started true)
-	(<ol> ^search <cmd> - 
+	(<ol> ^postprocess <cmd> - 
 		  ^execute <ex>)
  	(<ex> ^speed 0.9)
 }

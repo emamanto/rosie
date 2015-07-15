@@ -12,3 +12,7 @@ popd
 pushd finish-motion
 source finish-motion_source.soar
 popd
+
+pushd edit-motion-plan
+source edit-motion-plan_source.soar
+popd

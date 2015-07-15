@@ -96,6 +96,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 					   "stop",
 					   "pause",
 					   "continue",
+					   "postprocess",
 					   "execute",
 					   "reset"};
 	 for (String outputHandlerString : outputHandlerStrings)
@@ -283,6 +284,9 @@ public class MotorSystemConnector implements OutputEventInterface,
             else if (wme.GetAttribute().equals("continue")) {
                 processContinueCommand(id);
             }
+            else if (wme.GetAttribute().equals("postprocess")) {
+                processPostprocessCommand(id);
+            }
             else if (wme.GetAttribute().equals("execute")) {
                 processExecuteCommand(id);
             }
@@ -320,6 +324,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 	double[] t = {x, y, z};
         command.target = t;
 	command.primitive_size = ss;
+	command.time_limit = -1;
     	lcm.publish("PLANNER_COMMANDS", command);
         id.CreateStringWME("status", "searching");
         sentCommand = command;
@@ -370,6 +375,21 @@ public class MotorSystemConnector implements OutputEventInterface,
         sentTime = TimeUtil.utime();
 
 	lastRequest = "CONTINUE";
+	spam = true;
+    }
+
+    private void processPostprocessCommand(Identifier id)
+    {
+        planner_command_t command = new planner_command_t();
+        command.utime = TimeUtil.utime();
+        command.command_type = "POSTPROCESS";
+	command.precision = 0.5;
+    	lcm.publish("PLANNER_COMMANDS", command);
+        id.CreateStringWME("status", "postprocessing");
+        sentCommand = command;
+        sentTime = TimeUtil.utime();
+
+	lastRequest = "POSTPROCESS";
 	spam = true;
     }
 

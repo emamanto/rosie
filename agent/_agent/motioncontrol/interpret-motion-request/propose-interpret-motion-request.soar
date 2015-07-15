@@ -3,6 +3,7 @@ sp {propose*interpret-motion-request
                ^name motion-control
                ^request
               -^plan-requested true
+              -^postprocessing-requested true
               -^execution-started true)
 -->
 	(<s> ^operator <op> + =)

@@ -27,40 +27,42 @@ sp {topstate*start*demo
          ^z 0.2)
 }
 
-sp {propose*pause-test
-	(state <s> ^name motion-control
-               ^io.output-link <ol>)
- 	(<ol> ^search <srch>)
-    (<ol> -^pause <ps>)
--->
-	(<s> ^operator <op> + >)
- 	(<op> ^name pause-test)
-}
-
-sp {apply*pause-test
-	(state <s> ^name motion-control
-               ^operator.name pause-test
-               ^io.output-link <ol>)
- 	(<ol> ^search <srch>)
--->
-	(<ol> ^pause <p>)
- 	(<p> ^info null)
-}
-
-sp {propose*continue-test
-	(state <s> ^name motion-control
-               ^io.output-link <ol>)
- 	(<ol> ^pause <ps>)
--->
-	(<s> ^operator <op> + >)
- 	(<op> ^name continue-test)
-}
-
-sp {apply*continue-test
-	(state <s> ^name motion-control
-               ^operator.name continue-test
-               ^io.output-link <ol>)
--->
-	(<ol> ^continue <p>)
- 	(<p> ^info null)
-}
+#sp {propose*pause-test
+#	(state <s> ^name interpret-motion-request
+#               ^topstate.io.output-link <ol>)
+# 	(<ol> ^search <srch>)
+#    (<ol> -^pause <ps>)
+#-->
+#	(<s> ^operator <op> + >)
+# 	(<op> ^name pause-test)
+#}
+#
+#sp {apply*pause-test
+#	(state <s> ^name interpret-motion-request
+#               ^operator.name pause-test
+#               ^topstate.io.output-link <ol>)
+# 	(<ol> ^search <srch>)
+#-->
+#	(<ol> ^pause <p>)
+# 	(<p> ^info null)
+#}
+#
+#sp {propose*continue-test
+#	(state <s> ^name interpret-motion-request
+#               ^topstate.io.output-link <ol>)
+# 	(<ol> ^pause <ps>)
+#-->
+#	(<s> ^operator <op> + >)
+# 	(<op> ^name continue-test)
+#}
+#
+#sp {apply*continue-test
+#	(state <s> ^name interpret-motion-request
+#               ^operator.name continue-test
+#               ^topstate.io.output-link <ol>)
+# 	(<ol> ^pause <ps>)
+#-->
+#	(<ol> ^continue <p>
+#          ^pause <ps> -)
+# 	(<p> ^info null)
+#}

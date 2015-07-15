@@ -38,7 +38,7 @@ public class MotorSystemConnector implements OutputEventInterface,
     private SoarAgent agent;
     private Identifier inputLinkId;
     private Identifier selfId;
-    private Identifier plannerId;
+    private Identifier lastRequestId;
 
     private Pose pose;
 
@@ -119,20 +119,11 @@ public class MotorSystemConnector implements OutputEventInterface,
 	     System.out.println("Got a planner response.");
             try {
                 planner_response_t r = new planner_response_t(ins);
-		if (r.response_type.equals("SEARCH") &&
-		    lastRequest.equals("SEARCH") &&
+		if (r.response_type.equals(lastRequest) &&
 		    r.finished) {
 		    requestSuccess = r.success;
 		    requestFinished = true;
 		    planSize = r.plan_size;
-		    gotUpdate = true;
-		    spam = false;
-		}
-		if (r.response_type.equals("EXECUTE") &&
-		    lastRequest.equals("EXECUTE") &&
-		    r.finished) {
-		    requestSuccess = r.success;
-		    requestFinished = true;
 		    gotUpdate = true;
 		    spam = false;
 		}
@@ -175,11 +166,6 @@ public class MotorSystemConnector implements OutputEventInterface,
 
     private void initIL(){
     	selfId = inputLinkId.CreateIdWME("self");
-	plannerId = inputLinkId.CreateIdWME("planner");
-	plannerId.CreateStringWME("last-completed", "none");
-	plannerId.CreateStringWME("success", "false");
-	plannerId.CreateIntWME("plan-size", 0);
-
     	// selfId.CreateStringWME("action", "wait");
     	// selfId.CreateStringWME("prev-action", "wait");
     	// selfId.CreateStringWME("holding-obj", "false");
@@ -210,12 +196,11 @@ public class MotorSystemConnector implements OutputEventInterface,
     }
 
     private void updateIL(){
-	WMUtil.updateStringWME(plannerId, "last-completed",
-			       lastRequest.toLowerCase());
+	WMUtil.updateStringWME(lastRequestId, "status", "finished");
 	if(requestSuccess) {
-	    WMUtil.updateStringWME(plannerId, "success", "true");
+	    lastRequestId.CreateStringWME("success", "true");
 	} else {
-	    WMUtil.updateStringWME(plannerId, "success", "false");
+	    lastRequestId.CreateStringWME("success", "false");
 	}
 	if (lastRequest.equals("SEARCH")) {
 	    WMUtil.updateIntWME(plannerId, "plan-size", planSize);
@@ -326,11 +311,12 @@ public class MotorSystemConnector implements OutputEventInterface,
 	command.primitive_size = ss;
 	command.time_limit = -1;
     	lcm.publish("PLANNER_COMMANDS", command);
-        id.CreateStringWME("status", "searching");
+        id.CreateStringWME("status", "requested");
         sentCommand = command;
         sentTime = TimeUtil.utime();
 
 	lastRequest = "SEARCH";
+	lastRequestId = id;
 	requestFinished = false;
 	requestSuccess = false;
 	spam = true;
@@ -342,7 +328,7 @@ public class MotorSystemConnector implements OutputEventInterface,
         command.utime = TimeUtil.utime();
         command.command_type = "STOP";
     	lcm.publish("PLANNER_COMMANDS", command);
-        stopId.CreateStringWME("status", "killed");
+        stopId.CreateStringWME("status", "requested");
         sentCommand = command;
         sentTime = TimeUtil.utime();
 
@@ -356,11 +342,12 @@ public class MotorSystemConnector implements OutputEventInterface,
         command.utime = TimeUtil.utime();
         command.command_type = "PAUSE";
     	lcm.publish("PLANNER_COMMANDS", command);
-        pauseId.CreateStringWME("status", "paused");
+        pauseId.CreateStringWME("status", "requested");
         sentCommand = command;
         sentTime = TimeUtil.utime();
 
 	lastRequest = "PAUSE";
+	lastRequestId = pauseId;
 	spam = true;
     }
 
@@ -370,11 +357,12 @@ public class MotorSystemConnector implements OutputEventInterface,
         command.utime = TimeUtil.utime();
         command.command_type = "CONTINUE";
     	lcm.publish("PLANNER_COMMANDS", command);
-        contId.CreateStringWME("status", "continued");
+        contId.CreateStringWME("status", "requested");
         sentCommand = command;
         sentTime = TimeUtil.utime();
 
 	lastRequest = "CONTINUE";
+	lastRequestId = contId;
 	spam = true;
     }
 
@@ -385,11 +373,12 @@ public class MotorSystemConnector implements OutputEventInterface,
         command.command_type = "POSTPROCESS";
 	command.precision = 0.5;
     	lcm.publish("PLANNER_COMMANDS", command);
-        id.CreateStringWME("status", "postprocessing");
+        id.CreateStringWME("status", "requested");
         sentCommand = command;
         sentTime = TimeUtil.utime();
 
 	lastRequest = "POSTPROCESS";
+	lastRequestId = id;
 	spam = true;
     }
 
@@ -405,11 +394,12 @@ public class MotorSystemConnector implements OutputEventInterface,
         command.command_type = "EXECUTE";
 	command.speed = speed;
     	lcm.publish("PLANNER_COMMANDS", command);
-        id.CreateStringWME("status", "executing");
+        id.CreateStringWME("status", "requested");
         sentCommand = command;
         sentTime = TimeUtil.utime();
 
 	lastRequest = "EXECUTE";
+	lastRequestId = id;
 	requestFinished = false;
 	requestSuccess = false;
 	spam = true;
@@ -421,11 +411,12 @@ public class MotorSystemConnector implements OutputEventInterface,
         command.utime = TimeUtil.utime();
         command.command_type = "RESET";
     	lcm.publish("PLANNER_COMMANDS", command);
-        id.CreateStringWME("status", "resetting");
+        id.CreateStringWME("status", "requested");
         sentCommand = command;
         sentTime = TimeUtil.utime();
 
 	lastRequest = "RESET";
+	lastRequestId = id;
 	requestFinished = false;
 	requestSuccess = false;
 	spam = true;

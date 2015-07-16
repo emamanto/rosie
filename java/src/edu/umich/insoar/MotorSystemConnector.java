@@ -103,7 +103,15 @@ public class MotorSystemConnector implements OutputEventInterface,
 	 {
 		 agent.getAgent().AddOutputHandler(outputHandlerString, this, null);
 	 }
+
+	 new CommanderThread().start();
      }
+
+    private synchronized int getNextMsgId()
+    {
+	if (sentCommand == null) return 0;
+	return sentCommand.command_id + 1;
+    }
 
      @Override
      public synchronized void messageReceived(LCM lcm,
@@ -111,9 +119,6 @@ public class MotorSystemConnector implements OutputEventInterface,
 					      LCMDataInputStream ins){
 	 if(channel.equals("ARM_STATUS")){
 	     gotArmUpdate = true;
-	     if (spam) {
-		 lcm.publish("PLANNER_COMMANDS", sentCommand);
-	     }
 	 }
 	 if(channel.equals("PLANNER_RESPONSES")){
 	     System.out.println("Got a planner response.");
@@ -203,7 +208,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 	    lastRequestId.CreateStringWME("success", "false");
 	}
 	if (lastRequest.equals("SEARCH")) {
-	    WMUtil.updateIntWME(plannerId, "plan-size", planSize);
+	    lastRequestId.CreateIntWME("plan-size", planSize);
 	}
     }
 
@@ -310,6 +315,7 @@ public class MotorSystemConnector implements OutputEventInterface,
         command.target = t;
 	command.primitive_size = ss;
 	command.time_limit = -1;
+	command.command_id = getNextMsgId();
     	lcm.publish("PLANNER_COMMANDS", command);
         id.CreateStringWME("status", "requested");
         sentCommand = command;
@@ -327,6 +333,7 @@ public class MotorSystemConnector implements OutputEventInterface,
         planner_command_t command = new planner_command_t();
         command.utime = TimeUtil.utime();
         command.command_type = "STOP";
+	command.command_id = getNextMsgId();
     	lcm.publish("PLANNER_COMMANDS", command);
         stopId.CreateStringWME("status", "requested");
         sentCommand = command;
@@ -341,6 +348,7 @@ public class MotorSystemConnector implements OutputEventInterface,
         planner_command_t command = new planner_command_t();
         command.utime = TimeUtil.utime();
         command.command_type = "PAUSE";
+	command.command_id = getNextMsgId();
     	lcm.publish("PLANNER_COMMANDS", command);
         pauseId.CreateStringWME("status", "requested");
         sentCommand = command;
@@ -356,6 +364,7 @@ public class MotorSystemConnector implements OutputEventInterface,
         planner_command_t command = new planner_command_t();
         command.utime = TimeUtil.utime();
         command.command_type = "CONTINUE";
+	command.command_id = getNextMsgId();
     	lcm.publish("PLANNER_COMMANDS", command);
         contId.CreateStringWME("status", "requested");
         sentCommand = command;
@@ -372,6 +381,7 @@ public class MotorSystemConnector implements OutputEventInterface,
         command.utime = TimeUtil.utime();
         command.command_type = "POSTPROCESS";
 	command.precision = 0.5;
+	command.command_id = getNextMsgId();
     	lcm.publish("PLANNER_COMMANDS", command);
         id.CreateStringWME("status", "requested");
         sentCommand = command;
@@ -393,6 +403,7 @@ public class MotorSystemConnector implements OutputEventInterface,
         command.utime = TimeUtil.utime();
         command.command_type = "EXECUTE";
 	command.speed = speed;
+	command.command_id = getNextMsgId();
     	lcm.publish("PLANNER_COMMANDS", command);
         id.CreateStringWME("status", "requested");
         sentCommand = command;
@@ -410,6 +421,7 @@ public class MotorSystemConnector implements OutputEventInterface,
         planner_command_t command = new planner_command_t();
         command.utime = TimeUtil.utime();
         command.command_type = "RESET";
+	command.command_id = getNextMsgId();
     	lcm.publish("PLANNER_COMMANDS", command);
         id.CreateStringWME("status", "requested");
         sentCommand = command;
@@ -433,5 +445,20 @@ public class MotorSystemConnector implements OutputEventInterface,
         actionMenu.add(armResetButton);
 
         return actionMenu;
+    }
+
+    class CommanderThread extends Thread
+    {
+        public void run()
+        {
+	    while(true) {
+		if (spam && sentCommand != null) {
+		    synchronized(this) {
+			lcm.publish("PLANNER_COMMANDS", sentCommand);
+		    }
+		}
+		TimeUtil.sleep(100);
+	    }
+        }
     }
 }

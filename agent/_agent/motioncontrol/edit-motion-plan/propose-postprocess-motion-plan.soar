@@ -1,11 +1,10 @@
 sp {propose*postprocess-motion-plan
 	(state <s> ^superstate nil
                ^name motion-control
-               ^plan-requested true
-               ^io.input-link <il>)
- 	(<il> ^planner <pl>)
-  	(<pl> ^last-completed search
-          ^success true)
+               ^io.output-link <ol>)
+  	(<ol> ^search <srch>)
+    (<srch> ^status finished
+            ^success true)
 -->
 	(<s> ^operator <op> + =)
  	(<op> ^name postprocess-motion-plan)

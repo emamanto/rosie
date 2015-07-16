@@ -1,11 +1,9 @@
 sp {propose*finish-motion
 	(state <s> ^superstate nil
 			   ^name motion-control
-      		   ^io.input-link <il>
            	   ^io.output-link <ol>)
- 	(<il> ^planner <pl>)
-  	(<ol> ^execute)
-  	(<pl> ^last-completed execute 
+  	(<ol> ^execute <ex>)
+  	(<ex> ^status finished
 		  ^success true)
 -->
 	(<s> ^operator <op> + =)

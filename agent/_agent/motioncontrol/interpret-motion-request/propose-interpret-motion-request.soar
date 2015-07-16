@@ -2,9 +2,10 @@ sp {propose*interpret-motion-request
 	(state <s> ^superstate nil
                ^name motion-control
                ^request
-              -^plan-requested true
-              -^postprocessing-requested true
-              -^execution-started true)
+               ^io.output-link <ol>)
+ 	(<ol> -^search
+          -^postprocess
+          -^execute)
 -->
 	(<s> ^operator <op> + =)
  	(<op> ^name interpret-motion-request)

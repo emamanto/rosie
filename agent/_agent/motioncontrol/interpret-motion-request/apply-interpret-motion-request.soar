@@ -64,20 +64,3 @@ sp {apply*interpret-motion-request*apply-put-output-link
 -->
 	(<ol> ^search <search>)
 }
-
-sp {apply*interpret-motion-request*propose-finish
-	(state <s> ^name interpret-motion-request
-               ^search <search>
-               ^topstate.io.output-link.search <search>)
--->
-	(<s> ^operator <op> + =)
- 	(<op> ^name finish)
-}
-
-sp {apply*interpret-motion-request*apply-finish
-	(state <s> ^name interpret-motion-request
-               ^operator.name finish
-               ^topstate <t>)
--->
-	(<t> ^plan-requested true)
-}

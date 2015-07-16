@@ -2,13 +2,12 @@ sp {apply*accept-motion-plan
 	(state <s> ^superstate nil 
 			   ^name motion-control
                ^operator.name accept-motion-plan
-               ^postprocessing-requested true
                ^io <io>)
   	(<io> ^output-link <ol>)
     (<ol> ^postprocess <cmd>)
+    (<cmd> ^status finished
+           ^success true)
 -->
-	(<s> ^postprocessing-requested true -
-      	 ^execution-started true)
 	(<ol> ^postprocess <cmd> - 
 		  ^execute <ex>)
  	(<ex> ^speed 0.9)

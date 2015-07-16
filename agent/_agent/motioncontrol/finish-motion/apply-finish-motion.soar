@@ -3,12 +3,12 @@ sp {apply*finish-motion
 			   ^name motion-control
                ^operator.name finish-motion
                ^request <r>
-               ^execution-started true
                ^io <io>)
   	(<io> ^output-link <ol>)
     (<ol> ^execute <cmd>)
+    (<cmd> ^status finished
+		   ^success true)
 -->
-	(<s> ^request <r> -
-      	 ^execution-started true -)
+	(<s> ^request <r> -)
 	(<ol> ^execute <cmd> -)
 }

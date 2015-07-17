@@ -39,6 +39,7 @@ public class MotorSystemConnector implements OutputEventInterface,
     private Identifier inputLinkId;
     private Identifier selfId;
     private Identifier lastRequestId;
+    private Identifier idToUpdate;
 
     private Pose pose;
 
@@ -61,6 +62,10 @@ public class MotorSystemConnector implements OutputEventInterface,
 
     private planner_command_t sentCommand = null;
     private long sentTime = 0;
+    private int ongoingSearch = -1;
+    private int ongoingExecute = -1;
+    private Identifier ongoingSearchId;
+    private Identifier ongoingExecuteId;
 
     PerceptionConnector perception;
 
@@ -124,13 +129,36 @@ public class MotorSystemConnector implements OutputEventInterface,
 	     System.out.println("Got a planner response.");
             try {
                 planner_response_t r = new planner_response_t(ins);
-		if (r.response_type.equals(lastRequest) &&
+		if (r.response_id == sentCommand.command_id &&
 		    r.finished) {
 		    requestSuccess = r.success;
 		    requestFinished = true;
 		    planSize = r.plan_size;
 		    gotUpdate = true;
 		    spam = false;
+		    idToUpdate = lastRequestId;
+		}
+		else if (r.response_type.equals("SEARCH") &&
+			 r.response_id == ongoingSearch &&
+			 r.finished) {
+		    requestSuccess = r.success;
+		    requestFinished = true;
+		    planSize = r.plan_size;
+		    gotUpdate = true;
+		    spam = false;
+		    System.out.println("Updating the latest search");
+		    idToUpdate = ongoingSearchId;
+		}
+		else if ((r.response_type.equals("EXECUTE") ||
+			  r.response_type.equals("RESET")) &&
+			 r.response_id == ongoingExecute &&
+			 r.finished) {
+		    requestSuccess = r.success;
+		    requestFinished = true;
+		    planSize = r.plan_size;
+		    gotUpdate = true;
+		    spam = false;
+		    idToUpdate = ongoingExecuteId;
 		}
             }
             catch (IOException e){
@@ -201,15 +229,14 @@ public class MotorSystemConnector implements OutputEventInterface,
     }
 
     private void updateIL(){
-	WMUtil.updateStringWME(lastRequestId, "status", "finished");
+	WMUtil.updateStringWME(idToUpdate, "status", "finished");
 	if(requestSuccess) {
-	    lastRequestId.CreateStringWME("success", "true");
+	    idToUpdate.CreateStringWME("success", "true");
 	} else {
-	    lastRequestId.CreateStringWME("success", "false");
+	    idToUpdate.CreateStringWME("success", "false");
 	}
-	if (lastRequest.equals("SEARCH")) {
-	    lastRequestId.CreateIntWME("plan-size", planSize);
-	}
+	idToUpdate.CreateIntWME("plan-size", planSize);
+	idToUpdate = null;
     }
 
     private void updateArmInfo(){
@@ -316,6 +343,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 	command.primitive_size = ss;
 	command.time_limit = -1;
 	command.command_id = getNextMsgId();
+	ongoingSearch = command.command_id;
     	lcm.publish("PLANNER_COMMANDS", command);
         id.CreateStringWME("status", "requested");
         sentCommand = command;
@@ -323,6 +351,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 
 	lastRequest = "SEARCH";
 	lastRequestId = id;
+	ongoingSearchId = id;
 	requestFinished = false;
 	requestSuccess = false;
 	spam = true;
@@ -404,6 +433,7 @@ public class MotorSystemConnector implements OutputEventInterface,
         command.command_type = "EXECUTE";
 	command.speed = speed;
 	command.command_id = getNextMsgId();
+	ongoingExecute = command.command_id;
     	lcm.publish("PLANNER_COMMANDS", command);
         id.CreateStringWME("status", "requested");
         sentCommand = command;
@@ -411,6 +441,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 
 	lastRequest = "EXECUTE";
 	lastRequestId = id;
+	ongoingExecuteId = id;
 	requestFinished = false;
 	requestSuccess = false;
 	spam = true;
@@ -422,6 +453,7 @@ public class MotorSystemConnector implements OutputEventInterface,
         command.utime = TimeUtil.utime();
         command.command_type = "RESET";
 	command.command_id = getNextMsgId();
+	ongoingExecute = command.command_id;
     	lcm.publish("PLANNER_COMMANDS", command);
         id.CreateStringWME("status", "requested");
         sentCommand = command;
@@ -429,6 +461,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 
 	lastRequest = "RESET";
 	lastRequestId = id;
+	ongoingExecuteId = id;
 	requestFinished = false;
 	requestSuccess = false;
 	spam = true;

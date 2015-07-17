@@ -3,7 +3,7 @@ sp {propose*interpret-motion-request
                ^name motion-control
                ^request
                ^io.output-link <ol>)
- 	(<ol> -^search
+ 	(<ol> -^search.status finished
           -^postprocess
           -^execute)
 -->

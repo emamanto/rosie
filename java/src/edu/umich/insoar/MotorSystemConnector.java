@@ -126,7 +126,6 @@ public class MotorSystemConnector implements OutputEventInterface,
 	     gotArmUpdate = true;
 	 }
 	 if(channel.equals("PLANNER_RESPONSES")){
-	     System.out.println("Got a planner response.");
             try {
                 planner_response_t r = new planner_response_t(ins);
 		if (r.response_id == sentCommand.command_id &&
@@ -146,7 +145,6 @@ public class MotorSystemConnector implements OutputEventInterface,
 		    planSize = r.plan_size;
 		    gotUpdate = true;
 		    spam = false;
-		    System.out.println("Updating the latest search");
 		    idToUpdate = ongoingSearchId;
 		}
 		else if ((r.response_type.equals("EXECUTE") ||

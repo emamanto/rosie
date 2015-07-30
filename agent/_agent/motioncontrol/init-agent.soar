@@ -30,7 +30,7 @@ sp {topstate*apply*first-grab
 	(<s> ^request <r>
       	 ^first-grab-requested true)
 	(<r> ^target <t>
-         ^step-size 0.5
+         ^step-size 0.6
          ^speed 0.9)
  	(<t> ^x 1
          ^y 1
@@ -53,7 +53,7 @@ sp {topstate*apply*first-drop
 	(<s> ^request <r>
       	 ^first-drop-requested true)
 	(<r> ^target <t>
-         ^step-size 0.5
+         ^step-size 0.6
          ^speed 0.9)
  	(<t> ^x 0.2
          ^y 0.2
@@ -85,10 +85,13 @@ sp {topstate*apply*reset
 sp {topstate*propose*second-grab
 	(state <s> ^name motion-control
                ^reset-requested
+               ^io.output-link.reset <r>
            	  -^second-grab-requested
               -^request)
+ 	(<r> ^status finished)
 -->
 	(<s> ^operator.name second-grab +=)
+ 	(interrupt)
 }
 
 sp {topstate*apply*second-grab

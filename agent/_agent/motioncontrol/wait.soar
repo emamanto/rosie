@@ -1,0 +1,33 @@
+sp {state-no-change*propose*wait
+   (state <s> ^attribute state
+              ^choices none
+             -^waiting)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name wait)
+}
+
+sp {state-no-change*apply*wait
+   (state <s> ^operator <o>
+             -^waiting)
+   (<o> ^name wait)
+-->
+   (<s> ^waiting true)
+}
+
+sp {state-no-change*propose*wait-off
+   (state <s> ^attribute state
+              ^choices none
+              ^waiting)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name wait-off)
+}
+
+sp {state-no-change*apply*wait-off
+   (state <s> ^operator <o>
+              ^waiting true)
+   (<o> ^name wait-off)
+-->
+   (<s> ^waiting true -)
+}

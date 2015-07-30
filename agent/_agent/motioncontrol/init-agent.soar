@@ -58,10 +58,31 @@ sp {topstate*apply*first-drop
          ^z -1)
 }
 
+##################
+sp {topstate*propose*reset
+	(state <s> ^name motion-control
+               ^first-drop-requested
+           	  -^reset-requested
+              -^request
+               ^io.output-link <ol>)
+ 	(<ol> -^reset)
+-->
+	(<s> ^operator.name reset +=)
+}
+
+sp {topstate*apply*reset
+	(state <s> ^name motion-control
+               ^operator.name reset
+               ^io.output-link <ol>)
+-->
+	(<s> ^reset-requested true)
+	(<ol> ^reset <r>)
+    (<r> ^needs something)
+}
 #################
 sp {topstate*propose*second-grab
 	(state <s> ^name motion-control
-               ^first-drop-requested
+               ^reset-requested
            	  -^second-grab-requested
               -^request)
 -->

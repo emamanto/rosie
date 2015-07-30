@@ -15,17 +15,49 @@ sp {topstate*apply*init-agent
 }
 
 ### Just for demoing
-sp {topstate*start*demo
+sp {topstate*propose*first-grab
 	(state <s> ^name motion-control
-           	   ^io.output-link <ol>)
+           	  -^first-grab-requested
+              -^request)
 -->
-	(<s> ^request <r>)
-	(<r> ^target <t>
-        ^step-size 0.6)
- 	(<t> ^x 0.2
-         ^y 0.0
-         ^z 0.2)
+	(<s> ^operator.name first-grab +=)
 }
+
+sp {topstate*apply*first-grab
+	(state <s> ^name motion-control
+               ^operator.name first-grab)
+-->
+	(<s> ^request <r>
+      	 ^first-grab-requested true)
+	(<r> ^target <t>
+         ^step-size 0.6)
+ 	(<t> ^x 1
+         ^y 0.0
+         ^z 0.0)
+}
+
+sp {topstate*propose*first-drop
+	(state <s> ^name motion-control
+           	   ^first-grab-requested
+              -^first-drop-requested
+              -^request)
+-->
+	(<s> ^operator.name first-drop +=)
+}
+
+sp {topstate*apply*first-drop
+	(state <s> ^name motion-control
+               ^operator.name first-drop)
+-->
+	(<s> ^request <r>
+      	 ^first-drop-requested true)
+	(<r> ^target <t>
+         ^step-size 0.6)
+ 	(<t> ^x 0.2
+         ^y 0.2
+         ^z 0.1)
+}
+
 
 #sp {propose*pause-test
 #	(state <s> ^name interpret-motion-request

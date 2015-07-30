@@ -336,9 +336,15 @@ public class MotorSystemConnector implements OutputEventInterface,
         planner_command_t command = new planner_command_t();
         command.utime = TimeUtil.utime();
         command.command_type = "SEARCH";
-	if (x > 0.8) {
+	if (x > 0.8 && z > 0) {
 	    // For now, only one graspable object... LAAAME
 	    command.target_object_id = 2;
+	}
+	else if (z < 0) {
+	    // For now, only one graspable object... LAAAME
+	    double[] t = {x, y, z};
+	    command.target = t;
+	    command.target_object_id = -2;
 	}
 	else {
 	    double[] t = {x, y, z};

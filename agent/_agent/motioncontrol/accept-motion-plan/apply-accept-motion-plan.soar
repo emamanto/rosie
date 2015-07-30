@@ -2,6 +2,7 @@ sp {apply*accept-motion-plan
 	(state <s> ^superstate nil 
 			   ^name motion-control
                ^operator.name accept-motion-plan
+               ^request.speed <sp>
                ^io <io>)
   	(<io> ^output-link <ol>)
     (<ol> ^postprocess <cmd>)
@@ -10,5 +11,5 @@ sp {apply*accept-motion-plan
 -->
 	(<ol> ^postprocess <cmd> - 
 		  ^execute <ex>)
- 	(<ex> ^speed 0.9)
+ 	(<ex> ^speed <sp>)
 }

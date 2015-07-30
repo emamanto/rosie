@@ -30,7 +30,8 @@ sp {topstate*apply*first-grab
 	(<s> ^request <r>
       	 ^first-grab-requested true)
 	(<r> ^target <t>
-         ^step-size 0.5)
+         ^step-size 0.5
+         ^speed 0.9)
  	(<t> ^x 1
          ^y 1
          ^z 1)
@@ -52,7 +53,8 @@ sp {topstate*apply*first-drop
 	(<s> ^request <r>
       	 ^first-drop-requested true)
 	(<r> ^target <t>
-         ^step-size 0.5)
+         ^step-size 0.5
+         ^speed 0.9)
  	(<t> ^x 0.2
          ^y 0.2
          ^z -1)
@@ -96,7 +98,8 @@ sp {topstate*apply*second-grab
 	(<s> ^request <r>
       	 ^second-grab-requested true)
 	(<r> ^target <t>
-         ^step-size 0.2)
+         ^step-size 0.2
+         ^speed 0.5)
  	(<t> ^x 1
          ^y 1
          ^z 1)
@@ -118,7 +121,8 @@ sp {topstate*apply*second-drop
 	(<s> ^request <r>
       	 ^second-drop-requested true)
 	(<r> ^target <t>
-         ^step-size 0.2)
+         ^step-size 0.2
+         ^speed 0.5)
  	(<t> ^x 0.2
          ^y 0.2
          ^z -1)

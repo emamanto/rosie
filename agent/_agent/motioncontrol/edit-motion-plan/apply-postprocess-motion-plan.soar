@@ -4,11 +4,11 @@ sp {apply*postprocess-motion-plan
                ^operator.name postprocess-motion-plan
                ^io <io>)
   	(<io> ^output-link <ol>)
-    (<ol> ^search <cmd>)
+    (<ol> ^plan <cmd>)
     (<cmd> ^status finished
            ^success true)
 -->
-	(<ol> ^search <cmd> - 
+	(<ol> ^plan <cmd> - 
 		  ^postprocess <ex>)
  	(<ex> ^precision 0.5)
 }

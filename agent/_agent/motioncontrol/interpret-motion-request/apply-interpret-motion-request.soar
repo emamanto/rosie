@@ -1,7 +1,7 @@
 sp {apply*interpret-motion-request*propose-create-target
 	(state <s> ^name interpret-motion-request
                ^topstate <t>
-              -^search)
+              -^plan)
   	(<t> ^request)
 -->
 	(<s> ^operator <op> + =)
@@ -13,44 +13,48 @@ sp {apply*interpret-motion-request*apply-create-target
                ^operator.name create-target
                ^topstate <t>)
  	(<t> ^request.target <r>)
-  	(<r> ^x <xval>
-         ^y <yval>
-         ^z <zval>)
 -->
-	(<s> ^search <sr>)
- 	(<sr> ^target <targ>)
- 	(<targ> ^x <xval>
- 		    ^y <yval>
-         	^z <zval>)
+	(<s> ^plan <pla>)
+ 	(<pla> ^target <r>)
+}
+
+sp {apply*interpret-motion-request*elaborate-plan-type
+	(state <s> ^name interpret-motion-request
+               ^topstate <t>)
+ 	(<t> ^request <r>)
+  	(<s> ^plan <pla>)
+  	(<r> ^type <tp>)
+-->
+ 	(<pla> ^type <tp>)
 }
 
 sp {apply*interpret-motion-request*elaborate-target-step-size
 	(state <s> ^name interpret-motion-request
                ^topstate <t>)
  	(<t> ^request <r>)
-  	(<s> ^search <search>)
+  	(<s> ^plan <pla>)
   	(<r> ^step-size <ss>)
 -->
- 	(<search> ^step-size <ss>)
+ 	(<pla> ^step-size <ss>)
 }
 
 sp {apply*interpret-motion-request*elaborate-target-step-size*default
 	(state <s> ^name interpret-motion-request
                ^topstate <t>)
  	(<t> ^request <r>)
-  	(<s> ^search <search>)
+  	(<s> ^plan <pla>)
   	(<r> -^step-size)
 -->
- 	(<search> ^step-size 0.5)
+ 	(<pla> ^step-size 0.5)
 }
 
 sp {apply*interpret-motion-request*propose-put-output-link
 	(state <s> ^name interpret-motion-request
                ^topstate.io.output-link <ol>
-               ^search <search>)
- 	(<search> ^target
+               ^plan <pla>)
+ 	(<pla> ^target
           	  ^step-size)
-  	(<ol> -^search)
+  	(<ol> -^plan)
 -->
 	(<s> ^operator <op> + =)
  	(<op> ^name put-output-link)
@@ -60,7 +64,7 @@ sp {apply*interpret-motion-request*apply-put-output-link
 	(state <s> ^name interpret-motion-request
                ^operator.name put-output-link
                ^topstate.io.output-link <ol>
-               ^search <search>)
+               ^plan <pla>)
 -->
-	(<ol> ^search <search>)
+	(<ol> ^plan <pla>)
 }

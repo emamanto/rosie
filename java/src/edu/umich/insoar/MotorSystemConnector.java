@@ -50,6 +50,7 @@ public class MotorSystemConnector implements OutputEventInterface,
     private boolean spam = false;
 
     private String lastRequest = "NONE";
+    private String lastSearchType = "NONE";
     private boolean requestFinished = false;
     private boolean requestSuccess = false;
     private int planSize = 0;
@@ -97,7 +98,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 	 agent.getAgent().RegisterForRunEvent(smlRunEventId.smlEVENT_BEFORE_INPUT_PHASE, this, null);
 
 	 // Setup Output Link Events
-	 String[] outputHandlerStrings = { "search",
+	 String[] outputHandlerStrings = { "plan",
 					   "stop",
 					   "pause",
 					   "continue",
@@ -137,7 +138,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 		    spam = false;
 		    idToUpdate = lastRequestId;
 		}
-		else if (r.response_type.equals("SEARCH") &&
+		else if (r.response_type.equals("PLAN") &&
 			 r.response_id == ongoingSearch &&
 			 r.finished) {
 		    requestSuccess = r.success;
@@ -287,8 +288,8 @@ public class MotorSystemConnector implements OutputEventInterface,
         System.out.println(wme.GetAttribute());
 
         try{
-            if (wme.GetAttribute().equals("search")) {
-                processSearchCommand(id);
+            if (wme.GetAttribute().equals("plan")) {
+                processPlanCommand(id);
             }
             else if (wme.GetAttribute().equals("stop")) {
                 processStopCommand(id);
@@ -314,54 +315,52 @@ public class MotorSystemConnector implements OutputEventInterface,
         }
     }
 
-    private void processSearchCommand(Identifier id)
+    private void processPlanCommand(Identifier id)
     {
-        Identifier searchId =
+	String type = WMUtil.getValueOfAttribute(id, "type");
+        Identifier targetId =
 	    WMUtil.getIdentifierOfAttribute(id, "target",
                 "Error: No target location identifier");
-        double x = Double.parseDouble(WMUtil.getValueOfAttribute(
-                searchId, "x",
-		"Error: No target x attribute"));
-        double y = Double.parseDouble(WMUtil.getValueOfAttribute(
-                searchId, "y",
-		"Error: No target y attribute"));
-        double z = Double.parseDouble(WMUtil.getValueOfAttribute(
-                searchId, "z",
-		"Error: No target z attribute"));
+
+        planner_command_t command = new planner_command_t();
+        command.command_type = "PLAN";
+	command.plan_type = type.toUpperCase();
+
+	if (type.equals("grasp")) {
+	    int id_val = Integer.parseInt(WMUtil.getValueOfAttribute(targetId, "id", "Error: Grasp without object id."));
+	    command.target_object_id = id_val;
+	}
+	else if (type.equals("drop")) {
+	    double x = Double.parseDouble(WMUtil.getValueOfAttribute(targetId, "x", "Error: Drop without target x."));
+	    double y = Double.parseDouble(WMUtil.getValueOfAttribute(targetId, "y", "Error: Drop without target y."));
+	    double z = Double.parseDouble(WMUtil.getValueOfAttribute(targetId, "z", "Error: Drop without target z."));
+	    double[] xyz = {x, y, z};
+	    command.target = xyz;
+	}
+	else {
+	    double x = Double.parseDouble(WMUtil.getValueOfAttribute(targetId, "x", "Error: Move without target x."));
+	    double y = Double.parseDouble(WMUtil.getValueOfAttribute(targetId, "y", "Error: Move without target y."));
+	    double z = Double.parseDouble(WMUtil.getValueOfAttribute(targetId, "z", "Error: Move without target z."));
+	    double[] xyz = {x, y, z};
+	    command.target = xyz;
+	}
 
         double ss = Double.parseDouble(WMUtil.getValueOfAttribute(
                 id, "step-size",
-		"Error: No step-size attribute"));
-
-        planner_command_t command = new planner_command_t();
-        command.utime = TimeUtil.utime();
-        command.command_type = "SEARCH";
-	if (x > 0.8 && z > 0) {
-	    // For now, only one graspable object... LAAAME
-	    command.target_object_id = 2;
-	}
-	else if (z < 0) {
-	    // For now, only one graspable object... LAAAME
-	    double[] t = {x, y, z};
-	    command.target = t;
-	    command.target_object_id = -2;
-	}
-	else {
-	    double[] t = {x, y, z};
-	    command.target = t;
-	    command.target_object_id = -1;
-	}
+		"Error: Plan without step-size."));
 
 	command.primitive_size = ss;
+	// XXX Time limits
 	command.time_limit = -1;
 	command.command_id = getNextMsgId();
 	ongoingSearch = command.command_id;
+	lastSearchType = command.plan_type;
     	lcm.publish("PLANNER_COMMANDS", command);
         id.CreateStringWME("status", "requested");
         sentCommand = command;
         sentTime = TimeUtil.utime();
 
-	lastRequest = "SEARCH";
+	lastRequest = "PLAN";
 	lastRequestId = id;
 	ongoingSearchId = id;
 	requestFinished = false;
@@ -374,6 +373,7 @@ public class MotorSystemConnector implements OutputEventInterface,
         planner_command_t command = new planner_command_t();
         command.utime = TimeUtil.utime();
         command.command_type = "STOP";
+	command.plan_type = lastSearchType;
 	command.command_id = getNextMsgId();
     	lcm.publish("PLANNER_COMMANDS", command);
         stopId.CreateStringWME("status", "requested");
@@ -389,6 +389,7 @@ public class MotorSystemConnector implements OutputEventInterface,
         planner_command_t command = new planner_command_t();
         command.utime = TimeUtil.utime();
         command.command_type = "PAUSE";
+	command.plan_type = lastSearchType;
 	command.command_id = getNextMsgId();
     	lcm.publish("PLANNER_COMMANDS", command);
         pauseId.CreateStringWME("status", "requested");
@@ -405,6 +406,7 @@ public class MotorSystemConnector implements OutputEventInterface,
         planner_command_t command = new planner_command_t();
         command.utime = TimeUtil.utime();
         command.command_type = "CONTINUE";
+	command.plan_type = lastSearchType;
 	command.command_id = getNextMsgId();
     	lcm.publish("PLANNER_COMMANDS", command);
         contId.CreateStringWME("status", "requested");
@@ -421,6 +423,7 @@ public class MotorSystemConnector implements OutputEventInterface,
         planner_command_t command = new planner_command_t();
         command.utime = TimeUtil.utime();
         command.command_type = "POSTPROCESS";
+	command.plan_type = lastSearchType;
 	command.precision = 0.5;
 	command.command_id = getNextMsgId();
     	lcm.publish("PLANNER_COMMANDS", command);
@@ -443,6 +446,7 @@ public class MotorSystemConnector implements OutputEventInterface,
         planner_command_t command = new planner_command_t();
         command.utime = TimeUtil.utime();
         command.command_type = "EXECUTE";
+	command.plan_type = lastSearchType;
 	command.speed = speed;
 	command.command_id = getNextMsgId();
 	ongoingExecute = command.command_id;
@@ -464,6 +468,7 @@ public class MotorSystemConnector implements OutputEventInterface,
         planner_command_t command = new planner_command_t();
         command.utime = TimeUtil.utime();
         command.command_type = "RESET";
+	command.plan_type = "NONE";
 	command.command_id = getNextMsgId();
 	ongoingExecute = command.command_id;
     	lcm.publish("PLANNER_COMMANDS", command);

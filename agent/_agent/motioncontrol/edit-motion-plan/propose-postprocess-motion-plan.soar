@@ -2,7 +2,7 @@ sp {propose*postprocess-motion-plan
 	(state <s> ^superstate nil
                ^name motion-control
                ^io.output-link <ol>)
-  	(<ol> ^search <srch>)
+  	(<ol> ^plan <srch>)
     (<srch> ^status finished
             ^success true)
 -->

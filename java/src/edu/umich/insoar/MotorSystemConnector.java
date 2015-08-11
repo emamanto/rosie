@@ -51,7 +51,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 
     private String lastRequest = "NONE";
     private String lastSearchType = "NONE";
-    private boolean requestFinished = false;
+    private String requestStatus = "";
     private boolean requestSuccess = false;
     private int planSize = 0;
 
@@ -129,20 +129,31 @@ public class MotorSystemConnector implements OutputEventInterface,
 	 if(channel.equals("PLANNER_RESPONSES")){
             try {
                 planner_response_t r = new planner_response_t(ins);
-		if (r.response_id == sentCommand.command_id &&
+		if (r.response_type.equals("STOP") &&
+		    r.response_id == ongoingSearch &&
 		    r.finished) {
 		    requestSuccess = r.success;
-		    requestFinished = true;
+		    requestStatus = "stopped";
 		    planSize = r.plan_size;
 		    gotUpdate = true;
 		    spam = false;
-		    idToUpdate = lastRequestId;
+		    idToUpdate = ongoingSearchId;
+		}
+		else if (r.response_type.equals("PAUSE") &&
+		    r.response_id == ongoingSearch &&
+		    !r.finished) {
+		    requestSuccess = r.success;
+		    requestStatus = "paused";
+		    planSize = r.plan_size;
+		    gotUpdate = true;
+		    spam = false;
+		    idToUpdate = ongoingSearchId;
 		}
 		else if (r.response_type.equals("PLAN") &&
 			 r.response_id == ongoingSearch &&
 			 r.finished) {
 		    requestSuccess = r.success;
-		    requestFinished = true;
+		    requestStatus = "finished";
 		    planSize = r.plan_size;
 		    gotUpdate = true;
 		    spam = false;
@@ -153,12 +164,22 @@ public class MotorSystemConnector implements OutputEventInterface,
 			 r.response_id == ongoingExecute &&
 			 r.finished) {
 		    requestSuccess = r.success;
-		    requestFinished = true;
+		    requestStatus = "finished";
 		    planSize = r.plan_size;
 		    gotUpdate = true;
 		    spam = false;
 		    idToUpdate = ongoingExecuteId;
 		}
+		else if (r.response_id == sentCommand.command_id &&
+		    r.finished) {
+		    requestSuccess = r.success;
+		    requestStatus = "finished";
+		    planSize = r.plan_size;
+		    gotUpdate = true;
+		    spam = false;
+		    idToUpdate = lastRequestId;
+		}
+
             }
             catch (IOException e){
                 e.printStackTrace();
@@ -228,7 +249,7 @@ public class MotorSystemConnector implements OutputEventInterface,
     }
 
     private void updateIL(){
-	WMUtil.updateStringWME(idToUpdate, "status", "finished");
+	WMUtil.updateStringWME(idToUpdate, "status", requestStatus);
 	if(requestSuccess) {
 	    idToUpdate.CreateStringWME("success", "true");
 	} else {
@@ -361,8 +382,6 @@ public class MotorSystemConnector implements OutputEventInterface,
 		"Error: Plan without step-size."));
 
 	command.primitive_size = ss;
-	// XXX Time limits
-	command.time_limit = -1;
 	command.command_id = getNextMsgId();
 	ongoingSearch = command.command_id;
 	lastSearchType = command.plan_type;
@@ -374,8 +393,8 @@ public class MotorSystemConnector implements OutputEventInterface,
 	lastRequest = "PLAN";
 	lastRequestId = id;
 	ongoingSearchId = id;
-	requestFinished = false;
 	requestSuccess = false;
+	requestStatus = "requested";
 	spam = true;
     }
 
@@ -469,7 +488,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 	lastRequest = "EXECUTE";
 	lastRequestId = id;
 	ongoingExecuteId = id;
-	requestFinished = false;
+	requestStatus = "requested";
 	requestSuccess = false;
 	spam = true;
     }
@@ -490,7 +509,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 	lastRequest = "RESET";
 	lastRequestId = id;
 	ongoingExecuteId = id;
-	requestFinished = false;
+	requestStatus = "requested";
 	requestSuccess = false;
 	spam = true;
     }

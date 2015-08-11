@@ -1,4 +1,4 @@
-sp {propose*postprocess-motion-plan
+sp {propose*postprocess-motion-plan*finished
 	(state <s> ^superstate nil
                ^name motion-control
                ^io.output-link <ol>)
@@ -8,4 +8,16 @@ sp {propose*postprocess-motion-plan
 -->
 	(<s> ^operator <op> + =)
  	(<op> ^name postprocess-motion-plan)
- }
+}
+
+sp {propose*postprocess-motion-plan*stopped
+	(state <s> ^superstate nil
+               ^name motion-control
+               ^io.output-link <ol>)
+  	(<ol> ^plan <srch>)
+    (<srch> ^status stopped
+            ^success true)
+-->
+	(<s> ^operator <op> + =)
+ 	(<op> ^name postprocess-motion-plan)
+}

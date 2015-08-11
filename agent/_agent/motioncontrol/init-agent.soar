@@ -32,7 +32,9 @@ sp {topstate*apply*first-grab
 	(<r> ^target <t>
          ^type grasp
          ^step-size 0.6
-         ^speed 0.9)
+         ^speed 0.9
+         ^time-limit 3.0
+         ^hard-time-limit true)
  	(<t> ^id 1)
 }
 
@@ -53,6 +55,8 @@ sp {topstate*apply*first-drop
       	 ^first-drop-requested true)
 	(<r> ^target <t>
          ^type drop
+         ^time-limit 3.0
+         ^hard-time-limit true
          ^speed 0.9)
  	(<t> ^x 0.2
          ^y 0.2
@@ -101,6 +105,8 @@ sp {topstate*apply*second-grab
       	 ^second-grab-requested true)
 	(<r> ^target <t>
       	 ^type grasp
+         ^time-limit 8.0
+         ^hard-time-limit true
          ^step-size 0.2
          ^speed 0.5)
  	(<t> ^id 1)
@@ -123,6 +129,8 @@ sp {topstate*apply*second-drop
       	 ^second-drop-requested true)
 	(<r> ^target <t>
          ^type drop
+         ^time-limit 8.0
+         ^hard-time-limit true
          ^step-size 0.2
          ^speed 0.5)
  	(<t> ^x 0.2

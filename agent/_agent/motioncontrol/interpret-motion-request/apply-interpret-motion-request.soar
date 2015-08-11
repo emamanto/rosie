@@ -48,6 +48,45 @@ sp {apply*interpret-motion-request*elaborate-target-step-size*default
  	(<pla> ^step-size 0.5)
 }
 
+sp {apply*interpret-motion-request*elaborate-target-time-limit
+	(state <s> ^name interpret-motion-request
+               ^topstate <t>)
+ 	(<t> ^request <r>)
+  	(<s> ^plan <pla>)
+  	(<r> ^time-limit <tl>)
+-->
+ 	(<pla> ^time-limit <tl>)
+}
+
+sp {apply*interpret-motion-request*elaborate-target-time-limit*default
+	(state <s> ^name interpret-motion-request
+               ^topstate <t>)
+ 	(<t> ^request <r>)
+  	(<s> ^plan <pla>)
+  	(<r> -^time-limit)
+-->
+ 	(<pla> ^time-limit -1)
+}
+
+sp {apply*interpret-motion-request*elaborate-target-hard-limit
+	(state <s> ^name interpret-motion-request
+               ^topstate <t>)
+ 	(<t> ^request <r>)
+  	(<s> ^plan <pla>)
+  	(<r> ^hard-time-limit <h>)
+-->
+ 	(<pla> ^hard-time-limit <h>)
+}
+
+sp {apply*interpret-motion-request*elaborate-target-hard-limit*default
+	(state <s> ^name interpret-motion-request
+               ^topstate <t>)
+ 	(<t> ^request <r>)
+  	(<s> ^plan <pla>)
+  	(<r> -^hard-time-limit)
+-->
+ 	(<pla> ^hard-time-limit false)
+}
 sp {apply*interpret-motion-request*propose-put-output-link
 	(state <s> ^name interpret-motion-request
                ^topstate.io.output-link <ol>

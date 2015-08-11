@@ -322,9 +322,20 @@ public class MotorSystemConnector implements OutputEventInterface,
 	    WMUtil.getIdentifierOfAttribute(id, "target",
                 "Error: No target location identifier");
 
+	double lim = Double.parseDouble(WMUtil.getValueOfAttribute(id, "time-limit", "Error: Plan without time-limit."));
+	String hard = WMUtil.getValueOfAttribute(id, "hard-time-limit");
+
         planner_command_t command = new planner_command_t();
         command.command_type = "PLAN";
 	command.plan_type = type.toUpperCase();
+	command.time_limit = lim;
+
+	if (hard.equals("true")) {
+	    command.hard_limit = true;
+	}
+	else {
+	    command.hard_limit = false;
+	}
 
 	if (type.equals("grasp")) {
 	    int id_val = Integer.parseInt(WMUtil.getValueOfAttribute(targetId, "id", "Error: Grasp without object id."));

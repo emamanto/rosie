@@ -34,7 +34,7 @@ sp {topstate*apply*first-grab
          ^step-size 0.6
          ^speed 0.9
          ^time-limit 3.0
-         ^hard-time-limit true)
+         ^hard-time-limit false)
  	(<t> ^id 1)
 }
 
@@ -56,7 +56,7 @@ sp {topstate*apply*first-drop
 	(<r> ^target <t>
          ^type drop
          ^time-limit 3.0
-         ^hard-time-limit true
+         ^hard-time-limit false
          ^speed 0.9)
  	(<t> ^x 0.2
          ^y 0.2
@@ -162,23 +162,22 @@ sp {topstate*apply*second-drop
 #  	(<s> ^pause demoed)
 #}
 #
-#sp {propose*continue-test
-#	(state <s> ^name interpret-motion-request
-#               ^topstate.io.output-link <ol>)
-# 	(<ol> ^pause <ps>)
-#  	(<ps> ^status finished)
-#-->
-#	(<s> ^operator <op> + >)
-# 	(<op> ^name continue-test)
-#}
-#
-#sp {apply*continue-test
-#	(state <s> ^name interpret-motion-request
-#               ^operator.name continue-test
-#               ^topstate.io.output-link <ol>)
-# 	(<ol> ^pause <ps>)
-#-->
-#	(<ol> ^continue <p>
-#          ^pause <ps> -)
-# 	(<p> ^info null)
-#}
+sp {propose*continue-test
+	(state <s> ^name interpret-motion-request
+               ^topstate.io.output-link <ol>)
+ 	(<ol> ^plan <ps>)
+  	(<ps> ^status paused)
+-->
+	(<s> ^operator <op> + >)
+ 	(<op> ^name continue-test)
+}
+
+sp {apply*continue-test
+	(state <s> ^name interpret-motion-request
+               ^operator.name continue-test
+               ^topstate.io.output-link <ol>)
+ 	(<ol> ^plan <ps>)
+-->
+	(<ol> ^continue <p>)
+ 	(<p> ^info null)
+}

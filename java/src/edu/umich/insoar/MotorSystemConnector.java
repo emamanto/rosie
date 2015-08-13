@@ -55,6 +55,8 @@ public class MotorSystemConnector implements OutputEventInterface,
     private boolean requestSuccess = false;
     private int planSize = 0;
 
+    private int nextIdToUse = -1;
+
     private LCM lcm;
 
     private ArmStatus armStatus;
@@ -62,6 +64,7 @@ public class MotorSystemConnector implements OutputEventInterface,
     StringBuilder svsCommands = new StringBuilder();
 
     private planner_command_t sentCommand = null;
+    private planner_command_t ongoingSearchCommand = null;
     private long sentTime = 0;
     private int ongoingSearch = -1;
     private int ongoingExecute = -1;
@@ -115,8 +118,8 @@ public class MotorSystemConnector implements OutputEventInterface,
 
     private synchronized int getNextMsgId()
     {
-	if (sentCommand == null) return 0;
-	return sentCommand.command_id + 1;
+	nextIdToUse++;
+	return nextIdToUse;
     }
 
      @Override
@@ -138,6 +141,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 		    gotUpdate = true;
 		    spam = false;
 		    idToUpdate = ongoingSearchId;
+		    ongoingSearchCommand = null;
 		}
 		else if (r.response_type.equals("PAUSE") &&
 		    r.response_id == ongoingSearch &&
@@ -158,6 +162,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 		    gotUpdate = true;
 		    spam = false;
 		    idToUpdate = ongoingSearchId;
+		    ongoingSearchCommand = null;
 		}
 		else if ((r.response_type.equals("EXECUTE") ||
 			  r.response_type.equals("RESET")) &&
@@ -170,6 +175,15 @@ public class MotorSystemConnector implements OutputEventInterface,
 		    spam = false;
 		    idToUpdate = ongoingExecuteId;
 		}
+		else if (r. response_type.equals("CONTINUE") &&
+			 r.response_id == sentCommand.command_id &&
+			 r.finished) {
+		    requestSuccess = r.success;
+		    requestStatus = "finished";
+		    planSize = r.plan_size;
+		    gotUpdate = true;
+		    idToUpdate = lastRequestId;
+		}
 		else if (r.response_id == sentCommand.command_id &&
 		    r.finished) {
 		    requestSuccess = r.success;
@@ -179,7 +193,6 @@ public class MotorSystemConnector implements OutputEventInterface,
 		    spam = false;
 		    idToUpdate = lastRequestId;
 		}
-
             }
             catch (IOException e){
                 e.printStackTrace();
@@ -235,7 +248,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 		String name = "seg" + i;
 		double[] p1 = points.get(i);
 		double[] p2 = points.get(i+1);
-		double len = LinAlg.distance(p1, p2); 
+		double len = LinAlg.distance(p1, p2);
 		double[] size = new double[]{len, widths.get(i), widths.get(i)};
 		if(i == widths.size()-1){
 		    // Make the gripper bigger to help with occlusion checks;
@@ -250,6 +263,16 @@ public class MotorSystemConnector implements OutputEventInterface,
 
     private void updateIL(){
 	WMUtil.updateStringWME(idToUpdate, "status", requestStatus);
+	if (lastRequest == "CONTINUE" && requestSuccess) {
+	    WMUtil.updateStringWME(ongoingSearchId,
+				   "status", "requested");
+	    // Put the search back on the command
+	    lastRequest = "PLAN";
+	    sentCommand = ongoingSearchCommand;
+	    spam = true;
+	    //
+	}
+
 	if(requestSuccess) {
 	    idToUpdate.CreateStringWME("success", "true");
 	} else {
@@ -388,6 +411,7 @@ public class MotorSystemConnector implements OutputEventInterface,
     	lcm.publish("PLANNER_COMMANDS", command);
         id.CreateStringWME("status", "requested");
         sentCommand = command;
+	ongoingSearchCommand = command;
         sentTime = TimeUtil.utime();
 
 	lastRequest = "PLAN";

@@ -179,5 +179,6 @@ sp {apply*continue-test
  	(<ol> ^plan <ps>)
 -->
 	(<ol> ^continue <p>)
- 	(<p> ^info null)
+ 	(<p> ^time-limit 5
+         ^hard-time-limit true)
 }

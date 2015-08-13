@@ -163,6 +163,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 		    spam = false;
 		    idToUpdate = ongoingSearchId;
 		    ongoingSearchCommand = null;
+		    ongoingSearch = -1;
 		}
 		else if ((r.response_type.equals("EXECUTE") ||
 			  r.response_type.equals("RESET")) &&
@@ -174,6 +175,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 		    gotUpdate = true;
 		    spam = false;
 		    idToUpdate = ongoingExecuteId;
+		    ongoingExecute = -1;
 		}
 		else if (r. response_type.equals("CONTINUE") &&
 			 r.response_id == sentCommand.command_id &&
@@ -457,11 +459,23 @@ public class MotorSystemConnector implements OutputEventInterface,
 
     private void processContinueCommand(Identifier contId)
     {
+	double lim = Double.parseDouble(WMUtil.getValueOfAttribute(contId, "time-limit", "Error: Plan without time-limit."));
+	String hard = WMUtil.getValueOfAttribute(contId, "hard-time-limit");
+
         planner_command_t command = new planner_command_t();
         command.utime = TimeUtil.utime();
         command.command_type = "CONTINUE";
 	command.plan_type = lastSearchType;
 	command.command_id = getNextMsgId();
+	command.time_limit = lim;
+
+	if (hard.equals("true")) {
+	    command.hard_limit = true;
+	}
+	else {
+	    command.hard_limit = false;
+	}
+
     	lcm.publish("PLANNER_COMMANDS", command);
         contId.CreateStringWME("status", "requested");
         sentCommand = command;

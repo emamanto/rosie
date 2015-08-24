@@ -31,10 +31,11 @@ sp {topstate*apply*first-grab
       	 ^first-grab-requested true)
 	(<r> ^target <t>
          ^type grasp
-         ^step-size 0.6
+         #^step-size 0.6
          ^speed 0.9
-         ^time-limit 3.0
-         ^hard-time-limit false)
+         #^time-limit 3.0
+         #^hard-time-limit false)
+ 	     ^algorithm rrt)
  	(<t> ^id 1)
 }
 
@@ -55,8 +56,9 @@ sp {topstate*apply*first-drop
       	 ^first-drop-requested true)
 	(<r> ^target <t>
          ^type drop
-         ^time-limit 3.0
-         ^hard-time-limit false
+         ^algorithm ara
+         #^time-limit 3.0
+         #^hard-time-limit false
          ^speed 0.9)
  	(<t> ^x 0.2
          ^y 0.2
@@ -129,6 +131,7 @@ sp {topstate*apply*second-drop
       	 ^second-drop-requested true)
 	(<r> ^target <t>
          ^type drop
+         ^algorithm rrt
          ^time-limit 8.0
          ^hard-time-limit true
          ^step-size 0.2
@@ -166,7 +169,8 @@ sp {propose*continue-test
 	(state <s> ^name interpret-motion-request
                ^topstate.io.output-link <ol>)
  	(<ol> ^plan <ps>)
-  	(<ps> ^status paused)
+  	(<ps> ^status paused
+          ^algorithm ara)
 -->
 	(<s> ^operator <op> + >)
  	(<op> ^name continue-test)

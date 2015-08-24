@@ -51,6 +51,7 @@ public class MotorSystemConnector implements OutputEventInterface,
 
     private String lastRequest = "NONE";
     private String lastSearchType = "NONE";
+    private String lastSearchAlgorithm = "NONE";
     private String requestStatus = "";
     private boolean requestSuccess = false;
     private int planSize = 0;
@@ -364,23 +365,39 @@ public class MotorSystemConnector implements OutputEventInterface,
     private void processPlanCommand(Identifier id)
     {
 	String type = WMUtil.getValueOfAttribute(id, "type");
+	String algo = WMUtil.getValueOfAttribute(id, "algorithm");
+
         Identifier targetId =
 	    WMUtil.getIdentifierOfAttribute(id, "target",
                 "Error: No target location identifier");
 
-	double lim = Double.parseDouble(WMUtil.getValueOfAttribute(id, "time-limit", "Error: Plan without time-limit."));
-	String hard = WMUtil.getValueOfAttribute(id, "hard-time-limit");
-
         planner_command_t command = new planner_command_t();
         command.command_type = "PLAN";
+	command.planning_algorithm = algo.toUpperCase();
 	command.plan_type = type.toUpperCase();
-	command.time_limit = lim;
 
-	if (hard.equals("true")) {
-	    command.hard_limit = true;
+	if (algo.equals("ara")) {
+	    double lim = Double.parseDouble(WMUtil.getValueOfAttribute(id,"time-limit", "Error: Plan without time-limit."));
+	    command.time_limit = lim;
+
+	    String hard = WMUtil.getValueOfAttribute(id, "hard-time-limit");
+	    if (hard.equals("true")) {
+		command.hard_limit = true;
+	    }
+	    else {
+		command.hard_limit = false;
+	    }
+
+	    double ss = Double.parseDouble(WMUtil.getValueOfAttribute(
+                        id, "step-size",
+			"Error: Plan without step-size."));
+	    command.primitive_size = ss;
+	    command.planning_algorithm = "ARA";
+	    lastSearchAlgorithm = "ARA";
 	}
-	else {
-	    command.hard_limit = false;
+	else if (algo.equals("rrt")) {
+	    command.planning_algorithm = "RRT";
+	    lastSearchAlgorithm = "RRT";
 	}
 
 	if (type.equals("grasp")) {
@@ -402,11 +419,6 @@ public class MotorSystemConnector implements OutputEventInterface,
 	    command.target = xyz;
 	}
 
-        double ss = Double.parseDouble(WMUtil.getValueOfAttribute(
-                id, "step-size",
-		"Error: Plan without step-size."));
-
-	command.primitive_size = ss;
 	command.command_id = getNextMsgId();
 	ongoingSearch = command.command_id;
 	lastSearchType = command.plan_type;
@@ -426,9 +438,11 @@ public class MotorSystemConnector implements OutputEventInterface,
 
     private void processStopCommand(Identifier stopId)
     {
+	// XXX If RRT, can't stop!
         planner_command_t command = new planner_command_t();
         command.utime = TimeUtil.utime();
         command.command_type = "STOP";
+	command.planning_algorithm = "ARA";
 	command.plan_type = lastSearchType;
 	command.command_id = getNextMsgId();
     	lcm.publish("PLANNER_COMMANDS", command);
@@ -442,9 +456,11 @@ public class MotorSystemConnector implements OutputEventInterface,
 
     private void processPauseCommand(Identifier pauseId)
     {
+	// XXX If RRT, can't pause!
         planner_command_t command = new planner_command_t();
         command.utime = TimeUtil.utime();
         command.command_type = "PAUSE";
+	command.planning_algorithm = "ARA";
 	command.plan_type = lastSearchType;
 	command.command_id = getNextMsgId();
     	lcm.publish("PLANNER_COMMANDS", command);
@@ -459,12 +475,14 @@ public class MotorSystemConnector implements OutputEventInterface,
 
     private void processContinueCommand(Identifier contId)
     {
+	// XXX If RRT, can't continue!
 	double lim = Double.parseDouble(WMUtil.getValueOfAttribute(contId, "time-limit", "Error: Plan without time-limit."));
 	String hard = WMUtil.getValueOfAttribute(contId, "hard-time-limit");
 
         planner_command_t command = new planner_command_t();
         command.utime = TimeUtil.utime();
         command.command_type = "CONTINUE";
+	command.planning_algorithm = "ARA";
 	command.plan_type = lastSearchType;
 	command.command_id = getNextMsgId();
 	command.time_limit = lim;
@@ -488,10 +506,13 @@ public class MotorSystemConnector implements OutputEventInterface,
 
     private void processPostprocessCommand(Identifier id)
     {
+	// XXX If RRT, should technically be able to postprocess,
+	// but it doesn't really work now.
         planner_command_t command = new planner_command_t();
         command.utime = TimeUtil.utime();
         command.command_type = "POSTPROCESS";
 	command.plan_type = lastSearchType;
+	command.planning_algorithm = lastSearchAlgorithm;
 	command.precision = 0.5;
 	command.command_id = getNextMsgId();
     	lcm.publish("PLANNER_COMMANDS", command);
@@ -515,6 +536,7 @@ public class MotorSystemConnector implements OutputEventInterface,
         command.utime = TimeUtil.utime();
         command.command_type = "EXECUTE";
 	command.plan_type = lastSearchType;
+	command.planning_algorithm = lastSearchAlgorithm;
 	command.speed = speed;
 	command.command_id = getNextMsgId();
 	ongoingExecute = command.command_id;
@@ -537,6 +559,7 @@ public class MotorSystemConnector implements OutputEventInterface,
         command.utime = TimeUtil.utime();
         command.command_type = "RESET";
 	command.plan_type = "NONE";
+	command.planning_algorithm = lastSearchAlgorithm;
 	command.command_id = getNextMsgId();
 	ongoingExecute = command.command_id;
     	lcm.publish("PLANNER_COMMANDS", command);

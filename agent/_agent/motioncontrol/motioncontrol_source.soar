@@ -1,4 +1,4 @@
-source init-agent.soar
+#source init-agent.soar
 source elaborations.soar
 source wait.soar
 

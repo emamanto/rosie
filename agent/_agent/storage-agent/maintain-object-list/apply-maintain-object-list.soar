@@ -1,0 +1,41 @@
+sp {topstate*apply*init-object-list
+	(state <s> ^superstate nil
+               ^name storage-agent
+			   ^operator <op>
+               ^svs <svs>)
+    (<op> ^name init-object-list)
+-->
+	(<s> ^to-store-list <t>)
+ 	(<t> ^update true)
+}
+
+#############################################
+sp {update-object-list*propose*add-object
+	(state <s> ^name update-object-list
+               ^topstate <ts>)
+ 	(<ts> ^svs.spatial-scene <svs>
+          ^to-store-list <list>)
+ 	(<svs> ^child <c>)
+    (<c> ^id <id>
+         ^object-source perception)
+  	(<list> -^object.id <id>)
+-->
+	(<s> ^operator <op> + =)
+ 	(<op> ^name add-object
+          ^object <c>)
+}
+
+sp {update-object-list*apply*add-object
+	(state <s> ^name update-object-list
+               ^operator <op>
+               ^topstate <ts>)
+ 	(<ts> ^to-store-list <list>)
+    (<op> ^name add-object
+          ^object <obj>)
+    (<obj> ^id <id>)
+-->
+	(<list> ^object <o>)
+ 	(<o> ^id <id>
+       	 ^seen-count 1
+         ^not-seen-count 0)
+}

@@ -1,0 +1,7 @@
+pushd motioncontrol
+source motioncontrol_source.soar
+popd
+
+pushd storage-agent
+source storage-agent_source.soar
+popd

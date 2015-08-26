@@ -1,0 +1,5 @@
+source init-agent.soar
+
+pushd maintain-object-list
+	source maintain-object-list_source.soar
+popd

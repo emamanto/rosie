@@ -1,0 +1,22 @@
+# If the list doesn't already exist...
+sp {topstate*propose*init-object-list
+   (state <s> ^superstate nil
+              ^name storage-agent
+              ^svs <svs>
+             -^to-store-list)
+-->
+   (<s> ^operator <op> + =)
+   (<op> ^name init-object-list)
+}
+
+# If the list needs updating...
+sp {topstate*propose*update-object-list
+   (state <s> ^superstate nil
+              ^name storage-agent
+              ^svs <svs>
+              ^to-store-list <t>)
+   (<t> ^update true)
+-->
+   (<s> ^operator <op> + =)
+   (<op> ^name update-object-list)
+}

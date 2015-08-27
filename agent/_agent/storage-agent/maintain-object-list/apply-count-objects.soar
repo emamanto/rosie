@@ -13,7 +13,7 @@ sp {count-objects*apply*create-count
 	(<s> ^object-count 0)
 }
 
-sp {count-objects*propose*add-to-count
+sp {count-objects*propose*add-to-count*seen
 	(state <s> ^name count-objects
                ^object-count
                ^topstate <ts>)
@@ -24,16 +24,16 @@ sp {count-objects*propose*add-to-count
   	(<s> -^counted <id>)
 -->
 	(<s> ^operator <op> + =)
- 	(<op> ^name add-to-count
+ 	(<op> ^name add-to-count-seen
           ^id <id>)
 }
 
-sp {count-objects*apply*add-to-count
+sp {count-objects*apply*add-to-count*seen
 	(state <s> ^name count-objects
                ^operator <op>
                ^object-count <oc>
                ^topstate <ts>)
- 	(<op> ^name add-to-count
+ 	(<op> ^name add-to-count-seen
           ^id <id>)
 -->
 	(<s> ^object-count (+ <oc> 1)
@@ -41,11 +41,47 @@ sp {count-objects*apply*add-to-count
     	 ^counted <id>)
 }
 
-sp {prefer*add-to-count*before*put-superstate
+sp {count-objects*propose*add-to-count*not-seen
+	(state <s> ^name count-objects
+               ^object-count
+              -^counted <id>
+               ^topstate <ts>)
+ 	(<ts> ^to-store-list <list>)
+    (<list> ^object <obj>)
+    (<obj> ^id <id>)
+-->
+	(<s> ^operator <op> + < =)
+ 	(<op> ^name add-to-count-not-seen
+          ^id <id>)
+}
+
+sp {count-objects*apply*add-to-count*not-seen
+	(state <s> ^name count-objects
+               ^operator <op>
+               ^object-count <oc>
+               ^topstate <ts>)
+ 	(<op> ^name add-to-count-not-seen
+          ^id <id>)
+-->
+	(<s> ^object-count (+ <oc> 1)
+ 	     ^object-count <oc> -
+    	 ^counted <id>)
+}
+sp {prefer*add-to-count-seen*before*put-superstate
  	(state <s> ^name count-objects
                ^operator <o1> +
                ^operator <o2> +)
-  	(<o1> ^name add-to-count)
+  	(<o1> ^name add-to-count-seen)
+   	(<o2> ^name put-superstate)
+-->
+	(<s> ^operator <o1> > <o2>)
+}
+
+sp {prefer*add-to-count-not-seen*before*put-superstate
+ 	(state <s> ^name count-objects
+               ^operator <o1> +
+               ^operator <o2> +)
+  	(<o1> ^name add-to-count-not-seen)
    	(<o2> ^name put-superstate)
 -->
 	(<s> ^operator <o1> > <o2>)

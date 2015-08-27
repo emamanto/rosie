@@ -34,9 +34,11 @@ sp {update-object-list*propose*init-update-count
 
 sp {update-object-list*apply*init-update-count
 	(state <s> ^name update-object-list
+               ^topstate.to-store-list <list>
                ^operator.name init-update-count)
 -->
-	(<s> ^update-count 0)
+	(<s> ^update-count 0
+         ^new-list <l>)
 }
 
 ###########################################
@@ -45,6 +47,7 @@ sp {update-object-list*propose*add-object
 	(state <s> ^name update-object-list
                ^object-count
                ^update-count
+               ^new-list
                ^topstate <ts>
               -^finished <id>)
  	(<ts> ^svs.spatial-scene <svs>
@@ -63,13 +66,13 @@ sp {update-object-list*apply*add-object
 	(state <s> ^name update-object-list
                ^update-count <up>
                ^operator <op>
-               ^topstate <ts>)
- 	(<ts> ^to-store-list <list>)
-    (<op> ^name add-object
+               ^new-list <nl>
+               ^topstate.to-store-list <list>)
+     (<op> ^name add-object
           ^object <obj>)
     (<obj> ^id <id>)
 -->
-	(<list> ^object <o>)
+	(<nl> ^object <o>)
  	(<o> ^id <id>
        	 ^seen-count 1
          ^not-seen-count 0)
@@ -84,6 +87,7 @@ sp {update-object-list*propose*update-seen-count
 	(state <s> ^name update-object-list
                ^object-count
                ^update-count
+               ^new-list
                ^topstate <ts>
               -^finished <id>)
  	(<ts> ^svs.spatial-scene <svs>
@@ -103,19 +107,19 @@ sp {update-object-list*apply*update-seen-count
 	(state <s> ^name update-object-list
                ^operator <op>
                ^update-count <up>
-               ^topstate <ts>)
+               ^new-list <nl>
+               ^topstate.to-store-list <list>)
  	(<op> ^name update-seen-count
           ^id <id>)
- 	(<ts> ^to-store-list <list>)
   	(<list> ^object <obj>)
     (<obj> ^id <id>
            ^seen-count <sc>
            ^not-seen-count <nsc>)
 -->
-	(<obj> ^seen-count (+ <sc> 1)
- 		   ^seen-count <sc> -
-      	   ^not-seen-count 0
-           ^not-seen-count <nsc> -)
+	(<nl> ^object <o>)
+	(<o> ^seen-count (+ <sc> 1)
+       	 ^not-seen-count 0
+         ^id <id>)
  	(<s> ^update-count (+ <up> 1)
    		 ^update-count <up> -
       	 ^finished <id>)
@@ -125,6 +129,7 @@ sp {update-object-list*propose*update-not-seen-count
 	(state <s> ^name update-object-list
                ^object-count
                ^update-count
+               ^new-list
                ^topstate <ts>
               -^finished <id>)
  	(<ts> ^svs.spatial-scene <svs>
@@ -138,10 +143,11 @@ sp {update-object-list*propose*update-not-seen-count
           ^id <id>)
 }
 
-sp {update-object-list*apply*update-object-counts*seen
+sp {update-object-list*apply*update-not-seen-count
 	(state <s> ^name update-object-list
                ^operator <op>
                ^update-count <up>
+               ^new-list <nl>
                ^topstate <ts>)
  	(<op> ^name update-not-seen-count
           ^id <id>)
@@ -151,10 +157,10 @@ sp {update-object-list*apply*update-object-counts*seen
            ^seen-count <sc>
            ^not-seen-count <nsc>)
 -->
-	(<obj> ^not-seen-count (+ <nsc> 1)
- 		   ^not-seen-count <nsc> -
+	(<nl> ^object <o>)
+	(<o> ^not-seen-count (+ <nsc> 1)
       	   ^seen-count 0
-           ^seen-count <sc> -)
+           ^id <id>)
  	(<s> ^update-count (+ <up> 1)
    		 ^update-count <up> -
       	 ^finished <id>)
@@ -163,6 +169,7 @@ sp {update-object-list*apply*update-object-counts*seen
 # Same number of updates as objects, finished
 sp {update-object-list*propose*updates-finished
 	(state <s> ^name update-object-list
+               ^new-list
                ^topstate <ts>
                ^update-count <c>
                ^object-count <c>)
@@ -174,8 +181,11 @@ sp {update-object-list*propose*updates-finished
 
 sp {update-object-list*apply*updates-finished
 	(state <s> ^name update-object-list
+               ^new-list <nl>
                ^operator.name updates-finished
-               ^topstate.to-store-list <list>)
+               ^topstate <ts>)
+ 	(<ts> ^to-store-list <old>)
 -->
-	(<list> ^update true -)
+	(<ts> ^to-store-list <nl>
+          ^to-store-list <old> -)
 }

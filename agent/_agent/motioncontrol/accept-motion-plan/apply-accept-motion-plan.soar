@@ -1,9 +1,8 @@
 sp {apply*accept-motion-plan
-	(state <s> ^superstate nil 
-			   ^name motion-control
+	(state <s> ^name
                ^operator.name accept-motion-plan
                ^request.speed <sp>
-               ^io <io>)
+               ^topstate.io <io>)
   	(<io> ^output-link <ol>)
     (<ol> ^postprocess <cmd>)
     (<cmd> ^status finished

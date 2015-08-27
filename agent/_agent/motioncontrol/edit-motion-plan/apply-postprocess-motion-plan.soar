@@ -1,8 +1,8 @@
 sp {apply*postprocess-motion-plan
-	(state <s> ^superstate nil 
-			   ^name motion-control
+	(state <s> ^name
+               ^request
                ^operator.name postprocess-motion-plan
-               ^io <io>)
+               ^topstate.io <io>)
   	(<io> ^output-link <ol>)
     (<ol> ^plan <cmd>)
 -->
@@ -12,10 +12,10 @@ sp {apply*postprocess-motion-plan
 }
 
 sp {apply*postprocess-motion-plan-if-continued
-	(state <s> ^superstate nil 
-			   ^name motion-control
+	(state <s> ^name
+			   ^request
                ^operator.name postprocess-motion-plan
-               ^io <io>)
+               ^topstate.io <io>)
   	(<io> ^output-link <ol>)
     (<ol> ^continue <cmd>)
 -->

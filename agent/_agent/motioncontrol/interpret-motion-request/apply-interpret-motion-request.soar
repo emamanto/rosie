@@ -1,8 +1,8 @@
 sp {apply*interpret-motion-request*propose-create-target
 	(state <s> ^name interpret-motion-request
-               ^topstate <t>
+               ^superstate <ss>
               -^plan)
-  	(<t> ^request)
+  	(<ss> ^request)
 -->
 	(<s> ^operator <op> + =)
  	(<op> ^name create-target)
@@ -11,8 +11,8 @@ sp {apply*interpret-motion-request*propose-create-target
 sp {apply*interpret-motion-request*apply-create-target
 	(state <s> ^name interpret-motion-request
                ^operator.name create-target
-               ^topstate <t>)
- 	(<t> ^request.target <r>)
+               ^superstate <ss>)
+ 	(<ss> ^request.target <r>)
 -->
 	(<s> ^plan <pla>)
  	(<pla> ^target <r>)
@@ -20,7 +20,7 @@ sp {apply*interpret-motion-request*apply-create-target
 
 sp {apply*interpret-motion-request*elaborate-plan-type
 	(state <s> ^name interpret-motion-request
-               ^topstate <t>)
+               ^superstate <t>)
  	(<t> ^request <r>)
   	(<s> ^plan <pla>)
   	(<r> ^type <tp>)
@@ -30,7 +30,7 @@ sp {apply*interpret-motion-request*elaborate-plan-type
 
 sp {apply*interpret-motion-request*elaborate-algorithm
 	(state <s> ^name interpret-motion-request
-               ^topstate <t>)
+               ^superstate <t>)
  	(<t> ^request <r>)
   	(<s> ^plan <pla>)
   	(<r> ^algorithm <al>)
@@ -40,7 +40,7 @@ sp {apply*interpret-motion-request*elaborate-algorithm
 
 sp {apply*interpret-motion-request*elaborate-algorithm-default
 	(state <s> ^name interpret-motion-request
-               ^topstate <t>)
+               ^superstate <t>)
  	(<t> ^request <r>)
   	(<s> ^plan <pla>)
   	(<r> -^algorithm)
@@ -50,7 +50,7 @@ sp {apply*interpret-motion-request*elaborate-algorithm-default
 
 sp {apply*interpret-motion-request*elaborate-target-step-size
 	(state <s> ^name interpret-motion-request
-               ^topstate <t>)
+               ^superstate <t>)
  	(<t> ^request <r>)
   	(<s> ^plan <pla>)
   	(<r> ^step-size <ss>)
@@ -60,7 +60,7 @@ sp {apply*interpret-motion-request*elaborate-target-step-size
 
 sp {apply*interpret-motion-request*elaborate-target-step-size*default
 	(state <s> ^name interpret-motion-request
-               ^topstate <t>)
+               ^superstate <t>)
  	(<t> ^request <r>)
   	(<s> ^plan <pla>)
   	(<r> -^step-size)
@@ -70,7 +70,7 @@ sp {apply*interpret-motion-request*elaborate-target-step-size*default
 
 sp {apply*interpret-motion-request*elaborate-target-time-limit
 	(state <s> ^name interpret-motion-request
-               ^topstate <t>)
+               ^superstate <t>)
  	(<t> ^request <r>)
   	(<s> ^plan <pla>)
   	(<r> ^time-limit <tl>)
@@ -80,7 +80,7 @@ sp {apply*interpret-motion-request*elaborate-target-time-limit
 
 sp {apply*interpret-motion-request*elaborate-target-time-limit*default
 	(state <s> ^name interpret-motion-request
-               ^topstate <t>)
+               ^superstate <t>)
  	(<t> ^request <r>)
   	(<s> ^plan <pla>)
   	(<r> -^time-limit)
@@ -90,7 +90,7 @@ sp {apply*interpret-motion-request*elaborate-target-time-limit*default
 
 sp {apply*interpret-motion-request*elaborate-target-hard-limit
 	(state <s> ^name interpret-motion-request
-               ^topstate <t>)
+               ^superstate <t>)
  	(<t> ^request <r>)
   	(<s> ^plan <pla>)
   	(<r> ^hard-time-limit <h>)
@@ -100,7 +100,7 @@ sp {apply*interpret-motion-request*elaborate-target-hard-limit
 
 sp {apply*interpret-motion-request*elaborate-target-hard-limit*default
 	(state <s> ^name interpret-motion-request
-               ^topstate <t>)
+               ^superstate <t>)
  	(<t> ^request <r>)
   	(<s> ^plan <pla>)
   	(<r> -^hard-time-limit)
@@ -122,6 +122,7 @@ sp {apply*interpret-motion-request*propose-put-output-link
 sp {apply*interpret-motion-request*apply-put-output-link
 	(state <s> ^name interpret-motion-request
                ^operator.name put-output-link
+               ^superstate.request <r>
                ^topstate.io.output-link <ol>
                ^plan <pla>)
 -->

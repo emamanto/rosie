@@ -3,3 +3,11 @@ source init-agent.soar
 pushd maintain-object-list
 	source maintain-object-list_source.soar
 popd
+
+pushd select-object
+	source select-object_source.soar
+popd
+
+pushd move-object
+	source move-object_source.soar
+popd

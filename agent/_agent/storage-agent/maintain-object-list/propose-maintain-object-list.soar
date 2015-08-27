@@ -10,33 +10,41 @@ sp {topstate*propose*init-object-list
 }
 
 # If the list needs updating...
-sp {topstate*propose*update-object-list
-   (state <s> ^superstate nil
-              ^name storage-agent
-              ^svs <svs>
-              ^to-store-list <t>)
+sp {propose*update-object-list
+   (state <s> ^topstate <ts>)
+   (<ts> ^name storage-agent
+	     ^to-store-list <t>)
    (<t> ^update true)
 -->
-   (<s> ^operator <op> + =)
+   (<s> ^operator <op> + < =)
    (<op> ^name update-object-list)
 }
 
-## TEST
-sp {topstate*propose*request-update
-	(state <s> ^superstate nil
-               ^name storage-agent
-               ^to-store-list <t>)
+# Propose update when waiting?
+sp {propose*request-update*waiting
+	(state <s> ^attribute state
+               ^choices none
+               ^waiting)
  	(<t> -^update true)
 -->
-   (<s> ^operator <op> + <)
+   (<s> ^operator <op> + =)
    (<op> ^name request-update)  
 }
 
-sp {topstate*apply*request-update
-	(state <s> ^superstate nil
-               ^name storage-agent
-               ^operator.name request-update
-               ^to-store-list <t>)
+sp {prefer*request-update*over*wait-off
+	(state <s> ^attribute state
+               ^operator <op1> +
+               ^operator <op2> +)
+ 	(<op1> ^name request-update)
+  	(<op2> ^name wait-off)
 -->
-	(<t> ^update true)
+	(<s> ^operator <op1> > <op2>)
+}
+
+sp {apply*request-update*waiting
+	(state <s> ^attribute state
+               ^operator.name request-update
+               ^topstate.to-store-list <list>)
+-->
+	(<list> ^update true)
 }

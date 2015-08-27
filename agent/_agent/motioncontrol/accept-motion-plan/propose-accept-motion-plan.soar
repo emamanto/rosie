@@ -1,7 +1,7 @@
 sp {propose*accept-motion-plan
-	(state <s> ^superstate nil
-               ^name motion-control
-               ^io.output-link <ol>)
+	(state <s> ^name
+               ^request
+               ^topstate.io.output-link <ol>)
   	(<ol> ^postprocess <p>)
    	(<p> ^success true)
 -->

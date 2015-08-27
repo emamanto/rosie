@@ -135,11 +135,13 @@ sp {update-object-list*propose*update-not-seen-count
  	(<ts> ^svs.spatial-scene <svs>
           ^to-store-list <list>)
   	(<list> ^object <obj>)
+    (<obj> ^not-seen-count <nsc>)
     (<obj> ^id <id>)
     (<svs> -^child.id <id>)
 -->
 	(<s> ^operator <op> + =)
  	(<op> ^name update-not-seen-count
+          ^count <nsc>
           ^id <id>)
 }
 
@@ -150,6 +152,7 @@ sp {update-object-list*apply*update-not-seen-count
                ^new-list <nl>
                ^topstate <ts>)
  	(<op> ^name update-not-seen-count
+          ^count <c> < 10
           ^id <id>)
  	(<ts> ^to-store-list <list>)
   	(<list> ^object <obj>)
@@ -161,6 +164,26 @@ sp {update-object-list*apply*update-not-seen-count
 	(<o> ^not-seen-count (+ <nsc> 1)
       	   ^seen-count 0
            ^id <id>)
+ 	(<s> ^update-count (+ <up> 1)
+   		 ^update-count <up> -
+      	 ^finished <id>)
+}
+
+sp {update-object-list*apply*update-not-seen-count*deletion
+	(state <s> ^name update-object-list
+               ^operator <op>
+               ^update-count <up>
+               ^new-list <nl>
+               ^topstate <ts>)
+ 	(<op> ^name update-not-seen-count
+          ^count <c> >= 10
+          ^id <id>)
+ 	(<ts> ^to-store-list <list>)
+  	(<list> ^object <obj>)
+    (<obj> ^id <id>
+           ^seen-count <sc>
+           ^not-seen-count <nsc>)
+-->
  	(<s> ^update-count (+ <up> 1)
    		 ^update-count <up> -
       	 ^finished <id>)

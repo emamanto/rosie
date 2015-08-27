@@ -54,6 +54,7 @@ sp {update-object-list*propose*add-object
           ^to-store-list <list>)
  	(<svs> ^child <c>)
     (<c> ^id <id>
+         ^main-color red
          ^object-source perception)
   	(<list> -^object.id <id>)
 -->
@@ -94,6 +95,7 @@ sp {update-object-list*propose*update-seen-count
           ^to-store-list <list>)
  	(<svs> ^child <c>)
     (<c> ^id <id>
+         ^main-color red
          ^object-source perception)
   	(<list> ^object <obj>)
     (<obj> ^id <id>)

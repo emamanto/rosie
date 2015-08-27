@@ -20,6 +20,7 @@ sp {count-objects*propose*add-to-count*seen
  	(<ts> ^svs.spatial-scene <svs>)
  	(<svs> ^child <c>)
     (<c> ^id <id>
+         ^main-color red
          ^object-source perception)
   	(<s> -^counted <id>)
 -->

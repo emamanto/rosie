@@ -1,3 +1,4 @@
 source propose-maintain-object-list.soar
 source apply-maintain-object-list.soar
 source apply-count-objects.soar
+source elaborate-svs-objects.soar

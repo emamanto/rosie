@@ -1,0 +1,29 @@
+sp {elaborate*main-color-red
+	(state <s> ^name update-object-list
+               ^topstate <ts>)
+ 	(<ts> ^svs.spatial-scene <svs>)
+  	(<svs> ^child <c>)
+    (<c> ^color.red <red> > 0.8)
+-->
+	(<c> ^main-color red)
+}
+
+sp {elaborate*main-color-green
+	(state <s> ^name update-object-list
+               ^topstate <ts>)
+ 	(<ts> ^svs.spatial-scene <svs>)
+  	(<svs> ^child <c>)
+    (<c> ^color.green <green> > 0.8)
+-->
+	(<c> ^main-color green)
+}
+
+sp {elaborate*main-color-blue
+	(state <s> ^name update-object-list
+               ^topstate <ts>)
+ 	(<ts> ^svs.spatial-scene <svs>)
+  	(<svs> ^child <c>)
+    (<c> ^color.blue <blue> > 0.4)
+-->
+	(<c> ^main-color blue)
+}

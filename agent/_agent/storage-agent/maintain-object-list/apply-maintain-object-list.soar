@@ -10,9 +10,43 @@ sp {topstate*apply*init-object-list
 }
 
 #############################################
+# Count how many objects are visible
+sp {update-object-list*propose*count-objects
+	(state <s> ^name update-object-list
+              -^object-count
+               ^topstate <ts>)
+-->
+	(<s> ^operator <op> + =)
+ 	(<op> ^name count-objects)
+}
+
+#############################################
+# Start keeping track of how many we've updated
+sp {update-object-list*propose*init-update-count
+	(state <s> ^name update-object-list
+               ^object-count
+              -^update-count
+               ^topstate <ts>)
+-->
+	(<s> ^operator <op> + =)
+ 	(<op> ^name init-update-count)
+}
+
+sp {update-object-list*apply*init-update-count
+	(state <s> ^name update-object-list
+               ^operator.name init-update-count)
+-->
+	(<s> ^update-count 0)
+}
+
+###########################################
+# Add an object we haven't seen before
 sp {update-object-list*propose*add-object
 	(state <s> ^name update-object-list
-               ^topstate <ts>)
+               ^object-count
+               ^update-count
+               ^topstate <ts>
+              -^finished <id>)
  	(<ts> ^svs.spatial-scene <svs>
           ^to-store-list <list>)
  	(<svs> ^child <c>)
@@ -27,6 +61,7 @@ sp {update-object-list*propose*add-object
 
 sp {update-object-list*apply*add-object
 	(state <s> ^name update-object-list
+               ^update-count <up>
                ^operator <op>
                ^topstate <ts>)
  	(<ts> ^to-store-list <list>)
@@ -38,4 +73,109 @@ sp {update-object-list*apply*add-object
  	(<o> ^id <id>
        	 ^seen-count 1
          ^not-seen-count 0)
+  	(<s> ^update-count (+ <up> 1)
+   		 ^update-count <up> -
+      	 ^finished <id>)
+}
+
+############################################
+# Update counts on an object we've already seen
+sp {update-object-list*propose*update-seen-count
+	(state <s> ^name update-object-list
+               ^object-count
+               ^update-count
+               ^topstate <ts>
+              -^finished <id>)
+ 	(<ts> ^svs.spatial-scene <svs>
+          ^to-store-list <list>)
+ 	(<svs> ^child <c>)
+    (<c> ^id <id>
+         ^object-source perception)
+  	(<list> ^object <obj>)
+    (<obj> ^id <id>)
+-->
+	(<s> ^operator <op> + =)
+ 	(<op> ^name update-seen-count
+          ^id <id>)
+}
+
+sp {update-object-list*apply*update-seen-count
+	(state <s> ^name update-object-list
+               ^operator <op>
+               ^update-count <up>
+               ^topstate <ts>)
+ 	(<op> ^name update-seen-count
+          ^id <id>)
+ 	(<ts> ^to-store-list <list>)
+  	(<list> ^object <obj>)
+    (<obj> ^id <id>
+           ^seen-count <sc>
+           ^not-seen-count <nsc>)
+-->
+	(<obj> ^seen-count (+ <sc> 1)
+ 		   ^seen-count <sc> -
+      	   ^not-seen-count 0
+           ^not-seen-count <nsc> -)
+ 	(<s> ^update-count (+ <up> 1)
+   		 ^update-count <up> -
+      	 ^finished <id>)
+}
+
+sp {update-object-list*propose*update-not-seen-count
+	(state <s> ^name update-object-list
+               ^object-count
+               ^update-count
+               ^topstate <ts>
+              -^finished <id>)
+ 	(<ts> ^svs.spatial-scene <svs>
+          ^to-store-list <list>)
+  	(<list> ^object <obj>)
+    (<obj> ^id <id>)
+    (<svs> -^child.id <id>)
+-->
+	(<s> ^operator <op> + =)
+ 	(<op> ^name update-not-seen-count
+          ^id <id>)
+}
+
+sp {update-object-list*apply*update-object-counts*seen
+	(state <s> ^name update-object-list
+               ^operator <op>
+               ^update-count <up>
+               ^topstate <ts>)
+ 	(<op> ^name update-not-seen-count
+          ^id <id>)
+ 	(<ts> ^to-store-list <list>)
+  	(<list> ^object <obj>)
+    (<obj> ^id <id>
+           ^seen-count <sc>
+           ^not-seen-count <nsc>)
+-->
+	(<obj> ^not-seen-count (+ <nsc> 1)
+ 		   ^not-seen-count <nsc> -
+      	   ^seen-count 0
+           ^seen-count <sc> -)
+ 	(<s> ^update-count (+ <up> 1)
+   		 ^update-count <up> -
+      	 ^finished <id>)
+}
+##############################################
+# Same number of updates as objects, finished
+sp {update-object-list*propose*updates-finished
+	(state <s> ^name update-object-list
+               ^topstate <ts>
+               ^update-count <c>
+               ^object-count <c>)
+  	(<ts> ^to-store-list <list>)
+    (<list> ^update true)
+-->
+	(<s> ^operator.name updates-finished +)
+}
+
+sp {update-object-list*apply*updates-finished
+	(state <s> ^name update-object-list
+               ^operator.name updates-finished
+               ^topstate.to-store-list <list>)
+-->
+	(<list> ^update true -)
 }

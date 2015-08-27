@@ -20,3 +20,23 @@ sp {topstate*propose*update-object-list
    (<s> ^operator <op> + =)
    (<op> ^name update-object-list)
 }
+
+## TEST
+sp {topstate*propose*request-update
+	(state <s> ^superstate nil
+               ^name storage-agent
+               ^to-store-list <t>)
+ 	(<t> -^update true)
+-->
+   (<s> ^operator <op> + <)
+   (<op> ^name request-update)  
+}
+
+sp {topstate*apply*request-update
+	(state <s> ^superstate nil
+               ^name storage-agent
+               ^operator.name request-update
+               ^to-store-list <t>)
+-->
+	(<t> ^update true)
+}

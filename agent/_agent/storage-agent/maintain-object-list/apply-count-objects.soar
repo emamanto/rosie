@@ -1,0 +1,68 @@
+sp {count-objects*propose*create-count
+	(state <s> ^name count-objects
+              -^object-count)
+-->
+	(<s> ^operator <op> + =)
+ 	(<op> ^name create-count)
+}
+
+sp {count-objects*apply*create-count
+	(state <s> ^name count-objects
+               ^operator.name create-count)
+-->
+	(<s> ^object-count 0)
+}
+
+sp {count-objects*propose*add-to-count
+	(state <s> ^name count-objects
+               ^object-count
+               ^topstate <ts>)
+ 	(<ts> ^svs.spatial-scene <svs>)
+ 	(<svs> ^child <c>)
+    (<c> ^id <id>
+         ^object-source perception)
+  	(<s> -^counted <id>)
+-->
+	(<s> ^operator <op> + =)
+ 	(<op> ^name add-to-count
+          ^id <id>)
+}
+
+sp {count-objects*apply*add-to-count
+	(state <s> ^name count-objects
+               ^operator <op>
+               ^object-count <oc>
+               ^topstate <ts>)
+ 	(<op> ^name add-to-count
+          ^id <id>)
+-->
+	(<s> ^object-count (+ <oc> 1)
+ 	     ^object-count <oc> -
+    	 ^counted <id>)
+}
+
+sp {prefer*add-to-count*before*put-superstate
+ 	(state <s> ^name count-objects
+               ^operator <o1> +
+               ^operator <o2> +)
+  	(<o1> ^name add-to-count)
+   	(<o2> ^name put-superstate)
+-->
+	(<s> ^operator <o1> > <o2>)
+}
+
+sp {count-objects*propose*put-superstate
+	(state <s> ^name count-objects
+               ^object-count)
+-->
+	(<s> ^operator.name put-superstate)
+}
+
+sp {count-objects*apply*put-superstate
+	(state <s> ^name count-objects
+               ^superstate <ss>
+               ^object-count <oc>
+               ^operator.name put-superstate)
+-->
+	(<ss> ^object-count <oc>)
+}

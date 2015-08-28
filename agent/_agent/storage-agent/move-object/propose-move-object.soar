@@ -1,0 +1,7 @@
+sp {topstate*propose*move-object
+	(state <s> ^superstate nil
+               ^name storage-agent
+               ^selected-object <id>)
+-->
+	(<s> ^operator.name move-object +)
+}

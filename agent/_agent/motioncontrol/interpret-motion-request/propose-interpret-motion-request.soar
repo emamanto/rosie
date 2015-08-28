@@ -3,8 +3,7 @@ sp {propose*interpret-motion-request
                ^request <r>
                ^topstate <ts>)
     (<ts> ^io.output-link <ol>)
-    (<ol> -^plan.status finished
-          -^plan.status stopped
+    (<ol> -^plan
           -^postprocess
           -^execute)
 -->

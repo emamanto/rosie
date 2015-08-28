@@ -1,7 +1,7 @@
 sp {propose*finish-motion
-	(state <s> ^superstate nil
-			   ^name motion-control
-           	   ^io.output-link <ol>)
+	(state <s> ^name
+			   ^request
+           	   ^topstate.io.output-link <ol>)
   	(<ol> ^execute <ex>)
   	(<ex> ^status finished
 		  ^success true)

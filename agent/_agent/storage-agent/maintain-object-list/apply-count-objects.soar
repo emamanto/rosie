@@ -68,29 +68,56 @@ sp {count-objects*apply*add-to-count*not-seen
  	     ^object-count <oc> -
     	 ^counted <id>)
 }
-sp {prefer*add-to-count-seen*before*put-superstate
- 	(state <s> ^name count-objects
-               ^operator <o1> +
-               ^operator <o2> +)
-  	(<o1> ^name add-to-count-seen)
-   	(<o2> ^name put-superstate)
+
+sp {count-objects*elaborate*countable-object-seen
+	(state <s> ^name count-objects
+               ^object-count
+               ^topstate <ts>)
+ 	(<ts> ^svs.spatial-scene <svs>)
+ 	(<svs> ^child <c>)
+    (<c> ^id <id>
+         ^main-color red
+         ^object-source perception)
+  	(<s> -^counted <id>)
 -->
-	(<s> ^operator <o1> > <o2>)
+	(<s> ^has-countable-object seen)
 }
 
-sp {prefer*add-to-count-not-seen*before*put-superstate
- 	(state <s> ^name count-objects
-               ^operator <o1> +
-               ^operator <o2> +)
-  	(<o1> ^name add-to-count-not-seen)
-   	(<o2> ^name put-superstate)
+sp {count-objects*elaborate*countable-object-not-seen
+	(state <s> ^name count-objects
+               ^object-count
+              -^counted <id>
+               ^topstate <ts>)
+ 	(<ts> ^to-store-list <list>)
+    (<list> ^object <obj>)
+    (<obj> ^id <id>)
 -->
-	(<s> ^operator <o1> > <o2>)
+	(<s> ^has-countable-object not-seen)
 }
+#sp {prefer*add-to-count-seen*before*put-superstate
+# 	(state <s> ^name count-objects
+#               ^operator <o1> +
+#               ^operator <o2> +)
+#  	(<o1> ^name add-to-count-seen)
+#   	(<o2> ^name put-superstate)
+#-->
+#	(<s> ^operator <o1> > <o2>)
+#}
+#
+#sp {prefer*add-to-count-not-seen*before*put-superstate
+# 	(state <s> ^name count-objects
+#               ^operator <o1> +
+#               ^operator <o2> +)
+#  	(<o1> ^name add-to-count-not-seen)
+#   	(<o2> ^name put-superstate)
+#-->
+#	(<s> ^operator <o1> > <o2>)
+#}
 
 sp {count-objects*propose*put-superstate
 	(state <s> ^name count-objects
-               ^object-count)
+               ^object-count
+ 			  -^has-countable-object)
 -->
 	(<s> ^operator.name put-superstate)
 }

@@ -1,0 +1,88 @@
+sp {move-object*propose*request-pick-up
+	(state <s> ^name move-object
+              -^pick-up requested
+               ^topstate.selected-object <id>)
+-->
+	(<s> ^operator <op> + =)
+ 	(<op> ^name request-pick-up
+          ^id <id>)
+}
+
+sp {move-object*apply*request-pick-up
+	(state <s> ^name move-object
+               ^operator <op>)
+ 	(<op> ^name request-pick-up
+          ^id <id>)
+-->
+	(<s> ^request <r>
+      	 ^pick-up requested)
+ 	(<r> ^target <t>
+         ^speed 1
+         ^type grasp
+         ^time-limit 3
+         ^step-size 0.4
+         ^hard-time-limit true)
+  	(<t> ^id <id>)
+}
+
+sp {move-object*propose*request-drop-off
+	(state <s> ^name move-object
+               ^pick-up requested
+              -^request
+              -^drop-off requested
+               ^topstate <ts>)
+ 	(<ts> ^selected-object <id>
+          ^io.output-link <ol>)
+  	(<ol> -^plan
+          -^postprocess
+          -^execute)
+-->
+	(<s> ^operator <op> + =)
+ 	(<op> ^name request-drop-off
+          ^id <id>)
+}
+
+sp {move-object*apply*request-drop-off
+	(state <s> ^name move-object
+               ^topstate.io.output-link <ol>
+               ^operator <op>)
+ 	(<op> ^name request-drop-off
+          ^id <id>)
+-->
+	(<s> ^request <r>
+      	 ^drop-off requested)
+ 	(<r> ^target <t>
+         ^speed 1
+         ^type drop
+         ^time-limit 3
+         ^step-size 0.4
+         ^hard-time-limit true)
+  	(<t> ^x -0.2
+         ^y -0.2
+         ^z 0.0)
+}
+
+sp {move-object*propose*mark-stored
+	(state <s> ^name move-object
+               ^pick-up requested
+               ^drop-off requested
+              -^request
+               ^topstate <ts>)
+	(<ts> ^selected-object <obj>)
+-->	
+	(<s> ^operator <op> +)
+ 	(<op> ^name mark-stored
+          ^id <obj>)
+}
+
+sp {move-object*apply*mark-stored
+	(state <s> ^name move-object
+               ^operator <op>
+               ^topstate <ts>)
+	(<op> ^name mark-stored
+          ^id <id>)
+ 	(<ts> ^selected-object <id>)
+-->	
+	(<ts> ^stored-object <id>
+       	  ^selected-object <id> -)
+}

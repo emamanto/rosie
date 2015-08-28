@@ -1,0 +1,9 @@
+sp {topstate*apply*select-object
+	(state <s> ^superstate nil
+               ^name storage-agent
+               ^operator <op>)
+ 	(<op> ^name select-object
+          ^id <id>)
+ -->
+	(<s> ^selected-object <id>)
+}

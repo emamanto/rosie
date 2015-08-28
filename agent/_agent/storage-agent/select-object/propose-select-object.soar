@@ -1,0 +1,26 @@
+sp {topstate*propose*select-object
+	(state <s> ^superstate nil
+               ^name storage-agent
+              -^selected-object
+               ^to-store-list <list>)
+ 	(<list> ^object <obj>)
+  	(<obj> ^id <id> 
+		   ^seen-count <sc> > 10)
+ -->
+	(<s> ^operator <op> + =)
+ 	(<op> ^name select-object
+          ^seen-count <sc>
+          ^id <id>)
+}
+
+sp {topstate*prefer*stable-object
+	(state <s> ^superstate nil
+               ^operator <op1>
+               ^operator <op2>)
+ 	(<op1> ^name select-object 
+		   ^seen-count <sc1>)
+  	(<op2> ^name select-object
+           ^seen-count <sc2> > <sc1>)
+-->
+	(<s> ^operator <op2> > <op1>)
+}

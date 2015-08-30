@@ -1,7 +1,43 @@
-sp {topstate*propose*move-object
+sp {move-object*propose*request-pick-up
 	(state <s> ^superstate nil
-               ^name storage-agent
-               ^selected-object <id>)
+			   ^name storage-agent
+      		   ^selected-object <id>
+              -^pick-up <id>
+              -^request)
 -->
-	(<s> ^operator.name move-object +)
+	(<s> ^operator <op> + =)
+ 	(<op> ^name request-pick-up
+          ^id <id>)
+  	(interrupt)
+}
+
+sp {move-object*propose*request-drop-off
+	(state <s> ^superstate nil
+			   ^name storage-agent
+      		   ^selected-object <id>
+               ^pick-up <id>
+              -^request
+              -^drop-off <id>
+               ^io.output-link <ol>)
+  	(<ol> -^plan
+          -^postprocess
+          -^execute)
+-->
+	(<s> ^operator <op> + =)
+ 	(<op> ^name request-drop-off
+          ^id <id>)
+}
+
+sp {move-object*propose*mark-stored
+	(state <s> ^superstate nil
+			   ^name storage-agent
+      		   ^selected-object <id>
+               ^pick-up <id>
+               ^drop-off <id>
+              -^stored-object <id>
+              -^request)
+-->	
+	(<s> ^operator <op> +)
+ 	(<op> ^name mark-stored
+          ^id <id>)
 }

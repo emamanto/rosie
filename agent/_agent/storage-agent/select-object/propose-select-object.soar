@@ -2,6 +2,7 @@ sp {topstate*propose*select-object
 	(state <s> ^superstate nil
                ^name storage-agent
               -^selected-object
+               ^open-location
                ^to-store-list <list>)
  	(<list> ^object <obj>)
   	(<obj> ^id <id> 

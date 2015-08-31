@@ -8,7 +8,7 @@ sp {move-object*apply*request-pick-up
 	(<s> ^request <r>
       	 ^pick-up <id>)
  	(<r> ^target <t>
-         ^speed 1
+         ^speed 0.8
          ^type grasp
          ^time-limit 3
          ^step-size 0.4
@@ -40,7 +40,7 @@ sp {move-object*apply*request-drop-off
 	(<s> ^request <r>
       	 ^drop-off <id>)
  	(<r> ^target <t>
-         ^speed 1
+         ^speed 0.8
          ^type drop
          ^time-limit 3
          ^step-size 0.4
@@ -50,9 +50,10 @@ sp {move-object*apply*request-drop-off
          ^z 0.0)
 }
 
-sp {move-object*apply*mark-stored
+sp {move-object*apply*mark-stored-not-finished
 	(state <s> ^superstate nil
 			   ^name storage-agent
+      		   ^open-location
                ^operator <op>)
 	(<op> ^name mark-stored
           ^id <id>
@@ -63,4 +64,14 @@ sp {move-object*apply*mark-stored
        	 ^selected-location <loc> -
          ^pick-up <id> -
          ^put-down <id> -)
+}
+
+sp {move-object*apply*mark-stored-finished
+	(state <s> ^superstate nil
+               ^name storage-agent
+               ^operator.name mark-stored
+              -^open-location)
+-->
+	(write (crlf) |Task complete|)
+ 	(halt)
 }

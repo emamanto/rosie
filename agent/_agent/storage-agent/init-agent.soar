@@ -26,3 +26,13 @@ sp {topstate*apply*init-agent
    	(<l4> ^x -0.2
           ^y -0.2)
 }
+
+sp {topstate*elaborate*open-locations
+	(state <s> ^superstate nil
+               ^name storage-agent
+               ^put-down-locations <list>)
+ 	(<list> ^location <loc>)
+  	(<loc> -^used)
+-->
+	(<s> ^open-location <loc>)
+}

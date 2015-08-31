@@ -8,7 +8,6 @@ sp {move-object*propose*request-pick-up
 	(<s> ^operator <op> + =)
  	(<op> ^name request-pick-up
           ^id <id>)
-  	(interrupt)
 }
 
 sp {move-object*propose*select-drop-off-location

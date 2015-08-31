@@ -16,7 +16,7 @@ sp {propose*update-object-list
 	     	  ^to-store-list <t>)
    (<t> ^update true)
 -->
-   (<s> ^operator <op> + =)
+   (<s> ^operator <op> + <)
    (<op> ^name update-object-list)
 }
 

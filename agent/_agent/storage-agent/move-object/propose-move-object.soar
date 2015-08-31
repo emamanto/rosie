@@ -11,10 +11,27 @@ sp {move-object*propose*request-pick-up
   	(interrupt)
 }
 
+sp {move-object*propose*select-drop-off-location
+	(state <s> ^superstate nil
+               ^name storage-agent
+               ^selected-object <id>
+               ^pick-up <id>
+              -^request
+               ^put-down-locations <l>
+              -^selected-location <loc>)
+ 	(<l> ^location <l1>)
+  	(<l1> -^used)
+-->
+	(<s> ^operator <op> + =)
+ 	(<op> ^name select-drop-off-location
+          ^location <l1>)
+}
+
 sp {move-object*propose*request-drop-off
 	(state <s> ^superstate nil
 			   ^name storage-agent
       		   ^selected-object <id>
+           	   ^selected-location <loc>
                ^pick-up <id>
               -^request
               -^drop-off <id>
@@ -25,13 +42,15 @@ sp {move-object*propose*request-drop-off
 -->
 	(<s> ^operator <op> + =)
  	(<op> ^name request-drop-off
-          ^id <id>)
+          ^id <id>
+          ^location <loc>)
 }
 
 sp {move-object*propose*mark-stored
 	(state <s> ^superstate nil
 			   ^name storage-agent
       		   ^selected-object <id>
+           	   ^selected-location <loc>
                ^pick-up <id>
                ^drop-off <id>
               -^stored-object <id>
@@ -39,5 +58,6 @@ sp {move-object*propose*mark-stored
 -->	
 	(<s> ^operator <op> +)
  	(<op> ^name mark-stored
-          ^id <id>)
+          ^id <id>
+          ^location <loc>)
 }

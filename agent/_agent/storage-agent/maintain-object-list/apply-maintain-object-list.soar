@@ -10,17 +10,6 @@ sp {topstate*apply*init-object-list
 }
 
 #############################################
-# Count how many objects are visible
-#sp {update-object-list*propose*count-objects
-#	(state <s> ^name update-object-list
-#              -^object-count
-#               ^topstate <ts>)
-#-->
-#	(<s> ^operator <op> + =)
-# 	(<op> ^name count-objects)
-#}
-
-#############################################
 # Start keeping track of how many we've updated
 sp {update-object-list*propose*init-new-list
 	(state <s> ^name update-object-list

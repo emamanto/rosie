@@ -1,2 +1,4 @@
 source propose-move-object.soar
 source apply-move-object.soar
+source decide-pick-up-params.soar
+source decide-put-down-params.soar

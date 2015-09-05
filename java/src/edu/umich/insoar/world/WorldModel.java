@@ -158,15 +158,15 @@ public class WorldModel implements RunEventInterface
     public synchronized void sendObservation(){
     	ArrayList<object_data_t> objDatas = new ArrayList<object_data_t>();
     	
-    	String[] beliefObjects = soarAgent.getAgent().SVSQuery("objs-with-flag object-source belief\n").split(" ");
-    	for(int i = 2; i < beliefObjects.length; i++){
-    		String objId = beliefObjects[i].trim();
-    		if(objId.length() == 0){
-    			continue;
-    		}
-    		String obj = soarAgent.getAgent().SVSQuery("obj-info " + objId);
-    		objDatas.add(parseObject(obj));
-    	}
+    	// String[] beliefObjects = soarAgent.getAgent().SVSQuery("objs-with-flag object-source belief\n").split(" ");
+    	// for(int i = 2; i < beliefObjects.length; i++){
+    	// 	String objId = beliefObjects[i].trim();
+    	// 	if(objId.length() == 0){
+    	// 		continue;
+    	// 	}
+    	// 	String obj = soarAgent.getAgent().SVSQuery("obj-info " + objId);
+    	// 	objDatas.add(parseObject(obj));
+    	// }
 
     	soar_objects_t outgoingObs = new soar_objects_t();
     	outgoingObs.utime = InSoar.GetSoarTime();

@@ -54,7 +54,7 @@ public class SoarAgent implements RunEventInterface{
            throw new IllegalStateException("Kernel created null agent");
         }
         
-    	System.out.println("Spawn Debugger: " + agent.SpawnDebugger(kernel.GetListenerPort()));
+    	// System.out.println("Spawn Debugger: " + agent.SpawnDebugger(kernel.GetListenerPort()));
     	this.agentSource = agentSource;
     	this.smemSource = null;
     	this.lgSoarSource = null;
@@ -87,7 +87,7 @@ public class SoarAgent implements RunEventInterface{
         
         // Start Debugger (if desired)
         if (!headless) {
-        	System.out.println("Spawn Debugger: " + agent.SpawnDebugger(kernel.GetListenerPort()));
+        	// System.out.println("Spawn Debugger: " + agent.SpawnDebugger(kernel.GetListenerPort()));
         	// Requires the SOAR_HOME environment variable
         }
         

@@ -175,7 +175,9 @@ public class InSoar implements RunEventInterface
 			soarAgent.getAgent().RegisterForRunEvent(smlRunEventId.smlEVENT_AFTER_INPUT_PHASE, this, this);
         }
         
-        chatFrame.showFrame();   
+	soarAgent.getAgent().RegisterForRunEvent(smlRunEventId.smlEVENT_AFTER_HALTED, this, this);
+
+        //chatFrame.showFrame();   
         
         
         
@@ -183,6 +185,7 @@ public class InSoar implements RunEventInterface
 		command.utime = InSoar.GetSoarTime();
 		command.command = "reset=time";
 		LCM.getSingleton().publish("GUI_COMMAND", command);
+		soarAgent.start();
     }
     
     public static void main(String[] args)
@@ -245,6 +248,9 @@ public class InSoar implements RunEventInterface
 			inputTime = getElapsed(prevTime);
 			prevTime = TimeUtil.utime();
 			break;
+		case smlEVENT_AFTER_HALTED:
+		    System.exit(0);
+		    break;
 		}
 	}
 }

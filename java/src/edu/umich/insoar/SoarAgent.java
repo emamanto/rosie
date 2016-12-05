@@ -87,7 +87,7 @@ public class SoarAgent implements RunEventInterface{
         
         // Start Debugger (if desired)
         if (!headless) {
-        	// System.out.println("Spawn Debugger: " + agent.SpawnDebugger(kernel.GetListenerPort()));
+        	//System.out.println("Spawn Debugger: " + agent.SpawnDebugger(kernel.GetListenerPort()));
         	// Requires the SOAR_HOME environment variable
         }
         

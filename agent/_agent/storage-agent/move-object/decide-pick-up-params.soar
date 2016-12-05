@@ -15,7 +15,7 @@ sp {decide-pick-up-params*apply*init
 sp {decide-pick-up-params*propose*set-step-size
 	(state <s> ^name decide-pick-up-params
                ^param <p>)
- 	(<p> -^step-size)
+ 	(<p> -^algorithm)
 -->
 	(<s> ^operator.name set-step-size + =)
 }
@@ -27,7 +27,7 @@ sp {decide-pick-up-params*apply*set-step-size-small
  	(<s> ^operator.name set-step-size)
   	(<sc> ^child.main-color blue)
 -->
-	(<p> ^step-size 0.2)
+	(<p> ^algorithm ara)
 }
 
 sp {decide-pick-up-params*apply*set-step-size-medium
@@ -38,7 +38,7 @@ sp {decide-pick-up-params*apply*set-step-size-medium
   	(<sc> -^child.main-color blue
           ^child.main-color green)
 -->
-	(<p> ^step-size 0.4)
+	(<p> ^algorithm rrt)
 }
 
 sp {decide-pick-up-params*apply*set-step-size-large
@@ -49,13 +49,13 @@ sp {decide-pick-up-params*apply*set-step-size-large
   	(<sc> -^child.main-color blue
           -^child.main-color green)
 -->
-	(<p> ^step-size 0.6)
+	(<p> ^algorithm rrt)
 }
 
 sp {decide-pick-up-params*propose*finish
 	(state <s> ^name decide-pick-up-params
                ^param <p>)
- 	(<p> ^step-size)
+ 	(<p> ^algorithm)
 -->
 	(<s> ^operator.name finish +)
 }

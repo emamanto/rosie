@@ -21,3 +21,13 @@ sp {apply*postprocess-motion-plan-if-continued
 -->
 	(<ol> ^continue <cmd> -)
 }
+
+sp {apply*halt-on-failure
+	(state <s> ^name
+               ^request
+               ^topstate.io.output-link <ol>
+               ^operator.name halt-on-failure) 
+-->
+	(write (crlf) |PLANNING FAILURE|)
+ 	(halt)
+}

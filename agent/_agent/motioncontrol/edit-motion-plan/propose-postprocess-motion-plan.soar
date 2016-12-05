@@ -21,3 +21,15 @@ sp {propose*postprocess-motion-plan*stopped
 	(<s> ^operator <op> + =)
  	(<op> ^name postprocess-motion-plan)
 }
+ 
+sp {propose*halt-on-failure
+	(state <s> ^name
+               ^request
+               ^topstate.io.output-link <ol>)
+  	(<ol> ^plan <srch>)
+    (<srch> ^success false)
+-->
+	(<s> ^operator <op> + =)
+ 	(<op> ^name halt-on-failure)
+}
+

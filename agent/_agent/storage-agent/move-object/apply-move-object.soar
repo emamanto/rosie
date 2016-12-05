@@ -5,7 +5,7 @@ sp {move-object*apply*request-pick-up
  	(<op> ^name request-pick-up
           ^id <id>
           ^params <p>)
-  	(<p> ^step-size <ss>)
+  	(<p> ^algorithm <ss>)
 -->
 	(<s> ^request <r>
       	 ^pick-up <id>
@@ -14,7 +14,8 @@ sp {move-object*apply*request-pick-up
          ^speed 0.8
          ^type grasp
          ^time-limit 3
-         ^step-size <ss>
+         ^step-size 0.4
+         ^algorithm <ss>
          ^hard-time-limit true)
   	(<t> ^id <id>)
 }
@@ -40,7 +41,7 @@ sp {move-object*apply*request-drop-off
           ^location <loc>)
   	(<loc> ^x <x>
            ^y <y>)
-   	(<p> ^step-size <ss>)
+   	(<p> ^algorithm <ss>)
 -->
 	(<s> ^request <r>
       	 ^drop-off <id>)
@@ -48,7 +49,8 @@ sp {move-object*apply*request-drop-off
          ^speed 0.8
          ^type drop
          ^time-limit 3
-         ^step-size <ss>
+         ^step-size 0.4
+         ^algorithm <ss>
          ^hard-time-limit true)
   	(<t> ^x <x>
          ^y <y>

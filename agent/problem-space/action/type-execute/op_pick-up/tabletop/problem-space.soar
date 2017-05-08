@@ -3,5 +3,5 @@ sp {op_pick-up1*tabletop*elaborate*problem-space*attend-to-all-perception
               ^problem-space.action.type execute
               ^problem-space.perception <p>)
 -->
-   (<p> ^attend-to-all-perception yes)
+   (<p> ^attend-to-robot yes)
 }

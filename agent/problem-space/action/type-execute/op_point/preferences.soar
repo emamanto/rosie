@@ -1,0 +1,19 @@
+sp {op_point1*tabletop*prefer*commands*over*report-failure
+   (state <s> ^name op_point1
+              ^operator <o1> +
+              ^operator <o2> +)
+   (<o1> ^name send-point-command)
+   (<o2> ^name report-failure)
+-->
+   (<s> ^operator <o1> > <o2>)
+}
+sp {op_point1*tabletop*prefer*attend-to-arm*over*report-success
+   (state <s> ^name op_point1
+              ^operator <o1> +
+              ^operator <o2> +)
+   (<o1> ^name attend-to-scene-change)
+   (<o2> ^name << report-success report-failure >>)
+-->
+   (<s> ^operator <o1> > <o2>)
+}
+

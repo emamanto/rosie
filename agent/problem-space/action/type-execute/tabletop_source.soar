@@ -9,3 +9,7 @@ popd
 pushd op_move
 source op_move_source.soar
 popd
+
+pushd op_point
+source op_point_source.soar
+popd

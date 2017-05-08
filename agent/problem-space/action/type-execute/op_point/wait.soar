@@ -1,0 +1,9 @@
+sp {op_point1*tabletop*propose*wait*during*commands
+   (state <s> ^name op_point1
+              ^problem-space.action.type execute
+              -^operator.name wait
+              ^current-action.point-command <cmd>)
+-->
+   (<s> ^operator <o> + <)
+   (<o> ^name wait)
+}

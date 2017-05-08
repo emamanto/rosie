@@ -1,0 +1,9 @@
+source elaborations.soar
+source preferences.soar
+source problem-space.soar
+
+source send-point-command.soar
+source wait.soar
+
+source report-success.soar
+source report-failure.soar

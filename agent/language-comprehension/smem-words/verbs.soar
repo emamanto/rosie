@@ -268,7 +268,7 @@ smem --add {
                          
     ## Point
           (<point> ^spelling |point|
-                   ^referent @101002
+                   ^referent @101007
                    ^super-type @60995)
 
             ## check

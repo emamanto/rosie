@@ -1,0 +1,7 @@
+sp {op_point1*tabletop*elaborate*problem-space*attend-to-robot
+   (state <s> ^name op_point1
+              ^problem-space.action.type execute
+              ^problem-space.perception <p>)
+-->
+   (<p> ^attend-to-robot yes)
+}

@@ -3,6 +3,7 @@ sp {top-state*elaborate*agent-params*domain*tabletop
               ^agent-params <params>)
 -->
    (<params> ^domain tabletop)
+   (<s> ^world-usage external)
 }
 
 source _agent_source.soar

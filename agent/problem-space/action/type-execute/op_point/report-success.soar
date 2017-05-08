@@ -1,0 +1,38 @@
+sp {op_point1*tabletop*apply*attend-to-scene-change*finished-point
+   (state <s> ^name op_point1
+              ^operator <o>)
+   (<o> ^name attend-to-scene-change
+        ^change <c>)
+   (<c> ^type changed-arm-moving-status
+        ^self-info.arm.moving-status wait)
+-->
+   (<s> ^finished-point true)
+}
+
+sp {op_point1*tabletop*propose*report-success
+   (state <s> ^name op_point1
+              ^finished-point true)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name report-success)
+}
+  
+sp {op_point1*tabletop*apply*report-success*mark*complete
+   (state <s> ^name op_point1
+              ^operator.name report-success
+              ^current-action <a>)
+-->
+   (<a> ^status complete)
+}
+
+sp {op_point1*tabletop*apply*report-success*remove*commands
+   (state <s> ^name op_point1
+              ^operator.name report-success
+              ^current-action <a>
+              ^io.output-link <out>)
+   (<a> ^{ <cmd-type> << point-command >> } <cmd>)
+   (<out> ^<cmd-name> <cmd>)
+-->
+   (<a> ^<cmd-type> <cmd> -)
+   (<out> ^<cmd-name> <cmd> -)
+}

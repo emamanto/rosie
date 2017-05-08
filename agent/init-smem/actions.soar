@@ -69,6 +69,14 @@ smem --add {
           ^arg1 <parg0061>)
 (<parg0061> ^arg-type object ^id <obj-slot0061>)
 
+
+### @point [007]
+# Point to the <obj>
+(@101007 ^handle point1 ^procedural <proc007> ^item-type action)
+(<proc007> ^op_name op_point1 
+          ^arg1 <parg0071>)
+(<parg0071> ^arg-type object ^id <obj-slot0071>)
+
 }
 
 

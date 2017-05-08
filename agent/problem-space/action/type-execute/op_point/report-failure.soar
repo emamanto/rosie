@@ -1,0 +1,34 @@
+# Report failure if there are no more candidates for the missing object
+sp {op_point1*tabletop*propose*report-failure
+   (state <s> ^name op_point1
+              ^problem-space.action.type execute
+              ^current-action.point-command.status << failure interrupted >>
+              ^target-object.predicates.visible false)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name report-failure)
+}
+
+# Report failure if there are no more candidates for the missing object
+sp {op_point1*tabletop*propose*report-failure*missing*object*no*command
+   (state <s> ^name op_point1
+              ^problem-space.action.type execute
+              -^current-action.point-command
+              ^target-object.predicates.visible false)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name report-failure)
+}
+
+# Remove the commands from the output-link/current-action
+sp {op_point1*tabletop*apply*report-failure*remove*commands
+   (state <s> ^name op_point1
+              ^current-action <a>
+              ^operator.name report-failure
+              ^io.output-link <out>)
+   (<a> ^{ <cmd-type> << point-command  >> } <cmd>)
+   (<out> ^<cmd-name> <cmd>)
+-->
+   (<a> ^<cmd-type> <cmd> -)
+   (<out> ^<cmd-name> <cmd> -)
+}

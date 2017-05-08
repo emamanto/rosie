@@ -1,0 +1,6 @@
+sp {op_point1*tabletop*elaborate*target-object*superoperator
+   (state <s> ^name op_point1
+              ^action-operator.arg1.{2} <obj>)
+-->
+   (<s> ^target-object <obj>)
+}

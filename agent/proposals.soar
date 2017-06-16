@@ -8,7 +8,7 @@ sp {top-state*propose*init-agent
    (state <s> ^top-state <s>
              -^name rosie)
 -->
-   (<s> ^operator <o> + !)
+   (<s> ^operator <o> + > =)
    (<o> ^name init-agent)
 }
 
@@ -62,8 +62,7 @@ sp {top-state*propose*satisfy-purpose
 
 sp {top-state*propose*execute-action
    (state <s> ^superstate nil
-              ^top-state.world-usage external
-           #   ^interaction.stack.segment.purpose.type << game execute-action >>
+              ^interaction.stack.segment.purpose.type << game execute-action >>
               ^action-stack.bottom { <action> <> none })
 -->
    (<s> ^operator <o> +)

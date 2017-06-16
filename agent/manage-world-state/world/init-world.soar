@@ -1,8 +1,7 @@
 sp {top-state*apply*init-agent*create*world-state*mobile
    (state <s> ^superstate nil
               ^agent-params.domain magicbot
-              ^operator.name init-agent
-              ^world-usage external)
+              ^operator.name init-agent)
 -->
    (<s> ^world <w>)
    (<w> ^objects <objs>
@@ -18,8 +17,7 @@ sp {top-state*apply*init-agent*create*world-state*mobile
 sp {top-state*apply*init-agent*create*world-state*tabletop
    (state <s> ^superstate nil
               ^agent-params.domain tabletop
-              ^operator.name init-agent
-              ^world-usage external)
+              ^operator.name init-agent)
 -->
    (<s> ^world <w>)
    (<w> ^objects <objs>
@@ -34,8 +32,7 @@ sp {top-state*apply*init-agent*create*world-state*tabletop
 sp {top-state*apply*init-agent*create*world-state*internal
    (state <s> ^superstate nil
               ^agent-params.domain internal
-              ^operator.name init-agent
-              ^world-usage external)
+              ^operator.name init-agent)
 -->
    (<s> ^world <w>)
    (<w> ^objects <objs>
@@ -44,3 +41,19 @@ sp {top-state*apply*init-agent*create*world-state*internal
    (<rob> ^handle rosie
           ^predicates.name rosie)
 }
+
+sp {top-state*apply*init-agent*create*world-state*fetch
+   (state <s> ^superstate nil
+              ^agent-params.domain fetch
+              ^operator.name init-agent)
+-->
+   (<s> ^world <w>)
+   (<w> ^objects <objs>
+        ^predicates <preds>
+        ^robot <rob>)
+   (<rob> ^arm <arm>
+          ^handle rosie
+          ^predicates.name rosie)
+   (<arm> ^state external)
+}
+

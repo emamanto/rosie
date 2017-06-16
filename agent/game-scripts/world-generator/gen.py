@@ -49,8 +49,8 @@ result.write("   (<status> ^performed.dialog-event <de>)\n");
 result.write("   (<de> ^type game-state-change\n");
 result.write("         ^originator agent)\n");
 result.write("   (<changes> ^outgoing-message <msg1>)\n");
-result.write("   (<msg1> ^type simple-message\n");
-result.write("          ^message-type ok)\n");
+result.write("   (<msg1> ^type ok\n");
+result.write("          ^complete-message true)\n");
 result.write("}\n");
 
 for infile in glob.glob('*.world'):
@@ -140,12 +140,12 @@ for infile in glob.glob('*.world'):
                         elif flag == 2:
                                 index2 = index2 +1
                                 words = line.split()
-                                result.write("<in" + str(index2) + "> ")
-                                predicates+= "(<in" + str(index2) + "> ^1 <o" + str(words[0]) + "> ^2 <o" + str(words[1]) + ">)\n"
+                                result.write("<ins" + str(index2) + "> ")
+                                predicates+= "(<ins" + str(index2) + "> ^1 <o" + str(words[0]) + "> ^2 <o" + str(words[1]) + ">)\n"
                         elif flag == 3:
                                 index2 = index2 +1
-                                result.write("<in" + str(index2) + "> ")
-                                predicates+= "(<in" + str(index2) + "> ^1 <set" + str(index2) + ">)\n(<set" + str(index2) + ">  ^object"
+                                result.write("<ins" + str(index2) + "> ")
+                                predicates+= "(<ins" + str(index2) + "> ^1 <set" + str(index2) + ">)\n(<set" + str(index2) + ">  ^object"
                                 for word in line.split():
                                         predicates+= " <o" +  str(word) + ">"
                                 predicates +=")\n"

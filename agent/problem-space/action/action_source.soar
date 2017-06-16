@@ -40,8 +40,8 @@ popd
 # sourced by domain-specific sourcing
 
 # type = simulate
-pushd type-simulate
-source type-simulate_source.soar
+pushd simulate-actions
+source simulate-actions_source.soar
 popd
 
 pushd learn-task-subaction
@@ -55,4 +55,8 @@ popd
 
 pushd Impasse__State-No-Change
 source Impasse__State-No-Change_source.soar
+popd
+
+pushd failure-handling
+source failure-handling_source.soar
 popd

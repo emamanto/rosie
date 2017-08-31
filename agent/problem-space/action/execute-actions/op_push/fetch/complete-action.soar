@@ -1,0 +1,21 @@
+sp {op_push1*fetch*apply*complete-action*success*remove*moving
+   (state <s> ^name op_push1
+              ^operator <o>
+              ^target-object.predicates <preds>)
+   (<o> ^name complete-action
+        ^status success)
+   (<preds> ^arm-status moving)
+-->
+   (<preds> ^arm-status moving -)
+}
+
+sp {op_push1*fetch*apply*complete-action*failure*remove*moving
+   (state <s> ^name op_push1
+              ^operator <o>
+              ^target-object.predicates <preds>)
+   (<o> ^name complete-action
+        ^status failure)
+   (<preds> ^arm-status moving)
+-->
+   (<preds> ^arm-status moving -)
+}

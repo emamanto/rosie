@@ -1,0 +1,42 @@
+###############################################################################
+#
+# Inside the op_pick-up1 substate, this will put a grab command on the output link
+# If the pick-up fails and needs to be re-issued, this will cause that to occur
+#
+###############################################################################
+
+sp {op_push1*fetch*propose*send-push-command
+   (state <s> ^name op_push1
+              ^problem-space.action.type execute
+              ^target-object <obj>
+              ^world.robot.arm.moving-status wait
+             -^current-action.push-command)
+   (<obj> ^predicates.visible true)
+-->
+   (<s> ^operator <o> + >)
+   (<o> ^name send-push-command
+        ^object <obj>)
+}
+
+sp {op_push1*fetch*apply*send-push-command*send
+   (state <s> ^name op_push1
+              ^operator <o>
+              ^io.output-link <ol>
+              ^current-action <a>)
+   (<o> ^name send-push-command
+		^object.handle <obj-handle>)
+-->
+   (<ol> ^push <cmd>)
+   (<cmd> ^object-handle <obj-handle>)
+   (<a> ^push-command <cmd>)
+}
+
+sp {op_push1*fetch*apply*send-push-command*mark*object*moving
+   (state <s> ^name op_push1
+              ^operator <o>)
+   (<o> ^name send-push-command
+        ^object.predicates <preds>)
+-->
+   (<preds> ^arm-status moving)
+}
+

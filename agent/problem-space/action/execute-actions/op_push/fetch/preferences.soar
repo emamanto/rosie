@@ -28,4 +28,12 @@ sp {op_push1*fetch*prefer*attend-to-scene*over*send-reset
    (<s> ^operator <o1> > <o2>)
 }
 
-
+sp {op_push1*fetch*prefer*find-projection*over*send-push
+   (state <s> ^name op_push1
+              ^operator <o1> +
+              ^operator <o2> +)
+   (<o1> ^name find-projection)
+   (<o2> ^name send-push-command)
+-->
+   (<s> ^operator <o1> > <o2>)
+}

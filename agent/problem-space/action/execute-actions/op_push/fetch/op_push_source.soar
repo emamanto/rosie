@@ -1,8 +1,9 @@
 source elaborations.soar
 source preferences.soar
 
+source find-projection.soar
+
 source send-push-command.soar
-source send-reset-command.soar
 
 source attend-to-scene-change.soar
 

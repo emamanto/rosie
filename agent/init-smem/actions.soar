@@ -130,6 +130,21 @@ smem --add {
    (<gpred101> ^type relation ^id <pred-slot1012> ^1 <obj-slot1011> ^2 <obj-slot1012>)
 }
 
+### +@push1 [117]
+   smem --add {
+   # 2 Argument Version: Push the <obj> <rel> <obj2>
+   #                     Push the red block onto the green location
+
+   (@push1 ^handle push1 ^procedural <proc117> ^item-type action)
+   (<proc117> ^op_name op_push1
+              ^arg1 <parg1171> ^arg2 <parg1172>)
+   (<parg1171> ^arg-type object ^importance required ^arg-status real ^id <obj-slot1171>)
+   (<parg1172> ^arg-type predicate ^importance required ^arg-status desired ^id <pred-slot1172> ^2 <obj-slot1172>)
+   (@push1 ^goal <goal117>)
+   (<goal117> ^predicate <gpred117>)
+   (<gpred117> ^type relation ^id <pred-slot1172> ^1 <obj-slot1171> ^2 <obj-slot1172>)
+}
+
 ### +@store1 [102]
 smem --add {
    # Store the <obj>

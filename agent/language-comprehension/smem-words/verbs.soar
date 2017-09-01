@@ -117,6 +117,13 @@ smem --add {
                    ^tense present
                    ^directional true
                    ^super-type @60987)
+           
+	## PUSH
+           (<push> ^spelling |push|
+                   ^referent @push1
+                   ^tense present
+                   ^directional true
+                   ^super-type @60987)
 
 	       (<write> ^spelling |write|
                    ^referent @write1

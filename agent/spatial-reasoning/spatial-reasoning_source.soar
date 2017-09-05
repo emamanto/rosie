@@ -12,6 +12,10 @@ pushd find-projection
 source find-projection_source.soar
 popd
 
+pushd find-push-vector
+source find-push-vector_source.soar
+popd
+
 pushd learn-preposition
 source learn-preposition_source.soar
 popd

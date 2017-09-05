@@ -1,4 +1,4 @@
-sp {op_push1*fetch*propose*find-projection
+sp {op_push1*fetch*propose*find-push-vector
    (state <s> ^name op_push1
               ^problem-space.action.type execute
              -^current-action.projection-result
@@ -7,15 +7,15 @@ sp {op_push1*fetch*propose*find-projection
               ^predicate-handle <pred-handle>)
 -->
    (<s> ^operator <o> + >)
-   (<o> ^name find-projection
+   (<o> ^name find-push-vector
         ^predicate-handle <pred-handle>
         ^arg-list <args>)
    (<args> ^1 <target> ^2 <dest>)
 }
 
-sp {op_push1*fetch*apply*find-projection*copy*result
+sp {op_push1*fetch*apply*find-push-vector*copy*result
    (state <s> ^name op_push1
-              ^operator.name find-projection
+              ^operator.name find-push-vector
               ^projection-result <res>
               ^current-action <a>)
 -->

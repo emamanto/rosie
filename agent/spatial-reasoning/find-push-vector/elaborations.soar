@@ -1,0 +1,94 @@
+sp {find-push-vector*elaborate*attributes*superoperator
+   (state <s> ^name find-push-vector
+              ^superstate.operator <o>)
+   (<o> ^arg-list <args>
+        ^predicate-handle <pred-handle>)
+-->
+   (<s> ^arg-list <args>
+        ^predicate-handle <pred-handle>)
+}
+
+sp {find-push-vector*elaborate*result
+   (state <s> ^name find-push-vector)
+-->
+   (<s> ^result <res>)
+}
+
+sp {find-push-vector*elaborate*svs-link*top-state
+   (state <s> ^name find-push-vector
+               ^top-state.svs <svs>)
+-->
+   (<s> ^svs-link <svs>)
+}
+
+#sp {find-push-vector*elaborate*copy-down-attrs*svs-link
+#   (state <s> ^name find-push-vector
+#              ^superstate.operator <o>)
+#   (<o> ^svs-link <svs>)
+#-->
+#   (<s> ^svs-link <svs>)
+#}
+#
+#sp {find-push-vector*elaborate*copy-down-attrs*svs-no-link-usetop-state
+#   (state <s> ^name find-push-vector
+#              ^top-state.svs <svs>
+#              ^superstate.operator <o>)
+#   (<o> -^svs-link )
+#-->
+#   (<s> ^svs-link <svs>)
+#}
+#
+#sp {find-push-vector*elaborate*copy-down-attrs*optional*found-prep
+#   (state <s> ^name find-push-vector
+#              ^superstate.operator.a.id <ida>
+#              ^superstate.operator.b.id <idb>
+#              ^superstate.operator.found-prep <fprep>)
+#-->
+#   (<s> ^result <res>
+#        ^a <ida>
+#        ^b <idb>
+#        ^found-prep <fprep>)
+#}
+#
+#sp {find-push-vector*elaborate*copy-down-attrs*optional*predicate
+#   (state <s> ^name find-push-vector
+#              ^superstate.operator.a.id <ida>
+#              ^superstate.operator.b.id <idb>
+#              ^superstate.operator.predicate <pred>)
+#-->
+#   (<s> ^result <res>
+#        ^a <ida>
+#        ^b <idb>
+#        ^stat old
+#        ^predicate <pred>)
+#}
+#
+#sp {find-push-vector*elaborate*copy-down-attrs*optional*interaction
+#   (state <s> ^name find-push-vector
+#              ^superstate.operator.interaction <int>)
+#-->
+#   (<s> ^interaction <int>)
+#}
+#
+#sp {find-push-vector*elaborate*copy-down-attrs*found-prep-status
+#   (state <s> ^name find-push-vector
+#              ^found-prep <fprep>)
+#   (<fprep> ^stat <status>)
+#-->
+#   (<s> ^stat <status>)
+#}
+#sp {find-push-vector*elaborate*copy-down-attrs*found-prep
+#   (state <s> ^name find-push-vector
+#              ^found-prep <fprep>)
+#   (<fprep> ^predicate <p>)
+#-->
+#   (<s> ^predicate <p>)
+#}
+#sp {find-push-vector*elaborate*copy-down-attrs*found-prep-predicate
+#   (state <s> ^name find-push-vector
+#              ^prep <type>
+#              ^top-state.found-prep <fprep>)
+#   (<fprep> ^type <type>)
+#-->
+#   (<s> ^found-prep <fprep>)
+#}

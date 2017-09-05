@@ -1,0 +1,39 @@
+sp {find-push-vector*propose*calculate-placement
+   (state <s> ^name find-push-vector
+              ^predicate.relation <rx> <ry> <rz>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name calculate-placement)
+}
+
+sp {find-push-vector*project*svs*create-projection
+   (state <s> ^name find-push-vector
+              ^operator <o>
+              ^arg-list.{1}.svs-obj.id <id1>
+              ^arg-list.{2}.svs-obj.id <id2>
+              ^result <res>
+              ^svs-link.command <cmd>)
+   (<o> ^name calculate-placement)
+-->
+    (<cmd> ^extract_once <e>)
+    (<e> ^type calculate_push 
+             ^a <nodea> ^b <nodeb>)
+   (<nodea> ^type node ^id <id1>)
+   (<nodeb> ^type node ^id <id2>)
+   (<s> ^calculate-push-filter <e>)
+}
+
+sp {find-push-vector*project*svs*complete-projection
+   (state <s> ^name find-push-vector
+              ^operator.name calculate-placement
+              ^calculate-push-filter <f>
+              ^result <res>
+              ^superstate <ss>)
+    (<f> ^type calculate_push
+         ^a.id <ida> ^b.id <idb>
+         ^result.record.value <pos>)
+    (<pos> ^x <x> ^y <y> ^z <z>)
+-->
+   (<ss> ^projection-result <result>)
+   (<result> ^x <x> ^y <y> ^z <z> ^1 <ida> ^2 <idb>)
+}

@@ -1,0 +1,32 @@
+sp {find-push-vector*elaborate*smem-query-cue*predicate
+   (state <s> ^name find-push-vector
+              ^predicate-handle <pred-handle>)
+-->
+  (<s> ^smem-query <query>)
+  (<query> ^cue <cue>
+            ^depth 4)
+  (<cue> ^handle <pred-handle>)
+}
+
+sp {find-push-vector*elaborate*predicate*from*query-result
+   (state <s> ^name find-push-vector
+              ^predicate-handle <pred-handle>
+              ^smem-query <query>)
+   (<query> ^cue.handle <pred-handle>
+             ^result <id>)
+   (<id> ^relation <rel>)
+-->
+   (<s> ^predicate <id>)
+}
+
+sp {find-push-vector*elaborate*predicate*from*query-result*use*spatial-relation
+   (state <s> ^name find-push-vector
+              ^predicate-handle <pred-handle>
+              ^smem-query <query>)
+   (<query> ^cue.handle <pred-handle>
+             ^result <id>)
+   (<id> -^relation
+          ^spatial-relation <rel>)
+-->
+   (<s> ^predicate <rel>)
+}

@@ -72,6 +72,14 @@ sp {anystate*attend-to-scene-change*elaborate*default*preference-order
 # 100 new-object-predicate
 #  80 missing-object
 
+sp {anystate*scene-change*attend*preference*220
+   (state <s> ^operator <o> +)
+   (<o> ^name attend-to-scene-change
+        ^change.type newly-visible-object)
+-->
+   (<o> ^preference-order 220)
+}
+
 # 200 update-pose
 # 200 delete-object 
 sp {anystate*scene-change*attend*preference*200
@@ -133,7 +141,7 @@ sp {anystate*scene-change*attend*preference*120
 sp {anystate*scene-change*attend*preference*100
    (state <s> ^operator <o> +)
    (<o> ^name attend-to-scene-change
-        ^change.type << newly-visible-object newly-not-visible-object new-object-predicate >>)
+        ^change.type << newly-not-visible-object new-object-predicate >>)
 -->
    (<o> ^preference-order 100)
 }

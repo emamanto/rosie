@@ -3,7 +3,7 @@ sp {op_push1*fetch*propose*send-push-command
               ^problem-space.action.type execute
               ^target-object <obj>
               ^projection-result <res>
-              ^world.robot.arm.moving-status wait
+              ^world.robot.arm.moving-status << wait failure >>
              -^current-action.push-command)
    (<obj> ^predicates.visible true)
 -->

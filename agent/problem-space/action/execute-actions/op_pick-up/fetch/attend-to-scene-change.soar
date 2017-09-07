@@ -36,8 +36,10 @@ sp {op_pick-up1*fetch*reject*attend-to-scene-change*grabbed*object
 sp {op_pick-up1*fetch*elaborate*evaluate-new-object*candidate-for-missing-object
    (state <s> ^name op_pick-up1
               ^operator <o> +
-              ^target-object.handle <obj-handle>
+              ^target-object <obj>
               ^top-state.perception-monitor.object-monitor.object-info <obj-info>)
+   (<obj> ^handle <obj-handle>
+          ^predicates.visible false)
    (<o> ^name attend-to-scene-change
         ^change.type new-object
         ^change <change>)

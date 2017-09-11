@@ -1,0 +1,3 @@
+source attend-to-scene-change.soar
+source elaborations.soar
+source apply-sort.soar

@@ -21,6 +21,19 @@ sp {op_push1*fetch*reject*attend-to-new-perception-object
    (<s> ^operator <o> -)
 }
 
+# Don't attend to anything while the arm is moving (except new perception objects)
+sp {op_push1*fetch*reject*attend-to-scene-change*all*during*push
+   (state <s> ^name op_push1
+              ^current-action.push-command <cmd>
+              ^operator <o> +)
+   (<o> ^name attend-to-scene-change
+        ^change.type { <any> <> new-perception-object }
+        ^change.info.category object)
+   (<cmd> ^status << sent executing >>)
+-->
+   (<s> ^operator <o> -)
+}
+
 # Don't attend at all to the object being picked up while the arm is moving
 sp {op_push1*fetch*reject*attend-to-scene-change*grabbed*object
    (state <s> ^name op_push1

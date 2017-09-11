@@ -22,11 +22,11 @@ source proposals.soar
 # Preferences: Contains preferences rules to avoid operator ties
 source preferences.soar
 
-source interaction.soar
+#source interaction.soar
 
-source create-scripted-sentences.soar
+#source create-scripted-sentences.soar
 
-source process-new-sentence.soar
+#source process-new-sentence.soar
 
 source create-internal-world.soar
 
@@ -69,9 +69,9 @@ source wait.soar
 #   This could be a new message from the instructor, (nl.message)
 #   If the current interaction has been satisfied (top-state.interaction.status.performed)
 #   Or the agent has to initiate a new segment (top-state.interaction.status.new-segment-info)
-pushd interaction
-source interaction_source.soar
-popd
+#pushd interaction
+#source interaction_source.soar
+#popd
 
 
 ###############################################################################
@@ -81,14 +81,14 @@ popd
 # This is where learning, actions, or dialog occurs
 #   If successful, it should create a performed wme on the interaction.status link
 
-pushd satisfy-purpose
-source satisfy-purpose_source.soar
-popd
+#pushd satisfy-purpose
+#source satisfy-purpose_source.soar
+#popd
 
 
-pushd game-learning
-source game-learning_source.soar
-popd
+#pushd game-learning
+#source game-learning_source.soar
+#popd
 
 
 pushd svs-command-operators
@@ -115,9 +115,9 @@ popd
 
 
 # Source child problem space "language-comprehension"
-pushd language-comprehension
-source mNL-Soar_source.soar
-popd
+#pushd language-comprehension
+#source mNL-Soar_source.soar
+#popd
 
 
 # Source child problem space "manage-world-state"
@@ -144,5 +144,9 @@ popd
 
 pushd manage-action-stack
 source manage-action-stack_source.soar
+popd
+
+pushd sorting
+source sorting_source.soar
 popd
 

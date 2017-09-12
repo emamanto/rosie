@@ -5,3 +5,13 @@ sp {sorting-state*elaborate*problem-space
    (<ps> ^perception <perc>)
    (<perc> ^attend-to-all-perception yes)
 }
+
+sp {sorting-state*elaborate*move-block-state
+   (state <s> ^name move-block
+              ^superstate.operator <o>)
+   (<o> ^block <b>
+        ^location <loc>)
+-->
+   (<s> ^block <b>
+        ^location <loc>)
+}

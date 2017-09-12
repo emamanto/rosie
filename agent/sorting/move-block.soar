@@ -1,0 +1,23 @@
+sp {move-block*propose*move
+   (state <s> ^name move-block
+              ^block <b>
+              ^location <loc>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name op_move1
+        ^action-handle move1
+        ^arg1 <b>
+        ^arg2 <loc>)
+}
+
+sp {move-block*propose*push
+   (state <s> ^name move-block
+              ^block <b>
+              ^location <loc>)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name op_push1
+        ^action-handle push1
+        ^arg1 <b>
+        ^arg2 <loc>)
+}

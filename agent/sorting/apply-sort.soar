@@ -43,3 +43,20 @@ sp {sorting*propose*move-block*red
         ^block <ob1>
         ^location <ob2>)
 }
+
+sp {sorting*reject*move-block*already-on-location
+	(state <s> ^name sort-blocks
+               ^operator <o> +
+               ^top-state <ts>)
+ 	(<o> ^name move-block
+         ^block <b>
+         ^location <loc>)
+    (<ts> ^world.predicates <preds>)
+    (<preds> ^predicate <p>)
+    (<p> ^handle on1
+         ^instance <i>)
+    (<i> ^1 <b>
+         ^2 <loc>)
+-->
+	(<s> ^operator <o> -)
+}

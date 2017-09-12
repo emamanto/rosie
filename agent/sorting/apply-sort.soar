@@ -2,21 +2,44 @@ sp {sorting*propose*move-block*blue
    (state <s> ^name sort-blocks
               ^top-state <ts>)
    (<ts> ^world.objects <objs>)
-   (<objs> ^object <ob>
+   (<objs> ^object <ob1>
            ^object <ob2>)
-   (<ob> ^item-type |object|
+   (<ob1> ^item-type object
          ^predicates <preds>
          ^handle <id>)
-   (<preds> ^category |block|
-            ^color |blue1|)
-   (<ob2> ^item-type |object|
+   (<preds> ^category block
+            ^color blue1)
+   (<ob2> ^item-type object
          ^predicates <preds2>
          ^handle <loc>)
-   (<preds2> ^category |location|
-            ^color |green1|)
+   (<preds2> ^category location
+            ^color green1)
 -->
    (<s> ^operator <o> + =)
    (<o> ^name move-block
-        ^block <id>
-        ^location <loc>)
+        ^block <ob1>
+        ^location <ob2>)
+}
+
+sp {sorting*propose*move-block*red
+   (state <s> ^name sort-blocks
+              ^top-state <ts>)
+   (<ts> ^world.objects <objs>)
+   (<objs> ^object <ob1>
+           ^object <ob2>)
+   (<ob1> ^item-type object
+         ^predicates <preds>
+         ^handle <id>)
+   (<preds> ^category block
+            ^color red1)
+   (<ob2> ^item-type object
+         ^predicates <preds2>
+         ^handle <loc>)
+   (<preds2> ^category location
+            ^color yellow1)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name move-block
+        ^block <ob1>
+        ^location <ob2>)
 }

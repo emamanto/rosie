@@ -6,6 +6,7 @@ sp {op_pick-up1*fetch*apply*complete-action*add*grabbed
         ^status success)
    (<preds> ^arm-status moving)
 -->
+   (interrupt)
    (<preds> ^arm-status moving -
             ^arm-status not-grabbed -
             ^arm-status grabbed)

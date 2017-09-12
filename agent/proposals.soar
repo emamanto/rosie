@@ -55,74 +55,74 @@ sp {top-state*propose*sort-block
 #
 ########################################################
 
-#sp {top-state*propose*satisfy-purpose
-#   (state <s> ^top-state <s>
-#             #-^parser-testing true
-#		      ^interaction.stack.segment.purpose {<p> <> none})
-#   (<p> -^type << action-command execute-action goal-description >>
-#	-^category goal)
-#-->
-#   (<s> ^operator <o> +)
-#   (<o> ^name satisfy-purpose
-#        ^purpose <p>)
-#}
-#
-#sp {prefer*execute-action*over*satisfy-purpose*finished-game-learning
-#  (state <s> ^name execute-action
-#             ^interaction.stack.segment.purpose.type << finished-game-learning >>
-#              ^operator <o1> +
-#              ^operator <o2> +)
-#  (<o1> ^name execute-action)
-#  (<o2> ^name satisfy-purpose)
-#-->
-#  (<s> ^operator <o1> > <o2>)
-#}
-#
-#sp {top-state*propose*execute-action
-#   (state <s> ^superstate nil
-#              ^interaction.stack.segment.purpose.type << finished-game-learning execute-action >>
-#              ^action-stack.bottom { <action> <> none })
-#-->
-#   (<s> ^operator <o> +)
-#   (<o> ^name execute-action
-#        ^action <action>)
-#}
-#
-#sp {top-state*apply*execute-action
-#   (state <s> ^superstate nil
-#              ^operator.name execute-action
-#              ^agent-params.enable-interrupts true)
-#-->
-#   (interrupt)
-#}
-#
-#sp {top-state*propose*generate-action-operator
-#   (state <s> ^superstate nil
-#              ^interaction.stack.segment.purpose <p>)
-#   (<p> ^type execute-action
-#        ^parameters <params>)
-#   (<params> ^command-message <msg>
-#            -^action-operator <op>)
-#   (<msg> -^pushed)
-#-->
-#   (<s> ^operator <o> +)
-#   (<o> ^name generate-action-operator
-#        ^command-message <msg>)
-#}
-#
-#sp {top-state*propose*manage-action-stack
-#   (state <s> ^superstate nil
-#              ^action-stack.changes.<change-name> <any>)
-#-->
-#   (<s> ^operator <o> + =)
-#   (<o> ^name manage-action-stack
-#        ^change-name <change-name>
-#        ^change-info <any>)
-#}
+sp {top-state*propose*satisfy-purpose
+   (state <s> ^top-state <s>
+             #-^parser-testing true
+		      ^interaction.stack.segment.purpose {<p> <> none})
+   (<p> -^type << action-command execute-action goal-description >>
+	-^category goal)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name satisfy-purpose
+        ^purpose <p>)
+}
+
+sp {prefer*execute-action*over*satisfy-purpose*finished-game-learning
+  (state <s> ^name execute-action
+             ^interaction.stack.segment.purpose.type << finished-game-learning >>
+              ^operator <o1> +
+              ^operator <o2> +)
+  (<o1> ^name execute-action)
+  (<o2> ^name satisfy-purpose)
+-->
+  (<s> ^operator <o1> > <o2>)
+}
+
+sp {top-state*propose*execute-action
+   (state <s> ^superstate nil
+              #^interaction.stack.segment.purpose.type << finished-game-learning execute-action >>
+              ^action-stack.bottom { <action> <> none })
+-->
+   (<s> ^operator <o> + >)
+   (<o> ^name execute-action
+        ^action <action>)
+}
+
+sp {top-state*apply*execute-action
+   (state <s> ^superstate nil
+              ^operator.name execute-action
+              ^agent-params.enable-interrupts true)
+-->
+   (interrupt)
+}
+
+sp {top-state*propose*generate-action-operator
+   (state <s> ^superstate nil
+              ^interaction.stack.segment.purpose <p>)
+   (<p> ^type execute-action
+        ^parameters <params>)
+   (<params> ^command-message <msg>
+            -^action-operator <op>)
+   (<msg> -^pushed)
+-->
+   (<s> ^operator <o> +)
+   (<o> ^name generate-action-operator
+        ^command-message <msg>)
+}
+
+sp {top-state*propose*manage-action-stack
+   (state <s> ^superstate nil
+              ^action-stack.changes.<change-name> <any>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name manage-action-stack
+        ^change-name <change-name>
+        ^change-info <any>)
+}
 
 #sp {top-state*propose*learning*action-type
 #   (state <s> ^top-state <s>
-#				^interaction.stack.segment.purpose <p>)
+#			  ^interaction.stack.segment.purpose <p>)
 #   (<p> ^satisfaction.learning-event)
 #   (<p> ^type << action-command >>)
 #-->
@@ -141,15 +141,14 @@ sp {top-state*propose*sort-block
 #   (<o> ^name action-learning
 #        ^purpose <p>)
 #}
-#
-#sp {top-state*propose*lookup-preposition
-#   (state <s> ^prepositions.prep.name <name>
-#              ^superstate nil
-#              ^top-state.robot-state.arm.action wait
-#             -^found-prep.type <name>)
-#-->
-#   (<s> ^operator <o> + =)
-#   (<o> ^name lookup-preposition
-#        ^type <name>)
-#}
-#
+
+sp {top-state*propose*lookup-preposition
+   (state <s> ^prepositions.prep.name <name>
+              ^superstate nil
+              ^top-state.robot-state.arm.action wait
+             -^found-prep.type <name>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name lookup-preposition
+        ^type <name>)
+}

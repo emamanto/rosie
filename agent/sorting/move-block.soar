@@ -1,23 +1,99 @@
-sp {move-block*propose*move
+# Preferences decide which of these happens
+sp {move-block*propose*choose-move
    (state <s> ^name move-block
               ^block <b>
-              ^location <loc>)
+              ^location <loc>
+              -^chosen-action)
 -->
    (<s> ^operator <o> +)
-   (<o> ^name op_move1
-        ^action-handle move1
-        ^arg1 <b>
-        ^arg2 <loc>)
+   (<o> ^name choose-move)
 }
 
-sp {move-block*propose*push
+sp {move-block*propose*choose-push
    (state <s> ^name move-block
               ^block <b>
-              ^location <loc>)
+              ^location <loc>
+              -^chosen-action)
 -->
    (<s> ^operator <o> +)
-   (<o> ^name op_push1
-        ^action-handle push1
-        ^arg1 <b>
-        ^arg2 <loc>)
+   (<o> ^name choose-push)
 }
+
+sp {move-block*apply*choose-move
+   (state <s> ^name move-block
+              ^operator.name choose-move)
+-->
+   (<s> ^chosen-action move)
+}
+
+sp {move-block*apply*choose-push
+   (state <s> ^name move-block
+              ^operator.name choose-push)
+-->
+   (<s> ^chosen-action push)
+}
+
+# Once moving is chosen
+sp {move-block*propose*action-stack*op_move1
+   (state <s> ^name move-block
+              ^block <b>
+              ^location <loc>
+              ^chosen-action move)
+-->
+	(<s> ^operator <o> +)
+ 	(<o> ^name push-chosen-action
+         ^action <a>)
+  	(<a> ^name op_move1
+         ^action-handle move1
+         ^arg1 <arg1>
+         ^arg2 <arg2>)
+    (<arg1> ^arg-type object
+            ^id <b>)
+    (<arg2> ^arg-type predicate
+            ^handle on1
+            ^2 <loc>)
+}
+
+sp {move-block*apply*action-stack*op_move1
+   (state <s> ^name move-block
+              ^top-state.action-stack.changes <chgs>
+              ^operator <o>)
+   (<o> ^name push-chosen-action
+        ^action <a>)
+-->
+   (<chgs> ^push <seg>)
+   (<seg> ^execution-operator <a>)
+}
+
+# Once pushing is chosen
+sp {move-block*propose*action-stack*op_push1
+   (state <s> ^name move-block
+              ^block <b>
+              ^location <loc>
+              ^chosen-action push)
+-->
+	(<s> ^operator <o> +)
+ 	(<o> ^name push-chosen-action
+         ^action <a>)
+  	(<a> ^name op_push1
+         ^action-handle push1
+         ^arg1 <arg1>
+         ^arg2 <arg2>)
+    (<arg1> ^arg-type object
+            ^id <b>)
+    (<arg2> ^arg-type predicate
+            ^handle on1
+            ^2 <loc>)
+}
+
+sp {move-block*apply*action-stack*op_push1
+   (state <s> ^name move-block
+              ^top-state.action-stack.changes <chgs>
+              ^operator <o>)
+   (<o> ^name push-chosen-action
+        ^action <a>)
+-->
+   (<chgs> ^push <seg>)
+   (<seg> ^execution-operator <a>)
+}
+

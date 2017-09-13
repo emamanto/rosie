@@ -1,18 +1,58 @@
+# First get block size from SVS
+sp {move-block*propose*get-block-volume
+   (state <s> ^name move-block
+              ^block <b>
+             -^chosen-action
+             -^block-volume)
+-->
+   (<s> ^operator <o> + >)
+   (<o> ^name get-block-volume
+        ^block <b>)
+}
+
+sp {move-block*apply*get-block-volume*extract
+   (state <s> ^name move-block
+              ^operator <o>
+              ^top-state.svs.command <cmd>)
+   (<o> ^name get-block-volume
+        ^block.svs-obj.id <id>)
+-->
+    (<cmd> ^extract_once <e>)
+    (<e> ^type volume
+             ^a <nodea>)
+   (<nodea> ^type node ^id <id>)
+   (<s> ^volume-filter <e>)
+}
+
+sp {move-block*apply*get-block-volume*copy-result
+   (state <s> ^name move-block
+              ^operator.name get-block-volume
+              ^volume-filter <f>)
+    (<f> ^type volume
+         ^a.id <ida>
+         ^result.record.value <vol>)
+-->
+   (<s> ^block-volume <vol>)
+}
+
 # Preferences decide which of these happens
 sp {move-block*propose*choose-move
    (state <s> ^name move-block
               ^block <b>
               ^location <loc>
+              ^block-volume <v>
               -^chosen-action)
 -->
    (<s> ^operator <o> +)
    (<o> ^name choose-move)
+   (interrupt)
 }
 
 sp {move-block*propose*choose-push
    (state <s> ^name move-block
               ^block <b>
               ^location <loc>
+              ^block-volume <v>
               -^chosen-action)
 -->
    (<s> ^operator <o> +)
@@ -54,16 +94,7 @@ sp {move-block*propose*action-stack*op_move1
             ^2 <loc>)
 }
 
-sp {move-block*apply*action-stack*op_move1
-   (state <s> ^name move-block
-              ^top-state.action-stack.changes <chgs>
-              ^operator <o>)
-   (<o> ^name push-chosen-action
-        ^action <a>)
--->
-   (<chgs> ^push <seg>)
-   (<seg> ^execution-operator <a>)
-}
+
 
 # Once pushing is chosen
 sp {move-block*propose*action-stack*op_push1
@@ -86,7 +117,8 @@ sp {move-block*propose*action-stack*op_push1
             ^2 <loc>)
 }
 
-sp {move-block*apply*action-stack*op_push1
+# Valid for either
+sp {move-block*apply*action-stack*op_move1
    (state <s> ^name move-block
               ^top-state.action-stack.changes <chgs>
               ^operator <o>)
@@ -95,5 +127,17 @@ sp {move-block*apply*action-stack*op_push1
 -->
    (<chgs> ^push <seg>)
    (<seg> ^execution-operator <a>)
+}
+
+sp {move-block*apply*store-top-state
+   (state <s> ^name move-block
+              ^top-state.block-history <h>
+              ^block-volume <v>
+              ^chosen-action <a>)
+   (<o> ^name push-chosen-action)
+-->
+   (<h> ^last-action <l>)
+   (<l> ^action-type <a>
+        ^block-volume <v>)
 }
 

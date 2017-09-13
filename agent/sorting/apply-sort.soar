@@ -1,7 +1,25 @@
+sp {sorting*propose*create-topstate-history
+   (state <s> ^name sort-blocks
+              ^top-state <ts>)
+   (<ts> -^block-history)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name create-topstate-history)
+}
+
+sp {sorting*apply*create-topstate-history
+   (state <s> ^name sort-blocks
+              ^top-state <ts>
+              ^operator.name create-topstate-history)
+-->
+   (<ts> ^block-history <h>)
+}
+
 sp {sorting*propose*move-block*blue
    (state <s> ^name sort-blocks
               ^top-state <ts>)
-   (<ts> ^world.objects <objs>)
+   (<ts> ^world.objects <objs>
+         ^block-history <h>)
    (<objs> ^object <ob1>
            ^object <ob2>)
    (<ob1> ^item-type object
@@ -24,7 +42,8 @@ sp {sorting*propose*move-block*blue
 sp {sorting*propose*move-block*red
    (state <s> ^name sort-blocks
               ^top-state <ts>)
-   (<ts> ^world.objects <objs>)
+   (<ts> ^world.objects <objs>
+         ^block-history <h>)
    (<objs> ^object <ob1>
            ^object <ob2>)
    (<ob1> ^item-type object

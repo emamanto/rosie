@@ -19,3 +19,13 @@ sp {move-block*test*prefer-push
 -->
    (<s> ^operator <o2> > <o1>)
 }
+
+sp {sort-blocks*prefer*attend-to-scene-change
+   (state <s> ^name sort-blocks
+              ^operator <o1> +
+              ^operator <o2> +)
+   (<o1> ^name attend-to-scene-change)
+   (<o2> ^name move-block)
+-->
+   (<s> ^operator <o1> > <o2>)
+}

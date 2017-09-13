@@ -6,7 +6,6 @@ sp {op_push1*fetch*apply*complete-action*success*remove*moving
         ^status success)
    (<preds> ^arm-status moving)
 -->
-   (interrupt)
    (<preds> ^arm-status moving -)
 }
 
@@ -18,6 +17,5 @@ sp {op_push1*fetch*apply*complete-action*failure*remove*moving
         ^status failure)
    (<preds> ^arm-status moving)
 -->
-   (interrupt)
    (<preds> ^arm-status moving -)
 }

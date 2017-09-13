@@ -4,7 +4,6 @@ sp {sorting-state*elaborate*problem-space
    (<s> ^problem-space <ps>)
    (<ps> ^perception <perc>)
    (<perc> ^attend-to-all-perception yes)
-   (interrupt)
 }
 
 sp {sorting-state*elaborate*move-block-state

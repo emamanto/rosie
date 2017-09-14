@@ -45,7 +45,6 @@ sp {move-block*propose*choose-move
 -->
    (<s> ^operator <o> +)
    (<o> ^name choose-move)
-   (interrupt)
 }
 
 sp {move-block*propose*choose-push

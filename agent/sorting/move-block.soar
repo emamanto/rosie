@@ -38,19 +38,16 @@ sp {move-block*apply*get-block-volume*copy-result
 # Preferences decide which of these happens
 sp {move-block*propose*choose-move
    (state <s> ^name move-block
-              ^block <b>
-              ^location <loc>
               ^block-volume <v>
               -^chosen-action)
 -->
    (<s> ^operator <o> +)
    (<o> ^name choose-move)
+   (interrupt)
 }
 
 sp {move-block*propose*choose-push
    (state <s> ^name move-block
-              ^block <b>
-              ^location <loc>
               ^block-volume <v>
               -^chosen-action)
 -->

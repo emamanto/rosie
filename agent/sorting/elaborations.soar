@@ -16,6 +16,46 @@ sp {sorting-state*elaborate*move-block-state
         ^location <loc>)
 }
 
+sp {sorting-state*elaborate*replay-state
+   (state <s> ^name replay-last-action
+              ^superstate.operator <o>)
+   (<o> ^action <a>
+        ^command <cmd>)
+-->
+   (<s> ^action <a>
+        ^command <cmd>)
+}
+
+sp {replay-state*elaborate*move-block-state*success
+   (state <s> ^name move-block
+              ^superstate <ss>)
+   (<ss> ^name replay-last-action
+         ^action <a>
+         ^command.status success)
+   (<a> ^action-type <at>
+        ^block-volume <v>)
+-->
+   (<s> ^prev-chosen-action <at>
+        ^prev-successful true
+        ^block-volume <v>)
+}
+
+sp {replay-state*elaborate*move-block-state*failure
+   (state <s> ^name move-block
+              ^superstate <ss>)
+   (<ss> ^name replay-last-action
+         ^action <a>
+         ^command <cmd>)
+   (<cmd> ^status failure
+          ^failure-reason <r>)
+   (<a> ^action-type <at>
+        ^block-volume <v>)
+-->
+   (<s> ^prev-chosen-action <at>
+        ^prev-failure-reason <r>
+        ^block-volume <v>)
+}
+
 sp {move-block*elaborate*volume-check
    (state <s> ^name move-block
               ^block-volume <v1>

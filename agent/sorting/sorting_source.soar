@@ -3,3 +3,5 @@ source elaborations.soar
 source apply-sort.soar
 source move-block.soar
 source preferences.soar
+source last-action.soar
+source rl.soar

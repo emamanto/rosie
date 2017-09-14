@@ -1,6 +1,28 @@
-sp {move-block*prefer-push*previously-failed
+#sp {move-block*prefer-push*previously-failed
+#   (state <s> ^name move-block
+#              ^prev-failure true
+#              ^operator <o1> +
+#              ^operator <o2> +)
+#   (<o1> ^name choose-move)
+#   (<o2> ^name choose-push)
+#-->
+#   (<s> ^operator <o2> > <o1>)
+#}
+#
+#sp {move-block*prefer-move*otherwise
+#   (state <s> ^name move-block
+#              -^prev-failure true
+#              ^operator <o1> +
+#              ^operator <o2> +)
+#   (<o1> ^name choose-move)
+#   (<o2> ^name choose-push)
+#-->
+#   (<s> ^operator <o1> > <o2>)
+#}
+
+sp {move-block*prefer-push*previous-selection
    (state <s> ^name move-block
-              ^prev-failure true
+              ^prev-chosen-action push
               ^operator <o1> +
               ^operator <o2> +)
    (<o1> ^name choose-move)
@@ -9,9 +31,9 @@ sp {move-block*prefer-push*previously-failed
    (<s> ^operator <o2> > <o1>)
 }
 
-sp {move-block*prefer-move*otherwise
+sp {move-block*prefer-move*previous-selection
    (state <s> ^name move-block
-              -^prev-failure true
+              ^prev-chosen-action move
               ^operator <o1> +
               ^operator <o2> +)
    (<o1> ^name choose-move)
@@ -35,6 +57,16 @@ sp {sort-blocks*prefer*finish-last-action
               ^operator <o1> +
               ^operator <o2> +)
    (<o1> ^name finish-last-action)
+   (<o2> ^name move-block)
+-->
+   (<s> ^operator <o1> > <o2>)
+}
+
+sp {sort-blocks*prefer*replay-last-action
+   (state <s> ^name sort-blocks
+              ^operator <o1> +
+              ^operator <o2> +)
+   (<o1> ^name replay-last-action)
    (<o2> ^name move-block)
 -->
    (<s> ^operator <o1> > <o2>)

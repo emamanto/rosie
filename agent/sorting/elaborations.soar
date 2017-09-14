@@ -15,3 +15,19 @@ sp {sorting-state*elaborate*move-block-state
    (<s> ^block <b>
         ^location <loc>)
 }
+
+sp {move-block*elaborate*volume-check
+   (state <s> ^name move-block
+              ^block-volume <v1>
+              ^top-state.block-history <h>
+              ^operator <o1> +
+              ^operator <o2> +)
+   (<h> ^action <a>)
+   (<a> ^action-type move
+	    ^failure grasping
+        ^block-volume <v2> <= <v1>)
+   (<o1> ^name choose-move)
+   (<o2> ^name choose-push)
+-->
+   (<s> ^prev-failure true)
+}

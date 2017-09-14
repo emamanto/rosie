@@ -1,19 +1,37 @@
-sp {move-block*test*prefer-move
+sp {move-block*test*prefer-push*volume-check
    (state <s> ^name move-block
-              ^block.predicates.color blue1
+              ^block-volume <v1>
+              ^topstate.block-history <h>
               ^operator <o1> +
               ^operator <o2> +)
+   (<h> ^action <a>)
+   (<a> ^action-type move
+	    ^failure grasping
+        ^block-volume <v2> <= <v1>)
    (<o1> ^name choose-move)
    (<o2> ^name choose-push)
 -->
    (<s> ^operator <o1> > <o2>)
 }
 
-sp {move-block*test*prefer-push
+sp {move-block*test*prefer-move*no-history
    (state <s> ^name move-block
-              ^block.predicates.color red1
+              ^topstate.block-history <h>
               ^operator <o1> +
               ^operator <o2> +)
+   (<h> -^action)
+   (<o1> ^name choose-move)
+   (<o2> ^name choose-push)
+-->
+   (<s> ^operator <o2> > <o1>)
+}
+
+sp {move-block*test*prefer-move*no-grasp-failures
+   (state <s> ^name move-block
+              ^topstate.block-history <h>
+              ^operator <o1> +
+              ^operator <o2> +)
+   (<h> -^action.failure.grasping)
    (<o1> ^name choose-move)
    (<o2> ^name choose-push)
 -->

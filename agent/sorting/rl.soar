@@ -24,56 +24,70 @@ sp {replay-last-action*apply*finish-replay
 	(<ss> ^replay done)
 }
 
+sp {move-block*replay*propose*finish-replay
+	(state <s> ^name move-block
+               ^result-learned true)
+-->
+    (<s> ^operator <o> + >)
+    (<o> ^name move-finish-replay)
+}
+
+sp {move-block*apply*finish-replay
+	(state <s> ^name move-block
+               ^superstate <ss>
+               ^operator.name move-finish-replay)
+-->
+	(<ss> ^replay done)
+}
+
 sp {move-block*replay*apply*choose-move*success
    (state <s> ^name move-block
-              ^top-state.reward-link <rl>
-              ^superstate <ss>
+              ^reward-link <rl>
               ^block-volume <v>
               ^operator.name choose-move
               ^prev-successful true)
 -->
    (<rl> ^reward.value 1)
+   (<s> ^result-learned true)
    (write |Successful move reward|)
-   (<ss> ^replay done)
 }
 
 sp {move-block*replay*apply*choose-push*success
    (state <s> ^name move-block
-              ^top-state.reward-link <rl>
-              ^superstate <ss>
+              ^reward-link <rl>
               ^block-volume <v>
               ^operator.name choose-push
               ^prev-successful true)
 -->
    (<rl> ^reward.value 1)
+   (<s> ^result-learned true)
    (write |Successful push reward|)
-   (<ss> ^replay done)
 }
 
 sp {move-block*replay*apply*choose-move*fail
    (state <s> ^name move-block
-              ^top-state.reward-link <rl>
+              ^reward-link <rl>
               ^superstate <ss>
               ^block-volume <v>
               ^operator.name choose-move
               ^prev-failure-reason)
 -->
    (<rl> ^reward.value -1)
+   (<s> ^result-learned true)
    (write |Failed move reward|)
-   (<ss> ^replay done)
 }
 
 sp {move-block*replay*apply*choose-push*fail
    (state <s> ^name move-block
-              ^top-state.reward-link <rl>
+              ^reward-link <rl>
               ^superstate <ss>
               ^block-volume <v>
               ^operator.name choose-push
               ^prev-failure-reason)
 -->
    (<rl> ^reward.value -1)
+   (<s> ^result-learned true)
    (write |Failed push reward|)
-   (<ss> ^replay done)
 }
 
 sp {move-block*select-move
@@ -83,7 +97,7 @@ sp {move-block*select-move
     (<o> ^name choose-move)
 -->
 	(<s> ^operator <o> = 0.0)
- 	(write (crlf) |Select-move small|)
+ 	#(write (crlf) |Select-move small|)
  }
 
 sp {move-block*select-move*2
@@ -93,7 +107,7 @@ sp {move-block*select-move*2
     (<o> ^name choose-move)
 -->
 	(<s> ^operator <o> = 0.0)
-    (write (crlf) |Select-move large|)
+    #(write (crlf) |Select-move large|)
  }
 
 sp {move-block*select-push
@@ -103,7 +117,7 @@ sp {move-block*select-push
     (<o> ^name choose-push)
 -->
 	(<s> ^operator <o> = 0.0)
- 	(write (crlf) |Select-push small|)
+ 	#(write (crlf) |Select-push small|)
  }
 
 sp {move-block*select-push*2
@@ -113,6 +127,6 @@ sp {move-block*select-push*2
     (<o> ^name choose-push)
 -->
 	(<s> ^operator <o> = 0.0)
-    (write (crlf) |Select-push large|)
+    #(write (crlf) |Select-push large|)
  }
 

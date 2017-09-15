@@ -37,6 +37,7 @@ sp {sorting*propose*move-block*blue
    (<o> ^name move-block
         ^block <ob1>
         ^location <ob2>)
+   (interrupt)
 }
 
 sp {sorting*propose*move-block*red
@@ -61,6 +62,7 @@ sp {sorting*propose*move-block*red
    (<o> ^name move-block
         ^block <ob1>
         ^location <ob2>)
+   (interrupt)
 }
 
 sp {sorting*reject*move-block*already-on-location

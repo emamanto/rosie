@@ -37,7 +37,6 @@ sp {sorting*propose*move-block*blue
    (<o> ^name move-block
         ^block <ob1>
         ^location <ob2>)
-   (interrupt)
 }
 
 sp {sorting*propose*move-block*red
@@ -62,7 +61,6 @@ sp {sorting*propose*move-block*red
    (<o> ^name move-block
         ^block <ob1>
         ^location <ob2>)
-   (interrupt)
 }
 
 sp {sorting*reject*move-block*already-on-location
@@ -78,6 +76,42 @@ sp {sorting*reject*move-block*already-on-location
          ^instance <i>)
     (<i> ^1 <b>
          ^2 <loc>)
+-->
+	(<s> ^operator <o> -)
+}
+
+sp {sorting*reject*move-block*location-not-clear
+	(state <s> ^name sort-blocks
+               ^not-clear <h>
+               ^operator <o> +
+               ^top-state <ts>)
+ 	(<o> ^name move-block
+         ^block <b>
+         ^location <loc>)
+    (<loc> ^handle <h>)
+-->
+	(<s> ^operator <o> -)
+}
+
+sp {sorting*reject*move-block*already-on-location*same-color
+	(state <s> ^name sort-blocks
+               ^operator <o> +
+               ^top-state <ts>)
+ 	(<o> ^name move-block
+         ^block <b>
+         ^location <loc>)
+    (<ts> ^world.predicates <preds>)
+    (<preds> ^predicate <p>)
+    (<p> ^handle on1
+         ^instance <i>)
+    (<i> ^1 <b>
+         ^2 <loc2>)
+    (<loc2> ^predicates <preds2>)
+    (<preds2> ^category location
+             ^color <c>)
+    (<loc> ^predicates <preds3>)
+    (<preds3> ^category location
+             ^color <c>)
 -->
 	(<s> ^operator <o> -)
 }

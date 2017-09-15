@@ -67,23 +67,33 @@ sp {move-block*replay*apply*choose-push*success
 sp {move-block*replay*apply*choose-move*fail
    (state <s> ^name move-block
               ^reward-link <rl>
-              ^superstate <ss>
               ^block-volume <v>
               ^operator.name choose-move
-              ^prev-failure-reason)
+              ^prev-failure-reason grasping)
 -->
    (<rl> ^reward.value -1)
    (<s> ^result-learned true)
-   (write |Failed move reward|)
+   (write |Failed move reward, grasping|)
+}
+
+sp {move-block*replay*apply*choose-move*fail*not-grasp
+   (state <s> ^name move-block
+              ^reward-link <rl>
+              ^block-volume <v>
+              ^operator.name choose-move
+              ^prev-failure-reason <> grasping)
+-->
+   (<rl> ^reward.value -0.1)
+   (<s> ^result-learned true)
+   (write |Failed move reward, not grasping|)
 }
 
 sp {move-block*replay*apply*choose-push*fail
    (state <s> ^name move-block
-              ^reward-link <rl>
-              ^superstate <ss>
               ^block-volume <v>
+              ^reward-link <rl>
               ^operator.name choose-push
-              ^prev-failure-reason)
+              ^prev-failure-reason <r>)
 -->
    (<rl> ^reward.value -1)
    (<s> ^result-learned true)
@@ -96,7 +106,7 @@ sp {move-block*select-move
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
-	(<s> ^operator <o> = 0.0)
+	(<s> ^operator <o> = 0.5)
  	#(write (crlf) |Select-move small|)
  }
 
@@ -106,7 +116,7 @@ sp {move-block*select-move*2
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
-	(<s> ^operator <o> = 0.0)
+	(<s> ^operator <o> = 0.5)
     #(write (crlf) |Select-move large|)
  }
 
@@ -116,7 +126,7 @@ sp {move-block*select-push
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
-	(<s> ^operator <o> = 0.0)
+	(<s> ^operator <o> = 0.1)
  	#(write (crlf) |Select-push small|)
  }
 
@@ -126,7 +136,7 @@ sp {move-block*select-push*2
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
-	(<s> ^operator <o> = 0.0)
+	(<s> ^operator <o> = 0.1)
     #(write (crlf) |Select-push large|)
  }
 

@@ -6,6 +6,20 @@ sp {sorting-state*elaborate*problem-space
    (<perc> ^attend-to-all-perception yes)
 }
 
+sp {sorting-state*elaborate*clear-location
+	(state <s> ^name sort-blocks
+               ^top-state <ts>)
+    (<ts> ^world.predicates <preds>)
+    (<preds> ^predicate <p>)
+    (<p> ^handle on1
+         ^instance <i>)
+    (<i> ^1 <b>
+         ^2 <loc>)
+    (<loc> ^handle <h>)
+-->
+	(<s> ^not-clear <h>)
+}
+
 sp {sorting-state*elaborate*move-block-state
    (state <s> ^name move-block
               ^superstate.operator <o>)

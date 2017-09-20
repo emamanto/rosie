@@ -100,43 +100,43 @@ sp {move-block*replay*apply*choose-push*fail
    (write |Failed push reward|)
 }
 
-sp {move-block*select-move
-	(state <s> ^name move-block
-               ^block-volume { > 0.000008 <= 0.001 }
-               ^operator <o> +)
-    (<o> ^name choose-move)
--->
-	(<s> ^operator <o> = 0.5)
- 	#(write (crlf) |Select-move small|)
- }
-
-sp {move-block*select-move*2
-	(state <s> ^name move-block
-               ^block-volume { > 0.001 < 0.005 }
-               ^operator <o> +)
-    (<o> ^name choose-move)
--->
-	(<s> ^operator <o> = 0.5)
-    #(write (crlf) |Select-move large|)
- }
-
-sp {move-block*select-push
-	(state <s> ^name move-block
-               ^block-volume { > 0.000008 <= 0.001 }
-               ^operator <o> +)
-    (<o> ^name choose-push)
--->
-	(<s> ^operator <o> = 0.1)
- 	#(write (crlf) |Select-push small|)
- }
-
-sp {move-block*select-push*2
-	(state <s> ^name move-block
-               ^block-volume { > 0.001 < 0.005 }
-               ^operator <o> +)
-    (<o> ^name choose-push)
--->
-	(<s> ^operator <o> = 0.1)
-    #(write (crlf) |Select-push large|)
- }
+#sp {move-block*select-move
+#	(state <s> ^name move-block
+#               ^block-volume { > 0.000008 <= 0.001 }
+#               ^operator <o> +)
+#    (<o> ^name choose-move)
+#-->
+#	(<s> ^operator <o> = 0.5)
+# 	#(write (crlf) |Select-move small|)
+# }
+#
+#sp {move-block*select-move*2
+#	(state <s> ^name move-block
+#               ^block-volume { > 0.001 < 0.005 }
+#               ^operator <o> +)
+#    (<o> ^name choose-move)
+#-->
+#	(<s> ^operator <o> = 0.5)
+#    #(write (crlf) |Select-move large|)
+# }
+#
+#sp {move-block*select-push
+#	(state <s> ^name move-block
+#               ^block-volume { > 0.000008 <= 0.001 }
+#               ^operator <o> +)
+#    (<o> ^name choose-push)
+#-->
+#	(<s> ^operator <o> = 0.1)
+# 	#(write (crlf) |Select-push small|)
+# }
+#
+#sp {move-block*select-push*2
+#	(state <s> ^name move-block
+#               ^block-volume { > 0.001 < 0.005 }
+#               ^operator <o> +)
+#    (<o> ^name choose-push)
+#-->
+#	(<s> ^operator <o> = 0.1)
+#    #(write (crlf) |Select-push large|)
+# }
 

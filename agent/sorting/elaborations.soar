@@ -6,6 +6,16 @@ sp {sorting-state*elaborate*problem-space
    (<perc> ^attend-to-all-perception yes)
 }
 
+sp {sorting-state*elaborate*superoperator
+   (state <s> ^name sort-blocks
+              ^superstate <ss>)
+   (<ss> ^operator <oss>)
+   (<s> ^operator <o> +)
+   (<o> ^name << finish-last-action replay-last-action >>)
+-->
+   (<oss> ^interruptible no)
+}
+
 sp {sorting-state*elaborate*clear-location
 	(state <s> ^name sort-blocks
                ^top-state <ts>)

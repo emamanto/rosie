@@ -14,3 +14,12 @@ sp {top-state*perception-monitor*predicate-monitor*elaborate*default*predicates
     (<mon> ^predicate-info <left-of-info>)
     (<left-of-info> ^predicate-handle left-of1)
 }
+
+sp {elaborate*arm-home*status
+   (state <s> ^superstate nil
+              ^io.input-link.self.arm <a>)
+   (<s> ^world.robot.arm <wra>)
+   (<a> ^at-home <h>)
+-->
+   (<wra> ^at-home <h>)
+}

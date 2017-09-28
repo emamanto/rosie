@@ -53,6 +53,16 @@ sp {sort-blocks*prefer*attend-to-scene-change
    (<s> ^operator <o1> > <o2>)
 }
 
+sp {sort-blocks*prefer*replay-action
+   (state <s> ^name sort-blocks
+              ^operator <o1> +
+              ^operator <o2> +)
+   (<o1> ^name attend-to-scene-change)
+   (<o2> ^name replay-last-action)
+-->
+   (<s> ^operator <o1> < <o2>)
+}
+
 sp {sort-blocks*prefer*finish-last-action
    (state <s> ^name sort-blocks
               ^operator <o1> +
@@ -69,6 +79,13 @@ sp {sort-blocks*prefer*replay-last-action
               ^operator <o2> +)
    (<o1> ^name replay-last-action)
    (<o2> ^name move-block)
+-->
+   (<s> ^operator <o1> > <o2>)
+}
+
+sp {topstate*prefer*sort-blocks*when-replaying
+   (state <s> ^name sort-blocks
+              ^topstate <ts>)
 -->
    (<s> ^operator <o1> > <o2>)
 }

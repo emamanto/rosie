@@ -94,3 +94,13 @@ sp {top-state*better-preferences*init-agent
    (<s> ^operator <o1> > <o2>)
 }
 
+sp {top-state*better-preferences*uninterruptible-sort
+   (state <s> ^superstate nil
+   		  	  ^operator <o1> +
+              ^operator <o2> +)
+   (<o1> ^name sort-blocks
+         ^interruptible no)
+   (<o2> -^name sort-blocks)
+-->
+   (<s> ^operator <o1> > <o2>)
+}

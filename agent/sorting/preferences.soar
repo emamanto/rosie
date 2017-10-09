@@ -103,6 +103,29 @@ sp {sort-blocks*prefer*find-distance
    (<s> ^operator <o1> > <o2>)
 }
 
+sp {sort-blocks*prefer*shorter-move
+   (state <s> ^name sort-blocks
+              ^distances <d>
+              ^operator <o1> +
+              ^operator <o2> +)
+   (<o1> ^name move-block
+         ^block.handle <b1>
+         ^location.handle <l1>)
+   (<o2> ^name move-block
+         ^block.handle <b2>
+         ^location.handle <l2>)
+   (<d> ^pair <p1>
+        ^pair <p2>)
+   (<p1> ^block <b1>
+         ^location <l1>
+         ^value <v1>)
+   (<p2> ^block <b2>
+         ^location <l2>
+         ^value <v2> <= <v1>)
+-->
+   (<s> ^operator <o2> > <o1>)
+}
+
 sp {topstate*prefer*sort-blocks*when-replaying
    (state <s> ^name sort-blocks
               ^topstate <ts>)

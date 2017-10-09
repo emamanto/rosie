@@ -94,7 +94,8 @@ sp {sorting*apply*copy-distance
 -->
    (<d> ^pair <p>)
    (<p> ^block <oba>
-        ^location <obb>)
+        ^location <obb>
+        ^value <r>)
    (<s> ^distance-command <dc> -
         ^distance-filter <f> -)
 }

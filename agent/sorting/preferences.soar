@@ -53,6 +53,16 @@ sp {sort-blocks*prefer*attend-to-scene-change
    (<s> ^operator <o1> > <o2>)
 }
 
+sp {sort-blocks*prefer*copy-distance*after*found
+   (state <s> ^name sort-blocks
+              ^operator <o1> +
+              ^operator <o2> +)
+   (<o1> ^name copy-distance)
+   (<o2> ^name distance-command)
+-->
+   (<s> ^operator <o1> > <o2>)
+}
+
 sp {sort-blocks*prefer*replay-action
    (state <s> ^name sort-blocks
               ^operator <o1> +
@@ -78,6 +88,16 @@ sp {sort-blocks*prefer*replay-last-action
               ^operator <o1> +
               ^operator <o2> +)
    (<o1> ^name replay-last-action)
+   (<o2> ^name move-block)
+-->
+   (<s> ^operator <o1> > <o2>)
+}
+
+sp {sort-blocks*prefer*find-distance
+   (state <s> ^name sort-blocks
+              ^operator <o1> +
+              ^operator <o2> +)
+   (<o1> ^name distance-command)
    (<o2> ^name move-block)
 -->
    (<s> ^operator <o1> > <o2>)

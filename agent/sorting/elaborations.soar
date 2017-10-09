@@ -6,6 +6,12 @@ sp {sorting-state*elaborate*problem-space
    (<perc> ^attend-to-all-perception yes)
 }
 
+sp {sorting-state*elaborate*distance-list
+   (state <s> ^name sort-blocks)
+-->
+   (<s> ^distances <d>)
+}
+
 sp {sorting-state*elaborate*superoperator
    (state <s> ^name sort-blocks
               ^superstate <ss>)

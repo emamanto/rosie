@@ -15,6 +15,90 @@ sp {sorting*apply*create-topstate-history
    (<ts> ^block-history <h>)
 }
 
+sp {sorting*propose*find-block-distance*blue
+   (state <s> ^name sort-blocks
+              ^top-state <ts>
+              ^distances <d>)
+   -{(<d> ^pair <p>)
+     (<p> ^block <id>
+          ^location <loc>)}
+   (<ts> ^world.objects <objs>
+         ^block-history <h>)
+   (<objs> ^object <ob1>
+           ^object <ob2>)
+   (<ob1> ^item-type object
+         ^predicates <preds>
+         ^handle <id>)
+   (<preds> ^category block
+            ^color blue1)
+   (<ob2> ^item-type object
+         ^predicates <preds2>
+         ^handle <loc>)
+   (<preds2> ^category location
+            ^color green1)   
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name distance-command
+        ^object-a <id>
+        ^object-b <loc>
+        ^distance-type distance)
+}
+
+sp {sorting*propose*find-block-distance*red
+   (state <s> ^name sort-blocks
+              ^top-state <ts>
+              ^distances <d>)
+   -{(<d> ^pair <p>)
+     (<p> ^block <id>
+          ^location <loc>)}
+   (<ts> ^world.objects <objs>
+         ^block-history <h>)
+   (<objs> ^object <ob1>
+           ^object <ob2>)
+   (<ob1> ^item-type object
+         ^predicates <preds>
+         ^handle <id>)
+   (<preds> ^category block
+            ^color red1)
+   (<ob2> ^item-type object
+         ^predicates <preds2>
+         ^handle <loc>)
+   (<preds2> ^category location
+            ^color yellow1)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name distance-command
+        ^object-a <id>
+        ^object-b <loc>
+        ^distance-type distance)
+}
+
+sp {sorting*propose*copy-distance
+   (state <s> ^name sort-blocks
+              ^distances <d>
+              ^distance-command.result <r>)
+-->
+   (<s> ^operator <o> + =)
+   (<o> ^name copy-distance)
+}
+
+sp {sorting*apply*copy-distance
+   (state <s> ^name sort-blocks
+              ^operator.name copy-distance
+              ^distances <d>
+              ^distance-command <dc>
+              ^distance-filter <f>)
+   (<dc> ^result <r>)
+   (<f> ^a.id <oba>
+        ^b.id <obb>)
+-->
+   (<d> ^pair <p>)
+   (<p> ^block <oba>
+        ^location <obb>)
+   (<s> ^distance-command <dc> -
+        ^distance-filter <f> -)
+}
+
 sp {sorting*propose*move-block*blue
    (state <s> ^name sort-blocks
               ^top-state <ts>)
@@ -37,6 +121,7 @@ sp {sorting*propose*move-block*blue
    (<o> ^name move-block
         ^block <ob1>
         ^location <ob2>)
+   (interrupt)
 }
 
 sp {sorting*propose*move-block*red

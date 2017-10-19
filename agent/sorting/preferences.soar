@@ -78,7 +78,7 @@ sp {sort-blocks*prefer*finish-last-action
               ^operator <o1> +
               ^operator <o2> +)
    (<o1> ^name finish-last-action)
-   (<o2> ^name move-block)
+   (<o2> ^name << distance-command copy-distance move-block >>)
 -->
    (<s> ^operator <o1> > <o2>)
 }
@@ -88,7 +88,7 @@ sp {sort-blocks*prefer*replay-last-action
               ^operator <o1> +
               ^operator <o2> +)
    (<o1> ^name replay-last-action)
-   (<o2> ^name move-block)
+   (<o2> ^name << distance-command copy-distance move-block >>)
 -->
    (<s> ^operator <o1> > <o2>)
 }

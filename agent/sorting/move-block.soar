@@ -128,11 +128,15 @@ sp {move-block*apply*store-top-state
    (state <s> ^name move-block
               ^top-state.block-history <h>
               ^block-volume <v>
-              ^chosen-action <a>)
+              ^chosen-action <a>
+              ^block.handle <b>
+              ^location.handle <loc>)
    (<o> ^name push-chosen-action)
 -->
    (<h> ^last-action <l>)
    (<l> ^action-type <a>
-        ^block-volume <v>)
+        ^block-volume <v>
+        ^block <b>
+        ^location <loc>)
 }
 

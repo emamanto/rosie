@@ -86,9 +86,12 @@ sp {sort-blocks*apply*finish*last-action*success
 
 sp {sort-blocks*apply*finish*last-action*failure
    (state <s> ^name sort-blocks
-              ^top-state.block-history <h>
+              ^top-state <ts>
 			  ^operator <o>)
+   (<ts> ^block-history <h>)
    (<h> ^last-action <a>)
+   (<a> ^block <b>
+        ^location <l>)
    (<o> ^name finish-last-action
         ^command <cmd>)
    (<cmd> ^status failure
@@ -98,5 +101,8 @@ sp {sort-blocks*apply*finish*last-action*failure
         ^last-action <a> -)
    (<a> ^failure <r>)
    (<cmd> ^sort-handled true)
+   (<ts> ^avoid-pair <p>)
+   (<p> ^block <b>
+        ^location <l>)
    (write (crlf) |Recorded failed action| <a>)
 }

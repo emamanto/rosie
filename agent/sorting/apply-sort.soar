@@ -201,3 +201,18 @@ sp {sorting*reject*move-block*already-on-location*same-color
 -->
 	(<s> ^operator <o> -)
 }
+
+sp {sorting*reject*move-block*avoid-pair
+	(state <s> ^name sort-blocks
+               ^operator <o> +
+               ^top-state <ts>)
+ 	(<o> ^name move-block
+         ^block.handle <b>
+         ^location.handle <loc>)
+    (<ts> ^avoid-pair <p>)
+    (<p> ^block <b>
+         ^location <loc>)
+
+-->
+	(<s> ^operator <o> -)
+}

@@ -89,8 +89,6 @@ sp {move-block*propose*action-stack*op_move1
             ^2 <loc>)
 }
 
-
-
 # Once pushing is chosen
 sp {move-block*propose*action-stack*op_push1
    (state <s> ^name move-block
@@ -113,7 +111,7 @@ sp {move-block*propose*action-stack*op_push1
 }
 
 # Valid for either
-sp {move-block*apply*action-stack*op_move1
+sp {move-block*apply*action-stack*either-action
    (state <s> ^name move-block
               ^top-state.action-stack.changes <chgs>
               ^operator <o>)
@@ -122,6 +120,16 @@ sp {move-block*apply*action-stack*op_move1
 -->
    (<chgs> ^push <seg>)
    (<seg> ^execution-operator <a>)
+}
+
+sp {move-block*apply*action-stack*remove-avoid
+   (state <s> ^name move-block
+              ^top-state <ts>
+              ^operator <o>)
+   (<o> ^name push-chosen-action)
+   (<ts> ^avoid-pair <p>)
+-->
+   (<ts> ^avoid-pair <p> -)
 }
 
 sp {move-block*apply*store-top-state

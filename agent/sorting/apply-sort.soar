@@ -122,7 +122,6 @@ sp {sorting*propose*move-block*blue
    (<o> ^name move-block
         ^block <ob1>
         ^location <ob2>)
-   (interrupt)
 }
 
 sp {sorting*propose*move-block*red

@@ -121,9 +121,10 @@ sp {sort-blocks*prefer*shorter-move
          ^value <v1>)
    (<p2> ^block <b2>
          ^location <l2>
-         ^value <v2> <= <v1>)
+         ^value <v2> < <v1>)
 -->
    (<s> ^operator <o2> > <o1>)
+   #(write (crlf) |Prefer | <b2> | to | <l2> | over | <b1> | to | <l1>)
 }
 
 sp {topstate*prefer*sort-blocks*when-replaying

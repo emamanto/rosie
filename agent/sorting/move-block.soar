@@ -122,16 +122,6 @@ sp {move-block*apply*action-stack*either-action
    (<seg> ^execution-operator <a>)
 }
 
-sp {move-block*apply*action-stack*remove-avoid
-   (state <s> ^name move-block
-              ^top-state <ts>
-              ^operator <o>)
-   (<o> ^name push-chosen-action)
-   (<ts> ^avoid-pair <p>)
--->
-   (<ts> ^avoid-pair <p> -)
-}
-
 sp {move-block*apply*store-top-state
    (state <s> ^name move-block
               ^top-state.block-history <h>

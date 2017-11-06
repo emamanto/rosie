@@ -100,43 +100,258 @@ sp {move-block*replay*apply*choose-push*fail
    (write |Failed push reward|)
 }
 
-#sp {move-block*select-move
-#	(state <s> ^name move-block
-#               ^block-volume { > 0.000008 <= 0.001 }
-#               ^operator <o> +)
-#    (<o> ^name choose-move)
-#-->
-#	(<s> ^operator <o> = 0.5)
-# 	#(write (crlf) |Select-move small|)
-# }
-#
-#sp {move-block*select-move*2
-#	(state <s> ^name move-block
-#               ^block-volume { > 0.001 < 0.005 }
-#               ^operator <o> +)
-#    (<o> ^name choose-move)
-#-->
-#	(<s> ^operator <o> = 0.5)
-#    #(write (crlf) |Select-move large|)
-# }
-#
-#sp {move-block*select-push
-#	(state <s> ^name move-block
-#               ^block-volume { > 0.000008 <= 0.001 }
-#               ^operator <o> +)
-#    (<o> ^name choose-push)
-#-->
-#	(<s> ^operator <o> = 0.1)
-# 	#(write (crlf) |Select-push small|)
-# }
-#
-#sp {move-block*select-push*2
-#	(state <s> ^name move-block
-#               ^block-volume { > 0.001 < 0.005 }
-#               ^operator <o> +)
-#    (<o> ^name choose-push)
-#-->
-#	(<s> ^operator <o> = 0.1)
-#    #(write (crlf) |Select-push large|)
-# }
+gp {move-block*select-move*1-0
+   (state <s> ^name move-block
+               ^block-volume { > 0.000 <= 0.000001 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
 
+gp {move-block*select-move*1-1
+   (state <s> ^name move-block
+               ^block-volume { > 0.000001 <= 0.000008 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*1-2
+   (state <s> ^name move-block
+               ^block-volume { > 0.000008 <= 0.000027 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*1-3
+   (state <s> ^name move-block
+               ^block-volume { > 0.000027 <= 0.000064 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*1-4
+   (state <s> ^name move-block
+               ^block-volume { > 0.000064 <= 0.000125 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*1-5
+   (state <s> ^name move-block
+               ^block-volume { > 0.000125 <= 0.000216 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*1-6
+   (state <s> ^name move-block
+               ^block-volume { > 0.000216 <= 0.000343 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*1-7
+   (state <s> ^name move-block
+               ^block-volume { > 0.000343 <= 0.000512 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*1-8
+   (state <s> ^name move-block
+               ^block-volume { > 0.000512 <= 0.000729 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*1-9
+   (state <s> ^name move-block
+               ^block-volume { > 0.000729 <= 0.001 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*1-10
+   (state <s> ^name move-block
+               ^block-volume { > 0.001 <= 0.001331 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*1-11
+   (state <s> ^name move-block
+               ^block-volume { > 0.001331 <= 0.001728 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*1-12
+   (state <s> ^name move-block
+               ^block-volume { > 0.001728 <= 0.002197 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*1-13
+   (state <s> ^name move-block
+               ^block-volume { > 0.002197 <= 0.002744 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*1-14
+   (state <s> ^name move-block
+               ^block-volume { > 0.002744 <= 0.003375 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*1-15
+   (state <s> ^name move-block
+               ^block-volume { > 0.003375 <= 0.01 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+##
+
+gp {move-block*select-move*2-1
+   (state <s> ^name move-block
+               ^block-volume { > 0.000 <= 0.000008 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*2-2
+   (state <s> ^name move-block
+               ^block-volume { > 0.000008 <= 0.000064 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*2-3
+   (state <s> ^name move-block
+               ^block-volume { > 0.000064 <= 0.000216 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*2-4
+   (state <s> ^name move-block
+               ^block-volume { > 0.000216 <= 0.000512 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*2-5
+   (state <s> ^name move-block
+               ^block-volume { > 0.000512 <= 0.001 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*2-6
+   (state <s> ^name move-block
+               ^block-volume { > 0.001 <= 0.001728 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*2-7
+   (state <s> ^name move-block
+               ^block-volume { > 0.001728 <= 0.002744 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*2-8
+   (state <s> ^name move-block
+               ^block-volume { > 0.002744 <= 0.01 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+##
+
+gp {move-block*select-move*3-1
+   (state <s> ^name move-block
+               ^block-volume { > 0.000 <= 0.000064 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*3-2
+   (state <s> ^name move-block
+               ^block-volume { > 0.000064 <= 0.000512 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*3-3
+   (state <s> ^name move-block
+               ^block-volume { > 0.000512 <= 0.001728 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}
+
+gp {move-block*select-move*3-4
+   (state <s> ^name move-block
+               ^block-volume { > 0.001728 <= 0.01 }
+               ^operator <o> +)
+    (<o> ^name [ choose-move choose-push ])
+-->
+	(<s> ^operator <o> = 0.0)
+}

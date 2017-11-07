@@ -1,25 +1,25 @@
-sp {move-block*prefer-push*previously-failed
-   (state <s> ^name move-block
-              ^prev-failure true
-             -^prev-success true
-              ^operator <o1> +
-              ^operator <o2> +)
-   (<o1> ^name choose-move)
-   (<o2> ^name choose-push)
--->
-   (<s> ^operator <o2> > <o1>)
-}
-
-sp {move-block*prefer-move*otherwise
-   (state <s> ^name move-block
-              -^prev-failure true
-              ^operator <o1> +
-              ^operator <o2> +)
-   (<o1> ^name choose-move)
-   (<o2> ^name choose-push)
--->
-   (<s> ^operator <o1> > <o2>)
-}
+#sp {move-block*prefer-push*previously-failed
+#   (state <s> ^name move-block
+#              ^prev-failure true
+#             -^prev-success true
+#              ^operator <o1> +
+#              ^operator <o2> +)
+#   (<o1> ^name choose-move)
+#   (<o2> ^name choose-push)
+#-->
+#   (<s> ^operator <o2> > <o1>)
+#}
+#
+#sp {move-block*prefer-move*otherwise
+#   (state <s> ^name move-block
+#              -^prev-failure true
+#              ^operator <o1> +
+#              ^operator <o2> +)
+#   (<o1> ^name choose-move)
+#   (<o2> ^name choose-push)
+#-->
+#   (<s> ^operator <o1> > <o2>)
+#}
 
 sp {move-block*prefer-push*previous-selection
    (state <s> ^name move-block
@@ -103,11 +103,15 @@ sp {sort-blocks*prefer*find-distance
    (<s> ^operator <o1> > <o2>)
 }
 
-sp {sort-blocks*prefer*shorter-move
+sp {sort-blocks*prefer*shorter-move*if-not-tried
    (state <s> ^name sort-blocks
+              ^top-state <ts>
               ^distances <d>
               ^operator <o1> +
               ^operator <o2> +)
+ -{(<ts> ^tried-pair <p>)
+   (<p> ^block <b2>
+        ^location <l2>)}
    (<o1> ^name move-block
          ^block.handle <b1>
          ^location.handle <l1>)
@@ -122,6 +126,60 @@ sp {sort-blocks*prefer*shorter-move
    (<p2> ^block <b2>
          ^location <l2>
          ^value <v2> < <v1>)
+-->
+   (<s> ^operator <o2> > <o1>)
+   #(write (crlf) |Prefer | <b2> | to | <l2> | over | <b1> | to | <l1>)
+}
+
+sp {sort-blocks*prefer*shorter-move*if-both-tried
+   (state <s> ^name sort-blocks
+              ^top-state <ts>
+              ^distances <d>
+              ^operator <o1> +
+              ^operator <o2> +)
+   (<ts> ^tried-pair <tp2>
+         ^tried-pair <tp1>)
+   (<tp2> ^block <b2>
+          ^location <l2>)
+   (<tp1> ^block <b1>
+          ^location <l1>)
+   (<o1> ^name move-block
+         ^block.handle <b1>
+         ^location.handle <l1>)
+   (<o2> ^name move-block
+         ^block.handle <b2>
+         ^location.handle <l2>)
+   (<d> ^pair <p1>
+        ^pair <p2>)
+   (<p1> ^block <b1>
+         ^location <l1>
+         ^value <v1>)
+   (<p2> ^block <b2>
+         ^location <l2>
+         ^value <v2> < <v1>)
+-->
+   (<s> ^operator <o2> > <o1>)
+   #(write (crlf) |Prefer | <b2> | to | <l2> | over | <b1> | to | <l1>)
+}
+
+sp {sort-blocks*prefer*untried*always
+   (state <s> ^name sort-blocks
+              ^top-state <ts>
+              ^distances <d>
+              ^operator <o1> +
+              ^operator <o2> +)
+ -{(<ts> ^tried-pair <tp2>)
+   (<tp2> ^block <b2>
+        ^location <l2>)}
+   (<ts> ^tried-pair <tp1>)
+   (<tp1> ^block <b1>
+          ^location <l1>)
+   (<o1> ^name move-block
+         ^block.handle <b1>
+         ^location.handle <l1>)
+   (<o2> ^name move-block
+         ^block.handle <b2>
+         ^location.handle <l2>)
 -->
    (<s> ^operator <o2> > <o1>)
    #(write (crlf) |Prefer | <b2> | to | <l2> | over | <b1> | to | <l1>)

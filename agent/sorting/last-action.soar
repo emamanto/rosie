@@ -101,7 +101,7 @@ sp {sort-blocks*apply*finish*last-action*failure
         ^last-action <a> -)
    (<a> ^failure <r>)
    (<cmd> ^sort-handled true)
-   (<ts> ^avoid-pair <p>)
+   (<ts> ^tried-pair <p>)
    (<p> ^block <b>
         ^location <l>)
    (write (crlf) |Recorded failed action| <a>)

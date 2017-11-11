@@ -55,4 +55,4 @@ svs --enable
 #svs connect_viewer 2000
 
 
-rl --set learning on
+#rl --set learning on

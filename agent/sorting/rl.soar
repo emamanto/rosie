@@ -47,7 +47,7 @@ sp {move-block*replay*apply*choose-move*success
               ^operator.name choose-move
               ^prev-successful true)
 -->
-   (<rl> ^reward.value 1)
+   (<rl> ^reward.value 10)
    (<s> ^result-learned true)
    (write |Successful move reward|)
 }
@@ -59,7 +59,7 @@ sp {move-block*replay*apply*choose-push*success
               ^operator.name choose-push
               ^prev-successful true)
 -->
-   (<rl> ^reward.value 1)
+   (<rl> ^reward.value 10)
    (<s> ^result-learned true)
    (write |Successful push reward|)
 }
@@ -71,7 +71,7 @@ sp {move-block*replay*apply*choose-move*fail
               ^operator.name choose-move
               ^prev-failure-reason grasping)
 -->
-   (<rl> ^reward.value -1)
+   (<rl> ^reward.value -20)
    (<s> ^result-learned true)
    (write |Failed move reward, grasping|)
 }

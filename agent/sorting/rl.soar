@@ -76,29 +76,27 @@ sp {move-block*replay*apply*choose-move*fail
    (write |Failed move reward, grasping|)
 }
 
-#sp {move-block*replay*apply*choose-move*fail*not-grasp
-#   (state <s> ^name move-block
-#              ^reward-link <rl>
-#              ^block-volume <v>
-#              ^operator.name choose-move
-#              ^prev-failure-reason <> grasping)
-#-->
-#   (<rl> ^reward.value -0.1)
-#   (<s> ^result-learned true)
-#   (write |Failed move reward, not grasping|)
-#}
-#
-#sp {move-block*replay*apply*choose-push*fail
-#   (state <s> ^name move-block
-#              ^block-volume <v>
-#              ^reward-link <rl>
-#              ^operator.name choose-push
-#              ^prev-failure-reason <r>)
-#-->
-#   (<rl> ^reward.value -0.1)
-#   (<s> ^result-learned true)
-#   (write |Failed push reward|)
-#}
+sp {move-block*replay*apply*choose-move*fail*not-grasp
+   (state <s> ^name move-block
+              ^block-volume <v>
+              ^operator.name choose-move
+              ^prev-failure-reason <> grasping)
+-->
+   #(<rl> ^reward.value -0.1)
+   (<s> ^result-learned true)
+   (write |Failed move with no reward, not grasping|)
+}
+
+sp {move-block*replay*apply*choose-push*fail
+   (state <s> ^name move-block
+              ^block-volume <v>
+              ^operator.name choose-push
+              ^prev-failure-reason <r>)
+-->
+   #(<rl> ^reward.value -0.1)
+   (<s> ^result-learned true)
+   (write |Failed push with no reward|)
+}
 
 ###############################################################
 

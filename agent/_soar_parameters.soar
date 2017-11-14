@@ -56,3 +56,4 @@ svs --enable
 
 
 rl --set learning on
+rl --set learning-rate 0.7

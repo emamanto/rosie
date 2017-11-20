@@ -47,7 +47,7 @@ sp {move-block*replay*apply*choose-move*success
               ^operator.name choose-move
               ^prev-successful true)
 -->
-   (<rl> ^reward.value 1)
+   (<rl> ^reward.value 10)
    (<s> ^result-learned true)
    (write |Successful move reward|)
 }
@@ -59,7 +59,7 @@ sp {move-block*replay*apply*choose-push*success
               ^operator.name choose-push
               ^prev-successful true)
 -->
-   (<rl> ^reward.value 1)
+   (<rl> ^reward.value 10)
    (<s> ^result-learned true)
    (write |Successful push reward|)
 }
@@ -71,40 +71,38 @@ sp {move-block*replay*apply*choose-move*fail
               ^operator.name choose-move
               ^prev-failure-reason grasping)
 -->
-   (<rl> ^reward.value -1)
+   (<rl> ^reward.value -20)
    (<s> ^result-learned true)
    (write |Failed move reward, grasping|)
 }
 
 sp {move-block*replay*apply*choose-move*fail*not-grasp
    (state <s> ^name move-block
-              ^reward-link <rl>
               ^block-volume <v>
               ^operator.name choose-move
               ^prev-failure-reason <> grasping)
 -->
-   (<rl> ^reward.value -0.1)
+   #(<rl> ^reward.value -0.1)
    (<s> ^result-learned true)
-   (write |Failed move reward, not grasping|)
+   (write |Failed move with no reward, not grasping|)
 }
 
 sp {move-block*replay*apply*choose-push*fail
    (state <s> ^name move-block
               ^block-volume <v>
-              ^reward-link <rl>
               ^operator.name choose-push
               ^prev-failure-reason <r>)
 -->
-   (<rl> ^reward.value -0.1)
+   #(<rl> ^reward.value -0.1)
    (<s> ^result-learned true)
-   (write |Failed push reward|)
+   (write |Failed push with no reward|)
 }
 
 ###############################################################
 
 sp {move-block*select-move*1-0
    (state <s> ^name move-block
-               ^block-volume { > 0.000 <= 0.000001 }
+               ^block-volume { > 0.000 <= 0.000000000125}
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
@@ -113,7 +111,7 @@ sp {move-block*select-move*1-0
 
 sp {move-block*select-move*1-1
    (state <s> ^name move-block
-               ^block-volume { > 0.000001 <= 0.000008 }
+               ^block-volume { > 0.000000000125 <= 0.000003375}
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
@@ -122,7 +120,7 @@ sp {move-block*select-move*1-1
 
 sp {move-block*select-move*1-2
    (state <s> ^name move-block
-               ^block-volume { > 0.000008 <= 0.000027 }
+               ^block-volume { > 0.000003375 <= 0.000015625 }
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
@@ -131,7 +129,7 @@ sp {move-block*select-move*1-2
 
 sp {move-block*select-move*1-3
    (state <s> ^name move-block
-               ^block-volume { > 0.000027 <= 0.000064 }
+               ^block-volume { > 0.000015625 <= 0.000042875 }
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
@@ -140,7 +138,7 @@ sp {move-block*select-move*1-3
 
 sp {move-block*select-move*1-4
    (state <s> ^name move-block
-               ^block-volume { > 0.000064 <= 0.000125 }
+               ^block-volume { > 0.000042875 <= 0.000091125 }
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
@@ -149,7 +147,7 @@ sp {move-block*select-move*1-4
 
 sp {move-block*select-move*1-5
    (state <s> ^name move-block
-               ^block-volume { > 0.000125 <= 0.000216 }
+               ^block-volume { > 0.000091125 <= 0.000166375 }
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
@@ -158,7 +156,7 @@ sp {move-block*select-move*1-5
 
 sp {move-block*select-move*1-6
    (state <s> ^name move-block
-               ^block-volume { > 0.000216 <= 0.000343 }
+               ^block-volume { > 0.000166375 <= 0.000274625 }
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
@@ -167,7 +165,7 @@ sp {move-block*select-move*1-6
 
 sp {move-block*select-move*1-7
    (state <s> ^name move-block
-               ^block-volume { > 0.000343 <= 0.000512 }
+               ^block-volume { > 0.000274625 <= 0.000421875 }
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
@@ -176,7 +174,7 @@ sp {move-block*select-move*1-7
 
 sp {move-block*select-move*1-8
    (state <s> ^name move-block
-               ^block-volume { > 0.000512 <= 0.000729 }
+               ^block-volume { > 0.000421875 <= 0.000614125 }
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
@@ -185,7 +183,7 @@ sp {move-block*select-move*1-8
 
 sp {move-block*select-move*1-9
    (state <s> ^name move-block
-               ^block-volume { > 0.000729 <= 0.001 }
+               ^block-volume { > 0.000614125 <= 0.000857375 }
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
@@ -194,7 +192,7 @@ sp {move-block*select-move*1-9
 
 sp {move-block*select-move*1-10
    (state <s> ^name move-block
-               ^block-volume { > 0.001 <= 0.001331 }
+               ^block-volume { > 0.000857375 <= 0.001157625 }
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
@@ -203,7 +201,7 @@ sp {move-block*select-move*1-10
 
 sp {move-block*select-move*1-11
    (state <s> ^name move-block
-               ^block-volume { > 0.001331 <= 0.001728 }
+               ^block-volume { > 0.001157625 <= 0.001520875 }
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
@@ -212,7 +210,7 @@ sp {move-block*select-move*1-11
 
 sp {move-block*select-move*1-12
    (state <s> ^name move-block
-               ^block-volume { > 0.001728 <= 0.002197 }
+               ^block-volume { > 0.001520875 <= 0.001953125 }
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
@@ -221,7 +219,7 @@ sp {move-block*select-move*1-12
 
 sp {move-block*select-move*1-13
    (state <s> ^name move-block
-               ^block-volume { > 0.002197 <= 0.002744 }
+               ^block-volume { > 0.001953125 <= 0.002460375 }
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
@@ -230,16 +228,7 @@ sp {move-block*select-move*1-13
 
 sp {move-block*select-move*1-14
    (state <s> ^name move-block
-               ^block-volume { > 0.002744 <= 0.003375 }
-               ^operator <o> +)
-    (<o> ^name choose-move)
--->
-	(<s> ^operator <o> = 0.1)
-}
-
-sp {move-block*select-move*1-15
-   (state <s> ^name move-block
-               ^block-volume { > 0.003375 <= 0.01 }
+               ^block-volume { > 0.002460375 <= 0.008 }
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
@@ -250,119 +239,71 @@ sp {move-block*select-move*1-15
 
 sp {move-block*select-move*2-1
    (state <s> ^name move-block
-               ^block-volume { > 0.000 <= 0.000008 }
+               ^block-volume { > 0.000 <= 0.000003375 }
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
-	(<s> ^operator <o> = 0.1)
+	(<s> ^operator <o> = 0.0)
 }
 
 sp {move-block*select-move*2-2
    (state <s> ^name move-block
-               ^block-volume { > 0.000008 <= 0.000064 }
+               ^block-volume { > 0.000003375 <= 0.000042875 }
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
-	(<s> ^operator <o> = 0.1)
+	(<s> ^operator <o> = 0.0)
 }
 
 sp {move-block*select-move*2-3
    (state <s> ^name move-block
-               ^block-volume { > 0.000064 <= 0.000216 }
+               ^block-volume { > 0.000042875 <= 0.000166375 }
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
-	(<s> ^operator <o> = 0.1)
+	(<s> ^operator <o> = 0.0)
 }
 
 sp {move-block*select-move*2-4
    (state <s> ^name move-block
-               ^block-volume { > 0.000216 <= 0.000512 }
+               ^block-volume { > 0.000166375 <= 0.000421875 }
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
-	(<s> ^operator <o> = 0.1)
+	(<s> ^operator <o> = 0.0)
 }
 
 sp {move-block*select-move*2-5
    (state <s> ^name move-block
-               ^block-volume { > 0.000512 <= 0.001 }
+               ^block-volume { > 0.000421875 <= 0.000857375 }
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
-	(<s> ^operator <o> = 0.1)
+	(<s> ^operator <o> = 0.0)
 }
 
 sp {move-block*select-move*2-6
    (state <s> ^name move-block
-               ^block-volume { > 0.001 <= 0.001728 }
+               ^block-volume { > 0.000857375 <= 0.001520875 }
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
-	(<s> ^operator <o> = 0.1)
+	(<s> ^operator <o> = 0.0)
 }
 
 sp {move-block*select-move*2-7
    (state <s> ^name move-block
-               ^block-volume { > 0.001728 <= 0.002744 }
+               ^block-volume { > 0.001520875 <= 0.008 }
                ^operator <o> +)
     (<o> ^name choose-move)
 -->
-	(<s> ^operator <o> = 0.1)
+	(<s> ^operator <o> = 0.0)
 }
-
-sp {move-block*select-move*2-8
-   (state <s> ^name move-block
-               ^block-volume { > 0.002744 <= 0.01 }
-               ^operator <o> +)
-    (<o> ^name choose-move)
--->
-	(<s> ^operator <o> = 0.1)
-}
-
-##
-
-sp {move-block*select-move*3-1
-   (state <s> ^name move-block
-               ^block-volume { > 0.000 <= 0.000064 }
-               ^operator <o> +)
-    (<o> ^name choose-move)
--->
-	(<s> ^operator <o> = 0.1)
-}
-
-sp {move-block*select-move*3-2
-   (state <s> ^name move-block
-               ^block-volume { > 0.000064 <= 0.000512 }
-               ^operator <o> +)
-    (<o> ^name choose-move)
--->
-	(<s> ^operator <o> = 0.1)
-}
-
-sp {move-block*select-move*3-3
-   (state <s> ^name move-block
-               ^block-volume { > 0.000512 <= 0.001728 }
-               ^operator <o> +)
-    (<o> ^name choose-move)
--->
-	(<s> ^operator <o> = 0.1)
-}
-
-sp {move-block*select-move*3-4
-   (state <s> ^name move-block
-               ^block-volume { > 0.001728 <= 0.01 }
-               ^operator <o> +)
-    (<o> ^name choose-move)
--->
-	(<s> ^operator <o> = 0.1)
-}
-
-########################################################################
+###############################################################
 
 sp {move-block*select-push*1-0
    (state <s> ^name move-block
-               ^block-volume { > 0.000 <= 0.000001 }
+               ^block-volume { > 0.000 <= 0.000000000125}
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -371,7 +312,7 @@ sp {move-block*select-push*1-0
 
 sp {move-block*select-push*1-1
    (state <s> ^name move-block
-               ^block-volume { > 0.000001 <= 0.000008 }
+               ^block-volume { > 0.000000000125 <= 0.000003375}
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -380,7 +321,7 @@ sp {move-block*select-push*1-1
 
 sp {move-block*select-push*1-2
    (state <s> ^name move-block
-               ^block-volume { > 0.000008 <= 0.000027 }
+               ^block-volume { > 0.000003375 <= 0.000015625 }
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -389,7 +330,7 @@ sp {move-block*select-push*1-2
 
 sp {move-block*select-push*1-3
    (state <s> ^name move-block
-               ^block-volume { > 0.000027 <= 0.000064 }
+               ^block-volume { > 0.000015625 <= 0.000042875 }
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -398,7 +339,7 @@ sp {move-block*select-push*1-3
 
 sp {move-block*select-push*1-4
    (state <s> ^name move-block
-               ^block-volume { > 0.000064 <= 0.000125 }
+               ^block-volume { > 0.000042875 <= 0.000091125 }
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -407,7 +348,7 @@ sp {move-block*select-push*1-4
 
 sp {move-block*select-push*1-5
    (state <s> ^name move-block
-               ^block-volume { > 0.000125 <= 0.000216 }
+               ^block-volume { > 0.000091125 <= 0.000166375 }
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -416,7 +357,7 @@ sp {move-block*select-push*1-5
 
 sp {move-block*select-push*1-6
    (state <s> ^name move-block
-               ^block-volume { > 0.000216 <= 0.000343 }
+               ^block-volume { > 0.000166375 <= 0.000274625 }
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -425,7 +366,7 @@ sp {move-block*select-push*1-6
 
 sp {move-block*select-push*1-7
    (state <s> ^name move-block
-               ^block-volume { > 0.000343 <= 0.000512 }
+               ^block-volume { > 0.000274625 <= 0.000421875 }
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -434,7 +375,7 @@ sp {move-block*select-push*1-7
 
 sp {move-block*select-push*1-8
    (state <s> ^name move-block
-               ^block-volume { > 0.000512 <= 0.000729 }
+               ^block-volume { > 0.000421875 <= 0.000614125 }
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -443,7 +384,7 @@ sp {move-block*select-push*1-8
 
 sp {move-block*select-push*1-9
    (state <s> ^name move-block
-               ^block-volume { > 0.000729 <= 0.001 }
+               ^block-volume { > 0.000614125 <= 0.000857375 }
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -452,7 +393,7 @@ sp {move-block*select-push*1-9
 
 sp {move-block*select-push*1-10
    (state <s> ^name move-block
-               ^block-volume { > 0.001 <= 0.001331 }
+               ^block-volume { > 0.000857375 <= 0.001157625 }
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -461,7 +402,7 @@ sp {move-block*select-push*1-10
 
 sp {move-block*select-push*1-11
    (state <s> ^name move-block
-               ^block-volume { > 0.001331 <= 0.001728 }
+               ^block-volume { > 0.001157625 <= 0.001520875 }
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -470,7 +411,7 @@ sp {move-block*select-push*1-11
 
 sp {move-block*select-push*1-12
    (state <s> ^name move-block
-               ^block-volume { > 0.001728 <= 0.002197 }
+               ^block-volume { > 0.001520875 <= 0.001953125 }
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -479,7 +420,7 @@ sp {move-block*select-push*1-12
 
 sp {move-block*select-push*1-13
    (state <s> ^name move-block
-               ^block-volume { > 0.002197 <= 0.002744 }
+               ^block-volume { > 0.001953125 <= 0.002460375 }
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -488,16 +429,7 @@ sp {move-block*select-push*1-13
 
 sp {move-block*select-push*1-14
    (state <s> ^name move-block
-               ^block-volume { > 0.002744 <= 0.003375 }
-               ^operator <o> +)
-    (<o> ^name choose-push)
--->
-	(<s> ^operator <o> = 0.0)
-}
-
-sp {move-block*select-push*1-15
-   (state <s> ^name move-block
-               ^block-volume { > 0.003375 <= 0.01 }
+               ^block-volume { > 0.002460375 <= 0.008 }
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -508,7 +440,7 @@ sp {move-block*select-push*1-15
 
 sp {move-block*select-push*2-1
    (state <s> ^name move-block
-               ^block-volume { > 0.000 <= 0.000008 }
+               ^block-volume { > 0.000 <= 0.000003375 }
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -517,7 +449,7 @@ sp {move-block*select-push*2-1
 
 sp {move-block*select-push*2-2
    (state <s> ^name move-block
-               ^block-volume { > 0.000008 <= 0.000064 }
+               ^block-volume { > 0.000003375 <= 0.000042875 }
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -526,7 +458,7 @@ sp {move-block*select-push*2-2
 
 sp {move-block*select-push*2-3
    (state <s> ^name move-block
-               ^block-volume { > 0.000064 <= 0.000216 }
+               ^block-volume { > 0.000042875 <= 0.000166375 }
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -535,7 +467,7 @@ sp {move-block*select-push*2-3
 
 sp {move-block*select-push*2-4
    (state <s> ^name move-block
-               ^block-volume { > 0.000216 <= 0.000512 }
+               ^block-volume { > 0.000166375 <= 0.000421875 }
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -544,7 +476,7 @@ sp {move-block*select-push*2-4
 
 sp {move-block*select-push*2-5
    (state <s> ^name move-block
-               ^block-volume { > 0.000512 <= 0.001 }
+               ^block-volume { > 0.000421875 <= 0.000857375 }
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -553,7 +485,7 @@ sp {move-block*select-push*2-5
 
 sp {move-block*select-push*2-6
    (state <s> ^name move-block
-               ^block-volume { > 0.001 <= 0.001728 }
+               ^block-volume { > 0.000857375 <= 0.001520875 }
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
@@ -562,54 +494,7 @@ sp {move-block*select-push*2-6
 
 sp {move-block*select-push*2-7
    (state <s> ^name move-block
-               ^block-volume { > 0.001728 <= 0.002744 }
-               ^operator <o> +)
-    (<o> ^name choose-push)
--->
-	(<s> ^operator <o> = 0.0)
-}
-
-sp {move-block*select-push*2-8
-   (state <s> ^name move-block
-               ^block-volume { > 0.002744 <= 0.01 }
-               ^operator <o> +)
-    (<o> ^name choose-push)
--->
-	(<s> ^operator <o> = 0.0)
-}
-
-##
-
-sp {move-block*select-push*3-1
-   (state <s> ^name move-block
-               ^block-volume { > 0.000 <= 0.000064 }
-               ^operator <o> +)
-    (<o> ^name choose-push)
--->
-	(<s> ^operator <o> = 0.0)
-}
-
-sp {move-block*select-push*3-2
-   (state <s> ^name move-block
-               ^block-volume { > 0.000064 <= 0.000512 }
-               ^operator <o> +)
-    (<o> ^name choose-push)
--->
-	(<s> ^operator <o> = 0.0)
-}
-
-sp {move-block*select-push*3-3
-   (state <s> ^name move-block
-               ^block-volume { > 0.000512 <= 0.001728 }
-               ^operator <o> +)
-    (<o> ^name choose-push)
--->
-	(<s> ^operator <o> = 0.0)
-}
-
-sp {move-block*select-push*3-4
-   (state <s> ^name move-block
-               ^block-volume { > 0.001728 <= 0.01 }
+               ^block-volume { > 0.001520875 <= 0.008 }
                ^operator <o> +)
     (<o> ^name choose-push)
 -->
